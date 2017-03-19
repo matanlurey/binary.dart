@@ -2,7 +2,8 @@
 
 - Moved into a standalone repository (outside of `gba.dart`).
 - Added `signExtend` as a method to `Integral`.
-- 
+- Added `areSet`.
+- Added `msb`.
 
 ## 0.1.1
 
