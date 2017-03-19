@@ -356,7 +356,7 @@ class Integral implements Comparable<Integral> {
     return binary.rotateRight(bits, number);
   }
 
-  /// Returns [bits] arithmetically-shifted right [n] bits.
+  /// Returns [bits] arithmetically right-shifted [n] bits.
   ///
   /// See [binary.arithmeticShiftRight].
   int arithmeticShiftRight(int bits, int n) {
