@@ -4,6 +4,12 @@ import 'dart:math' show pow;
 import 'package:binary/binary.dart' as binary;
 import 'package:meta/meta.dart';
 
+/// Returns [bits] arithmetically right-shifted [n] bits.
+int arithmeticShiftRight(int bits, int n, int length) {
+  int leftPadding = msb(bits, length) ? pow(2, n) - 1 : 0;
+  return (leftPadding << (length - n)) | (bits >> n);
+}
+
 /// Returns [bits] sign-extended to [endSize] bits.
 ///
 /// Sign extension is the operation of increasing the number of bits of a binary
@@ -348,6 +354,14 @@ class Integral implements Comparable<Integral> {
   int rotateRight(int bits, int number) {
     _assertInRange(bits);
     return binary.rotateRight(bits, number);
+  }
+
+  /// Returns [bits] arithmetically-shifted right [n] bits.
+  ///
+  /// See [binary.arithmeticShiftRight].
+  int arithmeticShiftRight(int bits, int n) {
+    _assertInRange(bits);
+    return binary.arithmeticShiftRight(bits, n, length);
   }
 
   /// Returns the number of set bits in [bits].
