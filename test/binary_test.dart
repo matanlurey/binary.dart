@@ -115,6 +115,15 @@ void main() {
     });
   });
 
+  test(
+      'arithmeticShiftRight should left-pad a logically right-shifted number '
+      'with its msb', () {
+    // 1111 1111 -> 1111 1111
+    expect(uint8.arithmeticShiftRight(0xFF, 5), 0xFF);
+    // 0111 1111 -> 0000 0011
+    expect(uint8.arithmeticShiftRight(0x7F, 5), 0x03);
+  });
+
   test('areSet should return the number of set bits', () {
     expect(
       uint8.areSet(uint8.fromBits([0, 1, 1, 0, 0, 0, 0, 0])),

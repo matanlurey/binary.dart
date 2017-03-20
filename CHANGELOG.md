@@ -1,3 +1,7 @@
+## 0.1.3
+
+- Added `arithmeticShiftRight`
+
 ## 0.1.2
 
 - Moved into a standalone repository (outside of `gba.dart`).
