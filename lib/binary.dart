@@ -119,7 +119,7 @@ int bitChunk(int bits, int left, int size) {
       throw new RangeError.value(size, 'size', 'Out of range. Must be >= 1.');
     }
     return true;
-  });
+  }());
   return (bits >> (left + 1 - size)) & ~(~0 << size);
 }
 
@@ -152,7 +152,7 @@ int fromBits(List<int> bits) {
       throw new ArgumentError.value('Must be non-empty', 'bits');
     }
     return true;
-  });
+  }());
   var result = 0;
   for (var n = 0; n < bits.length; n++) {
     if (bits[n] == 1) {
@@ -409,7 +409,7 @@ class Integral implements Comparable<Integral> {
         throw _rangeError(value, name);
       }
       return true;
-    });
+    }());
   }
 
   /// Returns whether [value] falls in the range of representable by this type.
