@@ -28,3 +28,9 @@ jobs:
 
       - name: Test
         run: pub run test --reporter expanded
+
+      - name: Generate Coverage
+        run: pub run test_coverage --no-badge
+
+      - name: Upload Coverage
+        uses: codecov/codecov-action@v1.0.7

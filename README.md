@@ -2,11 +2,22 @@
 
 Utilities for accessing binary data and bit manipulation in Dart and Flutter.
 
-[![Pub](https://img.shields.io/pub/v/binary.svg)](https://pub.dartlang.org/packages/binary)
-[![Actions](https://github.com/matanlurey/threed/workflows/Dart/badge.svg)](https://github.com/matanlurey/binary.dart/actions)
-[![Coverage](https://coveralls.io/repos/github/matanlurey/binary/badge.svg?branch=master)](https://coveralls.io/github/matanlurey/binary?branch=master)
-[![Documentation](https://img.shields.io/badge/Documentation-binary-blue.svg)](https://www.dartdocs.org/documentation/binary/latest)
-[![Style](https://img.shields.io/badge/style-pedantic-40c4ff.svg)](https://pub.dev/packages/pedantic)
+![pub_url][pub_img]
+![gha_url][gha_img]
+![doc_url][doc_img]
+![sty_url][sty_img]
+
+[pub_url]: https://pub.dartlang.org/packages/binary
+[pub_img]: https://img.shields.io/pub/v/binary.svg
+[gha_url]: https://github.com/matanlurey/binary.dart/actions
+[gha_img]: https://github.com/matanlurey/binary.dart/workflows/Dart/badge.svg
+
+[cov_url]:
+[cov_img]:
+[doc_url]: https://www.dartdocs.org/documentation/binary/latest
+[doc_img]: https://img.shields.io/badge/Documentation-binary-blue.svg
+[sty_url]: https://pub.dev/packages/pedantic
+[sty_img]: https://img.shields.io/badge/style-pedantic-40c4ff.svg
 
 ## Getting started
 
