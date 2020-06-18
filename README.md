@@ -1,68 +1,112 @@
-# binary
+# Binary
 
-Utilities for working with binary data and bit manipulation in Dart.
+Utilities for accessing binary data and bit manipulation in Dart and Flutter.
 
 [![Pub](https://img.shields.io/pub/v/binary.svg)](https://pub.dartlang.org/packages/binary)
-[![Build Status](https://travis-ci.org/matanlurey/binary.svg?branch=master)](https://travis-ci.org/matanlurey/binary)
-[![Coverage Status](https://coveralls.io/repos/github/matanlurey/binary/badge.svg?branch=master)](https://coveralls.io/github/matanlurey/binary?branch=master)
-[![documentation](https://img.shields.io/badge/Documentation-binary-blue.svg)](https://www.dartdocs.org/documentation/binary/latest)
+[![Actions](https://github.com/matanlurey/threed/workflows/Dart/badge.svg)](https://github.com/matanlurey/binary.dart/actions)
+[![Coverage](https://coveralls.io/repos/github/matanlurey/binary/badge.svg?branch=master)](https://coveralls.io/github/matanlurey/binary?branch=master)
+[![Documentation](https://img.shields.io/badge/Documentation-binary-blue.svg)](https://www.dartdocs.org/documentation/binary/latest)
+[![Style](https://img.shields.io/badge/style-pedantic-40c4ff.svg)](https://pub.dev/packages/pedantic)
 
-_**NOTE**: Unless otherwise noted, all functionality is based around treating
-bits as [little endian][], that is in a 32-bit integer the leftmost bit is 31
-and the rightmost bit is 0_
+## Getting started
 
-[little endian]: https://en.wikipedia.org/wiki/Endianness
+Using `package:binary` is easy, we have almost no dependencies:
 
-## Overview
-
-This library supports an `Integral` data type for fluent bit manipulation:
-
-```dart
-print(uint8.toBinaryPadded(196)); // '11000100'
+```yaml
+# Add a new dependency to "pubspec.yaml".
+dependencies:
+  binary:
 ```
 
-Because of Dart's ability to do advanced *inlining* in both the Dart VM and
-dart2js, this library should perform well and be extremely easy to use for most
-use cases. For example, it's used in an [`arm7_tdmi`][arm7_tdmi] emulator.
+```dart
+import 'package:binary/binary.dart';
 
-[arm7_tdmi]: https://pub.dartlang.org/packages/arm7_tdmi
+// Start using package:binary.
+```
+
+If you are not familiar with [extension methods in Dart][], it is worth reading
+the documentation before using this package, which has heavy use of extensions
+for most functionality. A small primer is instead of writing something like:
+
+```dart
+void main() {
+  // Old API in version <= 0.1.3:
+  print(toBinaryPadded(0x0C, 8)); // 00001100
+}
+```
+
+You now use `toBinaryPadded` (and other methods) as an _extension_ method:
+
+```dart
+void main() {
+  // New API.
+  print(0x0C.toBinaryPadded(8)); // 00001100
+}
+```
+
+[extension methods in dart]: https://dart.dev/guides/language/extension-methods
 
 ## Usage
 
-This library has a combination of top-level methods, and instance methods of
-pre-defined _`Integral` data types_ (see below). For example there are two ways
-to _clear_ (set to `0`) a bit:
+This package provides a few sets of APIs extension methods and boxed classes.
+
+> See the [API docs](https://www.dartdocs.org/documentation/binary/latest) for
+> complete documentation.
+
+Most users will use the extension methods on `int` or `String`:
 
 ```dart
-// Sets the 0th bit in an (int) bits to 0
-bits = clearBit(bits, 0)
+// Uses "parseBits" (on String) and "shiftRight" (on int).
+void main() {
+  test('shiftRight should work identical to >>> in JavaScript', () {
+    expect(
+      '0111' '1111'.parseBits().shiftRight(5, 8),
+      '0000' '0011'.parseBits(),
+    );
+  });
+}
 ```
 
-However, this will _not_ do range validation. Use `Integral#clearBit`:
+For convenience, extension methods are also present on `List<int>`:
 
 ```dart
-// Sets the 0th bit in a uint32 to 0.
-// In dev-mode, if either bits or `n` is out of range it throws.
-bits = uint32.clearBit(bits, 0);
+// Uses "rotateRight" (on List<int>).
+void main() {
+  test('rotateRight should work similarly to int.rotateRight', () {
+    final list = ['0110' '0000'.parseBits()];
+    expect(
+      list.rotateRight(0, 1).toBinaryPadded(8),
+      '0011' '0000',
+    );
+  });
+}
 ```
-### Integral data types
 
-* `bit`
-* `int4`
-* `int8`
-* `int16`
-* `int32`
-* `int64`
-* `int128`
-* `uint4`
-* `uint8`
-* `uint16`
-* `uint32`
-* `uint64`
-* `uint128`
+There are also some specialized extension methods on the `typed_data` types:
 
-### Learning more
+- `Uint8List`, `Int8List`
+- `Uint16List`, `Int16List`
+- `Uint32List`, `Int32List`
 
-See the [dartdocs][] for more about the API.
+### Boxed Types
 
-[dartdocs]: https://www.dartdocs.org/documentation/binary/latest
+It is possible to sacrifice performance in order to get more type safety and
+range checking. For apps or libraries where this is a suitable tradeoff, we
+provide these boxed types/classes:
+
+- `Bit`
+- `Int4` and `Uint4`
+- `Int8` and `Uint8`
+- `Int16` and `Uint16`
+- `Int32` and `Uint32`
+
+## Compatibility
+
+This package is intended to work identically and well in both the standalone
+Dart VM, Flutter, and web builds of Dart and Flutter (both in DDC and Dart2JS).
+As a result, there are no built-in ways to access integers > 32-bit provided (as
+web integers are limited).
+
+Feel free to [file an issue][] if you'd like limited support for 64 and 128-bit.
+
+[file an issue]: https://github.com/matanlurey/binary.dart/issues

@@ -1,589 +1,1111 @@
-import 'dart:collection' show IterableBase;
-import 'dart:math' show pow;
+/// Utilities for working with binary data within Dart.
+///
+/// > NOTE: Unless otherwise noted, all functionality is based around treating
+/// > bits as [little endian](https://en.wikipedia.org/wiki/Endianness), that
+/// > is, in a 32-bit integer the leftmost bit is 31 and the rightmost bit is 0.
+///
+/// There are a few sets extension methods that are intended to be generally
+/// useful for libraries and apps that need to access, manipulate, or visualize
+/// binary data (and individual bits), and are intended to be as performant as
+/// possible:
+///
+/// - [BinaryInt]: Provides `int` with methods to access/manipulate bytes.
+/// - [BinaryList]: Assumes a `List<int>` of just `0` and `1`, provides methods.
+/// - [BinaryString]: Assumes a `String` of just `'0'` and `1`, provides methods.
+///
+/// Do note that the built-in `dart:typed_data` representations, such as
+/// [Uint8List] are _greatly_ preferred in terms of performance to creating your
+/// own abstractions like `List<int>`. Extensions similar to [BinaryInt] are
+/// also provided for the various typed list sub-types:
+///
+/// - [BinaryInt8List]
+/// - [BinaryUint8List]
+/// - ... and so on, up to `Int32List` and `Uint32List`.
+///
+/// > Notably, the above extension methods do _not_ know the underlying bit
+/// > size and require a `length` parameter where the method would otherwise be
+/// > ambiguous.
+///
+/// For users that desire more type safety (i.e. want to explicitly declare and
+/// enforce size of binary data) at the cost of performance, there are also
+/// boxed int representations:
+///
+/// - [Bit]
+/// - [Int4], [Uint4]
+/// - [Int8], [Uint8]
+/// - [Int16], [Uint16]
+/// - [Int32], [Uint32]
+///
+/// > Integers with a size greater than 32-bits are not explicitly supported
+/// > due to the fact that compatibility varies based on the deployment
+/// > platform (e.g. on the web/JavaScript).
+/// >
+/// > We could add limited forms of support with `BigInt`; file a request!
+library binary;
 
-import 'package:binary/binary.dart' as binary;
+import 'dart:math' as math;
+import 'dart:typed_data';
+
 import 'package:meta/meta.dart';
 
-/// Returns [bits] arithmetically right-shifted [n] bits.
-int arithmeticShiftRight(int bits, int n, int length) {
-  int leftPadding = msb(bits, length) ? pow(2, n) - 1 : 0;
-  return (leftPadding << (length - n)) | (bits >> n);
+bool get _assertionsEnabled {
+  var enabled = false;
+  assert(enabled = true);
+  return enabled;
 }
 
-/// Returns [bits] sign-extended to [endSize] bits.
+extension on Object {
+  /// Casts the current object to type [T].
+  ///
+  /// In some production compilers, this cast is skipped.
+  T unsafeCast<T>() => this; // ignore: return_of_invalid_type
+}
+
+/// A collection of unchecked binary methods to be applied to an [int].
 ///
-/// Sign extension is the operation of increasing the number of bits of a binary
-/// number while preserving the number's sign. This is done by appending digits
-/// to the most significant side of the number.  For example: if 6 bits are
-/// used to represent the value `00 1010` (decimal +10) and the sign extend
-/// operation increases the word length to 16 bits, the new representation is
-/// `0b0000 0000 0000 1010`.   Similarly the 10 bit value `11 1111 0001` can
-/// be sign extended to 16 bits as `1111 1111 1111 0001`
+/// > NOTE: There is limited range checking in this function. To verify
+/// > accessing a valid bit use one of the [Integral.getBit] implementations,
+/// > which knows both the minimum and maximum number of bits.
 ///
-/// [bits] will be extended from [startSize] to [endSize] bits.
-/// ```dart
-/// signExtend(bits, 10, 32);
+/// For example:
 /// ```
-int signExtend(int bits, int startSize, int endSize) {
-  assert(endSize > startSize);
-  int extendBit = getBit(bits, startSize - 1);
-  if (extendBit == 1) {
-    int newHighBits = pow(2, endSize - startSize) - 1;
-    bits = (newHighBits << startSize) | bits;
+/// // Unchecked. We assume 'bits' is meant to represent at least 7 bits.
+/// void example1(int bits) {
+///   print(bits.getBit(7));
+/// }
+///
+/// // Checked. Will throw a RangeError because Int4 cannot have 7 bits.
+/// void example2(Int4 bits) {
+///   print(bits.getBit(7));
+/// }
+/// ```
+extension BinaryInt on int {
+  /// Returns boxed as a [Bit] instance.
+  ///
+  /// This is a convenience and should be avoided for perf-sensitive code.
+  Bit asBit() => Bit(this);
+
+  /// Returns boxed as an [Int4] instance.
+  ///
+  /// This is a convenience and should be avoided for perf-sensitive code.
+  Int4 asInt4() => Int4(this);
+
+  /// Returns boxed as an [Uint4] instance.
+  ///
+  /// This is a convenience and should be avoided for perf-sensitive code.
+  Uint4 asUint4() => Uint4(this);
+
+  /// Returns boxed as an [Int8] instance.
+  ///
+  /// This is a convenience and should be avoided for perf-sensitive code.
+  Int8 asInt8() => Int8(this);
+
+  /// Returns boxed as an [Uint8] instance.
+  ///
+  /// This is a convenience and should be avoided for perf-sensitive code.
+  Uint8 asUint8() => Uint8(this);
+
+  /// Returns boxed as an [Int16] instance.
+  ///
+  /// This is a convenience and should be avoided for perf-sensitive code.
+  Int16 asInt16() => Int16(this);
+
+  /// Returns boxed as an [Uint16] instance.
+  ///
+  /// This is a convenience and should be avoided for perf-sensitive code.
+  Uint16 asUint16() => Uint16(this);
+
+  /// Returns boxed as an [Int32] instance.
+  ///
+  /// This is a convenience and should be avoided for perf-sensitive code.
+  Int32 asInt32() => Int32(this);
+
+  /// Returns boxed as an [Uint32] instance.
+  ///
+  /// This is a convenience and should be avoided for perf-sensitive code.
+  Uint32 asUint32() => Uint32(this);
+
+  /// Returns [this] arithetically right-shifted by [n] bytes assuming [length].
+  ///
+  /// This is intended to be roughly equivalent to JavaScript's `>>>` operator.
+  ///
+  /// > NOTE: [length] is _not_ validated. See [Integral.shiftRight].
+  int shiftRight(int n, int length) {
+    final leftPadding = msb(length) ? math.pow(2, n).unsafeCast<int>() - 1 : 0;
+    return (leftPadding << (length - n)) | (this >> n);
   }
-  return bits;
-}
 
-/// Returns a bit-wise right-rotation on [bits] by a specified [number] of bits.
-int rotateRight(int bits, int number) {
-  for (var i = 0; i < number; i++) {
-    bits = bits >> 1 | bits & 0x01 << 31;
-  }
-  return bits;
-}
-
-/// Returns the number of set [bits], assuming a [length]-bit input value.
-int areSet(int bits, int length) {
-  var c = 0;
-  for (var i = 0; i < length; i++) {
-    if (bits & (1 << i) != 0) {
-      c++;
+  /// Returns [this] sign-extended to [endSize] bits.
+  ///
+  /// Sign extension is the operation of increasing the number of bits of a
+  /// binary number while preserving the number's sign. This is done by
+  /// appending digits to the most significant side of the number, i.e. if 6
+  /// bits are used to represent the value `00 1010` (decimal +10) and the sign
+  /// extend operation increases the word length to 16 bits, the new
+  /// representation is `0b0000 0000 0000 1010`.
+  ///
+  /// Simiarily, the 10 bit value `11 1111 0001` can be sign extended to 16-bits
+  /// as `1111 1111 1111 0001`. This method is provided as a convenience when
+  /// converting between ints of smaller sizes to larger sizes.
+  int signExtend(int startSize, int endSize) {
+    if (endSize <= startSize) {
+      throw RangeError.value(
+        endSize,
+        'endSize',
+        'Expected endSize ($endSize) <= startSize ($startSize).',
+      );
     }
-  }
-  return c;
-}
-
-/// Returns whether the most-significant-bit in [bits] (of [length]) is set.
-bool msb(int bits, int length) => isSet(bits, length - 1);
-
-/// Returns the [n]th from [bits].
-///
-/// There is no range checking in this top-level function. To verify you are
-/// accessing a valid bit in _checked_ mode use [Integral.get], for example:
-/// ```dart
-/// int8.get(bits, n);
-/// ```
-int getBit(int bits, int n) => bits >> n & 1;
-
-/// Returns an integer with the [n]th bit in [bits] set.
-///
-/// There is no range checking in this top-level function. To verify you are
-/// accessing a valid bit in _checked_ mode use [Integral.set], for example:
-/// ```dart
-/// int8.set(bits, n);
-/// ```
-int setBit(int bits, int n) => bits | (1 << n);
-
-/// Returns whether the [n]th bit in [bits] is set.
-///
-/// There is no range checking in this top-level function. To verify you are
-/// accessing a valid bit in _checked_ mode use [Integral.isSet], for example:
-/// ```dart
-/// int8.isSet(bits, n);
-/// ```
-bool isSet(int bits, int n) => getBit(bits, n) == 1;
-
-/// Returns an integer with the [n]th bit in [bits] cleared.
-///
-/// There is no range checking in this top-level function. To verify you are
-/// accessing a valid bit in _checked_ mode use [Integral.clear], for example:
-/// ```dart
-/// int8.clear(bits, n);
-/// ```
-int clearBit(int bits, int n) => bits & ~(1 << n);
-
-/// Returns whether the [n]th bit in [bits] is set.
-///
-/// There is no range checking in this top-level function. To verify you are
-/// accessing a valid bit in _checked_ mode use [Integral.isClear], for example:
-/// ```dart
-/// int8.isClear(bits, n);
-/// ```
-bool isClear(int bits, int n) => getBit(bits, n) == 0;
-
-/// Returns an int containing bits in [left] to [left] + [size] from [bits].
-///
-/// The result is left-padded with 0's.
-///
-/// There is no range checking in this top-level function. To verify you are
-/// accessing a valid bit in _checked_ mode use [Integral.chunk], for example:
-/// ```dart
-/// int8.chunk(bits, left, size);
-/// ```
-int bitChunk(int bits, int left, int size) {
-  assert(() {
-    if (left < 0) {
-      throw new RangeError.value(left, 'left', 'Out of range. Must be > 0.');
-    }
-    if (size < 1) {
-      throw new RangeError.value(size, 'size', 'Out of range. Must be >= 1.');
-    }
-    return true;
-  });
-  return (bits >> (left + 1 - size)) & ~(~0 << size);
-}
-
-/// Returns an int containing bits in [left] to [right] _inclusive_ from [bits].
-///
-/// The result is left-padded with 0's.
-///
-/// There is no range checking in this top-level function. To verify you are
-/// accessing a valid bit in _checked_ mode use [Integral.range], for example:
-/// ```dart
-/// int8.range(bits, left, right);
-/// ```
-int bitRange(int bits, int left, int right) {
-  return bitChunk(bits, left, left - right + 1);
-}
-
-/// Returns an int from [bits], in order to right-most to left-most.
-///
-/// ```dart
-/// fromBits([1, 0, 0, 1]) // Returns `9`
-/// ```
-///
-/// **NOTE**: This is _not_ compatible with [Integral.toIterable].
-int fromBits(List<int> bits) {
-  assert(() {
-    if (bits == null) {
-      throw new ArgumentError.notNull('bits');
-    }
-    if (bits.isEmpty) {
-      throw new ArgumentError.value('Must be non-empty', 'bits');
-    }
-    return true;
-  });
-  var result = 0;
-  for (var n = 0; n < bits.length; n++) {
-    if (bits[n] == 1) {
-      result += pow(2, bits.length - n - 1);
+    final extendBit = getBit(startSize - 1);
+    if (extendBit == 1) {
+      final highBits = math.pow(2, endSize - startSize).unsafeCast<int>() - 1;
+      return (highBits << startSize) | this;
     } else {
-      assert(bits[n] == 0);
+      return this;
     }
   }
-  return result;
+
+  /// Returns a bit-wise right-rotation on [this] by an [amount] of bits.
+  int rotateRight(int amount) {
+    var bits = this;
+    for (var i = 0; i < amount; i++) {
+      bits = bits >> 1 | bits & 0x01 << 31;
+    }
+    return bits;
+  }
+
+  /// Returns the number of set bits in [this], assuming a [length]-bit [this].
+  ///
+  /// > NOTE: [length] is _not_ validated. See [Integral.setBits].
+  int countSetBits(int length) {
+    var count = 0;
+    for (var i = 0; i < length; i++) {
+      if (this & (1 << i) != 0) {
+        count++;
+      }
+    }
+    return count;
+  }
+
+  /// Returns whether the most-significant-bit in [this] (of [length]) is set.
+  ///
+  /// > NOTE: [length] is _not_ validated. See [Integral.msb].
+  bool msb(int length) {
+    return isSet(length - 1);
+  }
+
+  /// Throws [RangeError] if [n] is not at least `0`.
+  void _mustBeAtLeast0(int n) {
+    RangeError.checkNotNegative(n);
+  }
+
+  int _getBit(int n) => this >> n & 1;
+
+  /// Returns `1` if [n]th is bit set, else `0`.
+  ///
+  /// The current [int] instance is treated as bits of an unknown length.
+  int getBit(int n) {
+    _mustBeAtLeast0(n);
+    return _getBit(n);
+  }
+
+  int _setBit(int n) => this | (1 << n);
+
+  /// Returns a new [int] with the [n]th bit set.
+  ///
+  /// The current [int] instance is treated as bits of an unknown length.
+  int setBit(int n) {
+    _mustBeAtLeast0(n);
+    return _setBit(n);
+  }
+
+  int _clearBit(int n) => this & ~(1 << n);
+
+  /// Returns a new [int] with the [n]th bit cleared.
+  ///
+  /// The current [int] instance is treated as bits of an unknown length.
+  int clearBit(int n) {
+    _mustBeAtLeast0(n);
+    return _clearBit(n);
+  }
+
+  /// Returns whether bit [n] is set (i.e. `1`).
+  ///
+  /// The current [int] instance is treated as bits of an unknown length.
+  bool isSet(int n) => getBit(n) == 1;
+
+  /// Returns whether bit [n] is cleared (i.e. `0`).
+  ///
+  /// The current [int] instance is treated as bits of an unknown length.
+  bool isClear(int n) => getBit(n) == 0;
+
+  /// Returns an [int] containining bits _exclusive_ of the last bit.
+  ///
+  /// The result is left-padded with 0's.
+  ///
+  /// The current [int] instance is treated as bits of an unknown length.
+  int bitChunk(int left, int size) {
+    if (left < 0) {
+      throw RangeError.value(left, 'left', 'Out of range. Must be > 0.');
+    } else if (size < 1) {
+      throw RangeError.value(size, 'size', 'Out of range. Must be >= 1.');
+    } else if (size > left) {
+      throw RangeError.value(
+        size,
+        'size',
+        'Out of range. Must be > left ($left).',
+      );
+    }
+    return (this >> (left + 1 - size)) & ~(~0 << size);
+  }
+
+  /// Returns an [int] containining bits _inclusive_ of the last bit.
+  ///
+  /// The result is left-padded with 0's.
+  int bitRange(int left, int right) => bitChunk(left, left - right + 1);
+
+  /// Returns [this] as a binary string representation.
+  String toBinary() => toRadixString(2);
+
+  /// Returns [this] as a binary string representation, padded with `0`'s.
+  String toBinaryPadded(int length) => toBinary().padLeft(length, '0');
 }
 
-/// Parses a binary number made entirely of 1's and 0's.
+/// A collection of binary methods to be applied to elements of [Uint8List].
 ///
-/// ```dart
-/// parseBits('1001') // Returns `9`
-/// ```
-int parseBits(String bits) {
-  const $0 = 48;
-  const $1 = 49;
+/// The methods here are roughly the same as those on [BinaryInt], except that
+/// they operate on an [index] of the underlying list, and infer the `length`
+/// property based on the data type of the underlying list (i.e. `Uint8List` has
+/// a `length` of `8`).
+///
+/// See [BinaryList] for more extension methods that operate on any `List<int>`.
+extension BinaryUint8List on Uint8List {
+  static const _length = 8;
 
-  return fromBits(bits.codeUnits.map((codeUnit) {
+  /// Returns the [index]-th [int] boxed as a [Uint8].
+  Uint8 getBoxed(int index) => this[index].asUint8();
+
+  /// Returns the [index]-th [int] right-shifted by [n].
+  ///
+  /// See [BinaryInt.shiftRight].
+  int shiftRight(int index, int n) {
+    return this[index] = this[index].shiftRight(n, _length);
+  }
+
+  /// Returns [BinaryInt.countSetBits] applied to the [index]-th [int].
+  int countSetBits(int index) {
+    return this[index].countSetBits(_length);
+  }
+
+  /// Returns [BinaryInt.msb] applied to the [index]-th [int].
+  bool msb(int index) {
+    return this[index].msb(_length);
+  }
+}
+
+/// A collection of binary methods to be applied to elements of [Int8List].
+///
+/// The methods here are roughly the same as those on [BinaryInt], except that
+/// they operate on an [index] of the underlying list, and infer the `length`
+/// property based on the data type of the underlying list (i.e. `Int8List` has
+/// a `length` of `8`).
+///
+/// See [BinaryList] for more extension methods that operate on any `List<int>`.
+extension BinaryInt8List on Int8List {
+  static const _length = 8;
+
+  /// Returns the [index]-th [int] boxed as a [Int8].
+  Int8 getBoxed(int index) => this[index].asInt8();
+
+  /// Returns the [index]-th [int] right-shifted by [n].
+  ///
+  /// See [BinaryInt.shiftRight].
+  int shiftRight(int index, int n) {
+    return this[index] = this[index].shiftRight(n, _length);
+  }
+
+  /// Returns [BinaryInt.countSetBits] applied to the [index]-th [int].
+  int countSetBits(int index) {
+    return this[index].countSetBits(_length);
+  }
+
+  /// Returns [BinaryInt.msb] applied to the [index]-th [int].
+  bool msb(int index) {
+    return this[index].msb(_length);
+  }
+}
+
+/// A collection of binary methods to be applied to elements of [Uint16List].
+///
+/// The methods here are roughly the same as those on [BinaryInt], except that
+/// they operate on an [index] of the underlying list, and infer the `length`
+/// property based on the data type of the underlying list (i.e. `Uint16List`
+/// has a `length` of `16`).
+///
+/// See [BinaryList] for more extension methods that operate on any `List<int>`.
+extension BinaryUint16List on Uint16List {
+  static const _length = 16;
+
+  /// Returns the [index]-th [int] boxed as a [Uint16].
+  Uint16 getBoxed(int index) => this[index].asUint16();
+
+  /// Returns the [index]-th [int] right-shifted by [n].
+  ///
+  /// See [BinaryInt.shiftRight].
+  int shiftRight(int index, int n) {
+    return this[index] = this[index].shiftRight(n, _length);
+  }
+
+  /// Returns [BinaryInt.countSetBits] applied to the [index]-th [int].
+  int countSetBits(int index) {
+    return this[index].countSetBits(_length);
+  }
+
+  /// Returns [BinaryInt.msb] applied to the [index]-th [int].
+  bool msb(int index) {
+    return this[index].msb(_length);
+  }
+}
+
+/// A collection of binary methods to be applied to elements of [Int16List].
+///
+/// The methods here are roughly the same as those on [BinaryInt], except that
+/// they operate on an [index] of the underlying list, and infer the `length`
+/// property based on the data type of the underlying list (i.e. `Int16List`
+/// has a `length` of `16`).
+///
+/// See [BinaryList] for more extension methods that operate on any `List<int>`.
+extension BinaryInt16List on Int16List {
+  static const _length = 16;
+
+  /// Returns the [index]-th [int] boxed as a [Int16].
+  Int16 getBoxed(int index) => this[index].asInt16();
+
+  /// Returns the [index]-th [int] right-shifted by [n].
+  ///
+  /// See [BinaryInt.shiftRight].
+  int shiftRight(int index, int n) {
+    return this[index] = this[index].shiftRight(n, _length);
+  }
+
+  /// Returns [BinaryInt.countSetBits] applied to the [index]-th [int].
+  int countSetBits(int index) {
+    return this[index].countSetBits(_length);
+  }
+
+  /// Returns [BinaryInt.msb] applied to the [index]-th [int].
+  bool msb(int index) {
+    return this[index].msb(_length);
+  }
+}
+
+/// A collection of binary methods to be applied to elements of [Uint32List].
+///
+/// The methods here are roughly the same as those on [BinaryInt], except that
+/// they operate on an [index] of the underlying list, and infer the `length`
+/// property based on the data type of the underlying list (i.e. `Uint32List`
+/// has a `length` of `32`).
+///
+/// See [BinaryList] for more extension methods that operate on any `List<int>`.
+extension BinaryUint32List on Uint32List {
+  static const _length = 32;
+
+  /// Returns the [index]-th [int] boxed as a [Uint32].
+  Uint32 getBoxed(int index) => this[index].asUint32();
+
+  /// Returns the [index]-th [int] right-shifted by [n].
+  ///
+  /// See [BinaryInt.shiftRight].
+  int shiftRight(int index, int n) {
+    return this[index] = this[index].shiftRight(n, _length);
+  }
+
+  /// Returns [BinaryInt.countSetBits] applied to the [index]-th [int].
+  int countSetBits(int index) {
+    return this[index].countSetBits(_length);
+  }
+
+  /// Returns [BinaryInt.msb] applied to the [index]-th [int].
+  bool msb(int index) {
+    return this[index].msb(_length);
+  }
+}
+
+/// A collection of binary methods to be applied to elements of [Int32List].
+///
+/// The methods here are roughly the same as those on [BinaryInt], except that
+/// they operate on an [index] of the underlying list, and infer the `length`
+/// property based on the data type of the underlying list (i.e. `Int32List`
+/// has a `length` of `32`).
+///
+/// See [BinaryList] for more extension methods that operate on any `List<int>`.
+extension BinaryInt32List on Int32List {
+  static const _length = 32;
+
+  /// Returns the [index]-th [int] boxed as a [Int32].
+  Int32 getBoxed(int index) => this[index].asInt32();
+
+  /// Returns the [index]-th [int] right-shifted by [n].
+  ///
+  /// See [BinaryInt.shiftRight].
+  int shiftRight(int index, int n) {
+    return this[index] = this[index].shiftRight(n, _length);
+  }
+
+  /// Returns [BinaryInt.countSetBits] applied to the [index]-th [int].
+  int countSetBits(int index) {
+    return this[index].countSetBits(_length);
+  }
+
+  /// Returns [BinaryInt.msb] applied to the [index]-th [int].
+  bool msb(int index) {
+    return this[index].msb(_length);
+  }
+}
+
+/// A collection of binary methods to be applied to any `List<int>` instance.
+extension BinaryList on List<int> {
+  /// Converts a list of individual bytes to bits represented as an [int].
+  ///
+  /// Bytes are represented in order to right-most to left-most.
+  int parseBits() {
+    ArgumentError.checkNotNull(this, 'this');
+    if (isEmpty) {
+      throw ArgumentError.value('Must be non-empty', 'bits');
+    }
+    return join('').parseBits();
+  }
+
+  /// Returns the [index]-th [int] with [BinaryInt.signExtend] applied.
+  int signExtend(int index, int startSize, int endSize) {
+    return this[index] = this[index].signExtend(startSize, endSize);
+  }
+
+  /// Returns the [index]-th [int] with [BinaryInt.rotateRight] applied.
+  int rotateRight(int index, int amount) {
+    return this[index] = this[index].rotateRight(amount);
+  }
+
+  /// Returns the [index]-th [int] with [BinaryInt.countSetBits] applied.
+  ///
+  /// > NOTE: The [length] property is both required and not validated for
+  /// > correctness. See [Uint8List.countSetBits] or [Integral.setBits].
+  int countSetBits(int index, int length) {
+    return this[index].countSetBits(length);
+  }
+
+  /// Returns [BinaryInt.getInt] applied to the [index]-th [int].
+  int getBit(int index, int n) {
+    return this[index].getBit(n);
+  }
+
+  /// Returns [BinaryInt.setBit] applied to the [index]-th [int].
+  int setBit(int index, int n) {
+    return this[index] = this[index].setBit(n);
+  }
+
+  /// Returns [BinaryInt.clearBit] applied to the [index]-th [int].
+  int clearBit(int index, int n) {
+    return this[index] = this[index].clearBit(n);
+  }
+
+  /// Returns [BinaryInt.isSet] applied to the [index]-th [int].
+  bool isSet(int index, int n) {
+    return this[index].isSet(n);
+  }
+
+  /// Returns [BinarytInt.isClear] applied to the [index]-th [int].
+  bool isClear(int index, int n) {
+    return this[index].isClear(n);
+  }
+
+  /// Returns [BinaryInt.bitChunk] applied to the [index]-th [int].
+  int bitChunk(int index, int left, int size) {
+    return this[index].bitChunk(left, size);
+  }
+
+  /// Returns [BinaryInt.bitRange] applied to the [index]-th [int].
+  int bitRange(int index, int left, int right) {
+    return this[index].bitRange(left, right);
+  }
+}
+
+/// A collection of binary methods to be applied to any [String] instance.
+extension BinaryString on String {
+  int _parseCodeUnit(int index) {
+    const $0 = 48;
+    const $1 = 49;
+    final codeUnit = this.codeUnitAt(index);
     switch (codeUnit) {
       case $0:
         return 0;
       case $1:
         return 1;
       default:
-        final char = new String.fromCharCode(codeUnit);
-        throw new FormatException(
-          'Invalid character: $char',
-          bits,
-          bits.indexOf(char),
-        );
+        final char = String.fromCharCode(codeUnit);
+        throw FormatException('Invalid character: $char.', this, index);
     }
-  }).toList());
+  }
+
+  static final _left0s = RegExp(r'^0+');
+
+  /// Parses a binary number made entirely of `0`'s and `1`'s into an [int].
+  ///
+  /// Unlike [int.parse], this function allows `0` as a starting character.
+  int parseBits() {
+    var s = this;
+    if (s.isEmpty) {
+      throw FormatException('Non-empty string required.');
+    }
+    if (s.codeUnitAt(0) == 48) {
+      s = s.replaceAll(_left0s, '');
+    }
+    if (s.isEmpty) {
+      return 0;
+    } else {
+      return int.parse(replaceAll(_left0s, ''), radix: 2);
+    }
+  }
+
+  /// Parses a binary number made entirely of `0`'s and `1`'s into a list.
+  ///
+  /// Each element in the resulting `List<int>` is either `0` or `1`.
+  List<int> toBitList() {
+    if (isEmpty) {
+      throw FormatException('Cannot parse an empty string.');
+    }
+    final output = Uint8List(length);
+    for (var i = 0; i < length; i++) {
+      output[i] = _parseCodeUnit(i);
+    }
+    return output;
+  }
 }
 
-/// Returns true iff [bits] is exactly `0`.
-bool isZero(int bits) => bits == 0;
-
-/// Returns an int consisting of [bytes] packed left-to-right.
+/// Encapsulates a common integral data type of declared [size] and [signed].
 ///
-/// Every element of [bytes] is truncated as an 8-bit integer in the range
-/// [0, [uint8.max]].  0 is returned if [bytes] is empty.
-int pack(List<int> bytes) {
-  int value = 0;
+/// These data structures are _easier_ to use than [BinaryInt], but come at a
+/// cost of needing to box (wrap) [int] values in a class, and the overhead that
+/// comes with that in the Dart and JavaScript VMs, and should be avoided in
+/// perf-sensitive code.
+///
+/// **WARNING**: Do not implement, extend, or mix-in outside of this library.
+abstract class Integral<T extends Integral<T>> implements Comparable<Integral> {
+  /// Value wrapped by the [Integral].
+  final int value;
 
-  for (int i = 0; i < bytes.length; i++) {
-    int byte = uint8.mask(bytes[i]);
-    int numBytesLeft = bytes.length - (i + 1);
-    value = value | (byte << (8 * numBytesLeft));
-  }
-  return value;
-}
+  /// Numbers of bits in this data type.
+  final int size;
 
-/// Base class for common integral data types.
-class Integral implements Comparable<Integral> {
-  /// All _signed_ data types.
-  static const List<Integral> signed = const <Integral>[
-    int4,
-    int8,
-    int16,
-    int32,
-    int64,
-    int128,
-  ];
+  /// Whether this data type supports negative numbers.
+  final bool signed;
 
-  /// All _unsigned_ data types.
-  static const List<Integral> unsigned = const <Integral>[
-    bit,
-    uint4,
-    uint8,
-    uint16,
-    uint32,
-    uint64,
-    uint128,
-  ];
-
-  /// Number of bits in this data type.
-  final int length;
-
-  /// Whether this data type supports negative integers.
-  final bool isSigned;
-
-  /// Creates an integral data type of [length].
-  @literal
-  const Integral._(this.length) : isSigned = true;
-
-  /// Creates an unsigned integral data type of [length].
-  @literal
-  const Integral._unsigned(this.length) : isSigned = false;
-
-  RangeError _rangeError(int value, [String name]) {
-    return new RangeError.range(value, min, max, name);
+  /// Internal constructor for implementing sub-types.
+  Integral._checked({
+    @required this.value,
+    @required this.size,
+    @required this.signed,
+  }) {
+    ArgumentError.checkNotNull(value);
+    ArgumentError.checkNotNull(size);
+    ArgumentError.checkNotNull(signed);
+    RangeError.checkValueInInterval(value, _min, _max);
   }
 
-  /// Whether this data type is not signed (0 or positive integers only).
-  bool get isUnsigned => !isSigned;
+  /// An unsafe constructor that does not verify if the values are within range.
+  const Integral._unchecked({
+    @required this.value,
+    @required this.size,
+    @required this.signed,
+  })  : assert(value != null),
+        assert(size != null),
+        assert(signed != null);
 
-  /// Returns the [n]th from [bits].
-  ///
-  /// In _checked mode_, throws if [bits] or [n] not [inRange].
-  int get(int bits, int n) {
-    _assertInRange(bits, 'bits');
-    _assertInRange(n, 'n');
-    return getBit(bits, n);
-  }
+  /// Implement to create an instance of self around [value].
+  T _wrap(int value);
 
-  /// Returns the result of setting the [n]th from [bits].
-  ///
-  /// In _checked mode_, throws if [bits] or [n] not [inRange].
-  int set(int bits, int n) {
-    _assertInRange(bits, 'bits');
-    _assertInRange(n, 'n');
-    return setBit(bits, n);
-  }
-
-  /// Returns if the [n]th from [bits] is set.
-  ///
-  /// In _checked mode_, throws if [bits] or [n] not [inRange].
-  bool isSet(int bits, int n) {
-    _assertInRange(bits, 'bits');
-    _assertInRange(n, 'n');
-    return binary.isSet(bits, n);
-  }
-
-  /// Returns the result of clearing the [n]th from [bits].
-  ///
-  /// In _checked mode_, throws if [bits] or [n] not [inRange].
-  int clear(int bits, int n) {
-    _assertInRange(bits, 'bits');
-    _assertInRange(n, 'n');
-    return clearBit(bits, n);
-  }
-
-  /// Returns if the [n]th from [bits] is cleared.
-  ///
-  /// In _checked mode_, throws if [bits] or [n] not [inRange].
-  bool isClear(int bits, int n) {
-    _assertInRange(bits, 'bits');
-    _assertInRange(n, 'n');
-    return binary.isClear(bits, n);
-  }
-
-  /// Returns an int containing bits in [left] to [left] + [size] from [bits].
-  ///
-  /// The result is left-padded with 0's.
-  ///
-  /// In _checked mode_, throws if [bits], [left], or [size] out of range.
-  int chunk(int bits, int left, int size) {
-    _assertInRange(bits, 'bits');
-    _assertInRange(left, 'left');
-    _assertInRange(size, 'size');
-    return bitChunk(bits, left, size);
-  }
-
-  /// Returns an int containing bits in [left] to [right] inclusive from [bits].
-  ///
-  /// The result is left-padded with 0's.
-  ///
-  /// In _checked mode_, throws if [bits], [left], or [right] out of range.
-  int range(int bits, int left, int right) {
-    return bitRange(bits, left, right);
-  }
-
-  /// Returns an int from [bits], in order to left-most to right-most.
-  ///
-  /// In _checked mode_, throws if the result is out of range.
-  int fromBits(Iterable<int> bits) {
-    final result = binary.fromBits(bits);
-    _assertInRange(result);
-    return result;
-  }
-
-  /// Parses a binary number made entirely of 1's and 0's.
-  ///
-  /// In _checked mode_, throws if the result is out of range.
-  int parseBits(String bits) {
-    final result = binary.parseBits(bits);
-    _assertInRange(result);
-    return result;
-  }
-
-  /// Returns true iff [number] is negative, else false.
-  bool isNegative(int number) =>
-      isSigned ? getBit(number, length - 1) == 1 : false;
-
-  /// Returns [bits] sign-extended to [endSize] bits (defaults to [length]).
-  ///
-  /// See the top-level [binary.signExtend] method.
-  int signExtend(int bits, int startSize, [int endSize]) {
-    _assertInRange(bits);
-    return binary.signExtend(bits, startSize, endSize ?? length);
-  }
-
-  /// Returns a bit-wise right rotation on [bits] by [number] of bits.
-  ///
-  /// See [binary.rotateRight].
-  int rotateRight(int bits, int number) {
-    _assertInRange(bits);
-    return binary.rotateRight(bits, number);
-  }
-
-  /// Returns [bits] arithmetically right-shifted [n] bits.
-  ///
-  /// See [binary.arithmeticShiftRight].
-  int arithmeticShiftRight(int bits, int n) {
-    _assertInRange(bits);
-    return binary.arithmeticShiftRight(bits, n, length);
-  }
-
-  /// Returns the number of set bits in [bits].
-  ///
-  /// See [binary.areSet].
-  int areSet(int bits) {
-    _assertInRange(bits);
-    return binary.areSet(bits, length);
-  }
-
-  /// Returns whether the most-significant-bit in [bits] is set.
-  bool msb(int bits) {
-    _assertInRange(bits);
-    return binary.msb(bits, length);
-  }
-
-  /// Returns true if the [result] of an addition produced a carry bit.
-  ///
-  /// A carry bit is produced during a two's compliment addition if the unmasked
-  /// result is greater than [Integral.max].
-  bool hasCarryBit(int result) => result > max;
-
-  /// Returns true if [op1] + [op2] produced a signed overflow in [result].
-  bool doesAddOverflow(int op1, int op2, int result) =>
-      isNegative(op1) == isNegative(op2) &&
-      isNegative(result) != isNegative(op1);
-
-  /// Returns true if [op1] - [op2] produced a signed overflow in [result].
-  bool doesSubOverflow(int op1, int op2, int result) =>
-      isNegative(op1) != isNegative(op2) &&
-      isNegative(result) != isNegative(op1);
-
-  /// Returns an int containing only bits [0, [length]) from [bits].
-  int mask(int bits) => bits & ~(~0 << length);
-
-  /// Compares to another [Integral] data type, comparing [length].
-  ///
-  /// Whether [isSigned] or not is ignored.
   @override
-  int compareTo(Integral other) => length.compareTo(other.length);
+  int compareTo(Integral o) => value.compareTo(o.value);
 
-  void _assertInRange(int value, [String name]) {
-    assert(() {
-      if (!inRange(value)) {
-        throw _rangeError(value, name);
-      }
-      return true;
-    });
+  @override
+  bool operator ==(Object o) {
+    return o is Integral &&
+        value == o.value &&
+        size == o.size &&
+        signed == o.signed;
   }
 
-  /// Returns whether [value] falls in the range of representable by this type.
-  bool inRange(int value) => value >= min && value <= max;
+  @override
+  int get hashCode => value.hashCode;
 
   /// Minimum value representable by this type.
-  int get min => isSigned ? (-pow(2, length - 1)) : 0;
+  int get _min {
+    if (signed) {
+      return (-math.pow(2, size - 1)).unsafeCast();
+    } else {
+      return 0;
+    }
+  }
 
   /// Maximum value representable by this type.
-  int get max => isSigned ? pow(2, length - 1) - 1 : pow(2, length) - 1;
-
-  /// Returns [bits] as a binary string representation.
-  ///
-  /// In _checked mode_, throws if [bits] not [inRange].
-  String toBinary(int bits) {
-    _assertInRange(bits);
-    return bits.toRadixString(2);
+  int get _max {
+    if (signed) {
+      return (math.pow(2, size - 1) - 1).unsafeCast();
+    } else {
+      return (math.pow(2, size) - 1).unsafeCast();
+    }
   }
 
-  /// Returns [bits] as a binary string representation, padded with `0`'s.
-  ///
-  /// In _checked_ mode, throws if [bits] not [inRange].
-  String toBinaryPadded(int bits) {
-    _assertInRange(bits);
-    return bits.toRadixString(2).padLeft(length, '0');
+  void _assertMaxBits(int value, [String name]) {
+    RangeError.checkValueInInterval(value, 0, size - 1, name);
   }
 
-  /// Returns an iterable over [bits].
-  Iterable<int> toIterable(int bits) => new _IterableBits(this, bits);
+  /// Where this data type is not signed (0 or positive integers only).
+  bool get unsigned => !signed;
+
+  /// Returns the [n]th bit from [value].
+  ///
+  /// Throws [RangeError] if [n] is out of range.
+  int getBit(int n) {
+    _assertMaxBits(n, 'n');
+    return value.getBit(n);
+  }
+
+  /// Returns with the [n]th bit from [value] set.
+  ///
+  /// Throws [RangeError] if [n] is out of range.
+  T setBit(int n) {
+    _assertMaxBits(n, 'n');
+    return _wrap(value.setBit(n));
+  }
+
+  /// Returns whether the [n]th bit from [value] is set.
+  ///
+  /// Throws [RangeError] if [n] is out of range.
+  bool isSet(int n) {
+    _assertMaxBits(n);
+    return value.isSet(n);
+  }
+
+  /// Returns with the [n]th bit from [value] cleared.
+  ///
+  /// Throws [RangeError] if [n] is not [inRange].
+  T clearBit(int n) {
+    _assertMaxBits(n, 'n');
+    return _wrap(value.clearBit(n));
+  }
+
+  /// Returns whether the [n]th bit from [value] is cleared.
+  ///
+  /// Throws [RangeError] if [n] is out of range.
+  bool isClear(int n) {
+    _assertMaxBits(n, 'n');
+    return value.isClear(n);
+  }
+
+  /// Returns a new instance with bits in [left] to [size].
+  ///
+  /// The result is left-padded with 0's.
+  ///
+  /// Throws [RangeError] if [left] or [size] is out of range.
+  T bitChunk(int left, int size) {
+    _assertMaxBits(left, 'left');
+    return _wrap(value.bitChunk(left, size));
+  }
+
+  /// Returns a new instance with bits [left] to [right], inclusive.
+  ///
+  /// The result is left-padded with 0's.
+  ///
+  /// Throws [RangeError] if [left] or [bitRange] is out of range.
+  T bitRange(int left, int right) {
+    _assertMaxBits(left, 'left');
+    return _wrap(value.bitRange(left, right));
+  }
+
+  /// Returns `true` iff [value] represents a negative number, else `false`.
+  bool get isNegative => signed ? msb : false;
+
+  /// Returns `true` iff [value] represents a positive number, else `false`.
+  bool get isPositive => !isNegative;
+
+  /// Returns [value] arithmetically right-shifted [n] bits.
+  ///
+  /// See [BinaryInt.shiftRight].
+  T shiftRight(int n) {
+    return _wrap(value.shiftRight(n, size));
+  }
+
+  /// Returns a bit-wise right rotation on [value] by [number] of bits.
+  ///
+  /// See [BinaryInt.rotateRight].
+  T rotateRight(int number) {
+    return _wrap(value.rotateRight(number));
+  }
+
+  /// Returns the number of set bits in [value].
+  int get setBits {
+    return value.countSetBits(size);
+  }
+
+  /// Returns whether the most-significant-bit in [value] is set.
+  bool get msb => isSet(size - 1);
 
   @override
-  String toString() => '#$Integral {${isSigned ? '' : 'u'}$length}';
+  String toString() {
+    if (_assertionsEnabled) {
+      return _toDebugString();
+    } else {
+      return super.toString();
+    }
+  }
+
+  /// Returns [value] as a binary string representation.
+  String toBinary() => value.toBinary();
+
+  /// Returns [value] as a binary string representation, padded with `0`'s.
+  String toBinaryPadded() => value.toBinaryPadded(size);
+
+  /// Returns a debug-friendly representation of [toString].
+  String _toDebugString();
 }
 
-class _Bit extends Integral {
-  const _Bit() : super._unsigned(1);
+/// Encapsulates a single (unsigned) bit, i.e. either `0` or `1`.
+class Bit extends Integral<Bit> {
+  static const _name = 'Bit';
+  static const _size = 1;
+  static const _signed = false;
+
+  /// A pre-computed instance of `Bit(0)`.
+  static const zero = Bit._(0);
+
+  /// A pre-computed instance of `Bit(1)`.
+  static const one = Bit._(1);
+
+  /// Wraps a value of either `0` or `1`.
+  ///
+  /// This is considered a convenience for [Bit.zero] and [Bit.one].
+  factory Bit(int value) {
+    if (value == 0) return zero;
+    if (value == 1) return one;
+    throw RangeError.range(value, 0, 1);
+  }
+
+  const Bit._(int value)
+      : super._unchecked(
+          value: value,
+          signed: _signed,
+          size: _size,
+        );
 
   @override
-  final int min = 0;
+  Bit _wrap(int value) => Bit(value);
 
   @override
-  final int max = 1;
+  String _toDebugString() => '$_name {$value}';
 }
 
-class _BitIterator implements Iterator<int> {
-  final Integral _type;
+/// Encapsulates a signed 4-bit aggregation.
+///
+/// Also commonly known as:
+/// - A signed _nibble_
+/// - A _half-octet_
+/// - A _semi-octet_
+/// - A _half-byte_
+///
+/// Commonly used to represent:
+/// - Binary-coded decimal
+/// - Single decimal digits
+class Int4 extends Integral<Int4> {
+  static const _name = 'Int4';
+  static const _size = 4;
+  static const _signed = true;
 
-  int _bits;
-  int _position = -1;
+  /// A pre-computed instance of `Int4(0)`.
+  static const zero = Int4._(0);
 
-  _BitIterator(this._type, this._bits);
+  /// Wraps a [value] that is otherwise a valid 4-bit signed integer.
+  Int4(int value)
+      : super._checked(
+          value: value,
+          signed: _signed,
+          size: _size,
+        );
+
+  const Int4._(int value)
+      : super._unchecked(
+          value: value,
+          signed: _signed,
+          size: _size,
+        );
 
   @override
-  int get current => _type.get(_bits, _position);
+  Int4 _wrap(int value) => Int4(value);
 
   @override
-  bool moveNext() => ++_position < _type.length;
+  String _toDebugString() => '$_name {$value}';
 }
 
-class _IterableBits extends IterableBase<int> {
-  final Integral _type;
-  final int _bits;
+/// Encapsulates an unsigned 4-bit aggregation.
+///
+/// Also commonly known as:
+/// - An unsigned _nibble_
+/// - A _half-octet_
+/// - A _semi-octet_
+/// - A _half-byte_
+///
+/// Commonly used to represent:
+/// - Binary-coded decimal
+/// - Single decimal digits
+class Uint4 extends Integral<Uint4> {
+  static const _name = 'Uint4';
+  static const _size = 4;
+  static const _signed = false;
 
-  const _IterableBits(this._type, this._bits);
+  /// A pre-computed instance of `Uint4(0)`.
+  static const zero = Uint4._(0);
+
+  /// Wraps a [value] that is otherwise a valid 4-bit unsigned integer.
+  Uint4(int value)
+      : super._checked(
+          value: value,
+          signed: _signed,
+          size: _size,
+        );
+
+  const Uint4._(int value)
+      : super._unchecked(
+          value: value,
+          signed: _signed,
+          size: _size,
+        );
 
   @override
-  Iterator<int> get iterator => new _BitIterator(_type, _bits);
+  Uint4 _wrap(int value) => Uint4(value);
+
+  @override
+  String _toDebugString() => '$_name {$value}';
 }
 
-/// A single (unsigned) bit.
-const Integral bit = const _Bit();
-
-/// A (signed) 4-bit aggregation.
+/// Encapsulates a signed 8-bit aggregation.
 ///
-/// Also known as a signed _nibble_, _half-octet_, _semioctet_, _half-byte_.
-///
-/// Commonly used to represent:
-/// * Binary-coded decimal
-/// * Single decimal digits
-const Integral int4 = const Integral._(4);
-
-/// An unsigned 4-bit aggregation.
-///
-/// Also known as an unsigned _nibble_, _half-octet_, _semioctet_, _half-byte_.
+/// Also commonly known as:
+/// - An _octet_
+/// - A _byte_
 ///
 /// Commonly used to represent:
-/// * Binary-coded decimal
-/// * Single decimal digits
-const Integral uint4 = const Integral._unsigned(4);
+/// - ASCII characters
+class Int8 extends Integral<Int8> {
+  static const _name = 'Int8';
+  static const _size = 8;
+  static const _signed = true;
 
-/// A (signed) 8-bit aggregation.
+  /// A pre-computed instance of `Int8(0)`.
+  static const zero = Int8._(0);
+
+  /// Wraps a [value] that is otherwise a valid 8-bit signed integer.
+  Int8(int value)
+      : super._checked(
+          value: value,
+          signed: _signed,
+          size: _size,
+        );
+
+  const Int8._(int value)
+      : super._unchecked(
+          value: value,
+          signed: _signed,
+          size: _size,
+        );
+
+  @override
+  Int8 _wrap(int value) => Int8(value);
+
+  @override
+  String _toDebugString() => '$_name {$value}';
+}
+
+/// Encapsulates an unsigned 8-bit aggregation.
 ///
-/// Also known as an _octet_, _byte_.
+/// Also commonly known as:
+/// - An _octet_
+/// - A _byte_
 ///
 /// Commonly used to represent:
-/// * ASCII characters
-const Integral int8 = const Integral._(8);
+/// - ASCII characters
+class Uint8 extends Integral<Uint8> {
+  static const _name = 'Uint8';
+  static const _size = 8;
+  static const _signed = false;
 
-/// An unsigned 8-bit aggregation.
+  /// A pre-computed instance of `Uint8(0)`.
+  static const zero = Uint8._(0);
+
+  /// Wraps a [value] that is otherwise a valid 8-bit unsigned integer.
+  Uint8(int value)
+      : super._checked(
+          value: value,
+          signed: _signed,
+          size: _size,
+        );
+
+  const Uint8._(int value)
+      : super._unchecked(
+          value: value,
+          signed: _signed,
+          size: _size,
+        );
+
+  @override
+  Uint8 _wrap(int value) => Uint8(value);
+
+  @override
+  String _toDebugString() => '$_name {$value}';
+}
+
+/// Encapsulates a signed 16-bit aggregation.
 ///
-/// Also known as an _octet_, _byte_.
+/// Also commonly known as a _short_.
 ///
 /// Commonly used to represent:
-/// * ASCII characters
-const Integral uint8 = const Integral._unsigned(8);
+/// - USC-2 characters
+class Int16 extends Integral<Int16> {
+  static const _name = 'Int16';
+  static const _size = 16;
+  static const _signed = true;
 
-/// A (signed) 16-bit aggregation.
+  /// A pre-computed instance of `Int16(0)`.
+  static const zero = Int16._(0);
+
+  /// Wraps a [value] that is otherwise a valid 16-bit signed integer.
+  Int16(int value)
+      : super._checked(
+          value: value,
+          signed: _signed,
+          size: _size,
+        );
+
+  const Int16._(int value)
+      : super._unchecked(
+          value: value,
+          signed: _signed,
+          size: _size,
+        );
+
+  @override
+  Int16 _wrap(int value) => Int16(value);
+
+  @override
+  String _toDebugString() => '$_name {$value}';
+}
+
+/// Encapsulates an unsigned 16-bit aggregation.
 ///
-/// Also known as a _short_.
+/// Also commonly known as a _short_.
 ///
 /// Commonly used to represent:
-/// * UCS-2 characters
-const Integral int16 = const Integral._(16);
+/// - USC-2 characters
+class Uint16 extends Integral<Uint16> {
+  static const _name = 'Uint16';
+  static const _size = 16;
+  static const _signed = false;
 
-/// An unsigned 16-bit aggregation.
+  /// A pre-computed instance of `Uint16(0)`.
+  static const zero = Uint16._(0);
+
+  /// Wraps a [value] that is otherwise a valid 16-bit unsigned integer.
+  Uint16(int value)
+      : super._checked(
+          value: value,
+          signed: _signed,
+          size: _size,
+        );
+
+  const Uint16._(int value)
+      : super._unchecked(
+          value: value,
+          signed: _signed,
+          size: _size,
+        );
+
+  @override
+  Uint16 _wrap(int value) => Uint16(value);
+
+  @override
+  String _toDebugString() => '$_name {$value}';
+}
+
+/// Encapsulates a signed 32-bit aggregation.
 ///
-/// Also known a _short_.
+/// Also commonly known as a _word_ or _long_.
 ///
 /// Commonly used to represent:
-/// * UCS-2 characters
-const Integral uint16 = const Integral._unsigned(16);
+/// - UTF-32 characters
+/// - True color with alpha
+/// - Pointers in 32-bit computing
+class Int32 extends Integral<Int32> {
+  static const _name = 'Int32';
+  static const _size = 32;
+  static const _signed = true;
 
-/// A (signed) 32-bit aggregation.
+  /// A pre-computed instance of `Int32(0)`.
+  static const zero = Int32._(0);
+
+  /// Wraps a [value] that is otherwise a valid 32-bit signed integer.
+  Int32(int value)
+      : super._checked(
+          value: value,
+          signed: _signed,
+          size: _size,
+        );
+
+  @override
+  Int32 _wrap(int value) => Int32(value);
+
+  const Int32._(int value)
+      : super._unchecked(
+          value: value,
+          signed: _signed,
+          size: _size,
+        );
+
+  @override
+  String _toDebugString() => '$_name {$value}';
+}
+
+/// Encapsulates an unsigned 32-bit aggregation.
 ///
-/// Also known as a _word_, _long_.
+/// Also commonly known as a _word_ or _long_.
 ///
 /// Commonly used to represent:
-/// * UTF-32 characters
-/// * True color with alpha
-/// * Pointers in 32-bit computing
-const Integral int32 = const Integral._(32);
+/// - UTF-32 characters
+/// - True color with alpha
+/// - Pointers in 32-bit computing
+class Uint32 extends Integral<Uint32> {
+  static const _name = 'Uint32';
+  static const _size = 32;
+  static const _signed = false;
 
-/// An unsigned 32-bit aggregation.
-///
-/// Also known as a _word_, _long_.
-///
-/// Commonly used to represent:
-/// * UTF-32 characters
-/// * True color with alpha
-/// * Pointers in 32-bit computing
-const Integral uint32 = const Integral._unsigned(32);
+  /// A pre-computed instance of `Uint32(0)`.
+  static const zero = Uint32._(0);
 
-/// A (signed) 64-bit aggregation.
-///
-/// Also known as a _double word_, _long long_.
-///
-/// Commonly used to represent:
-/// * Time (milliseconds since the Unix epoch)
-/// * Pointers in 64-bit computing
-const Integral int64 = const Integral._(64);
+  /// Wraps a [value] that is otherwise a valid 32-bit unsigned integer.
+  Uint32(int value)
+      : super._checked(
+          value: value,
+          signed: _signed,
+          size: _size,
+        );
 
-/// An unsigned 64-bit aggregation.
-///
-/// Also known as a _double word_, _long long_.
-///
-/// Commonly used to represent:
-/// * Time (milliseconds since the Unix epoch)
-/// * Pointers in 64-bit computing
-const Integral uint64 = const Integral._unsigned(64);
+  const Uint32._(int value)
+      : super._unchecked(
+          value: value,
+          signed: _signed,
+          size: _size,
+        );
 
-/// A (signed) 128-bit aggregation.
-///
-/// Also known as a _octa word_.
-///
-/// Commonly used to represent:
-/// * Complicated scientific calculations
-/// * IPv6 addresses GUIDs
-const Integral int128 = const Integral._(128);
+  @override
+  Uint32 _wrap(int value) => Uint32(value);
 
-/// An unsigned 128-bit aggregation.
-///
-/// Also known as a _octa word_.
-///
-/// Commonly used to represent:
-/// * Complicated scientific calculations
-/// * IPv6 addresses GUIDs
-const Integral uint128 = const Integral._unsigned(128);
+  @override
+  String _toDebugString() => '$_name {$value}';
+}

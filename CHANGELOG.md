@@ -1,3 +1,13 @@
+# CHANGELOG
+
+## 1.0.0
+
+A large update to bring into line for Dart 2, as well take advantage of newer
+langauge features like
+[extension methods](https://dart.dev/guides/language/extension-methods) over
+top-level methods. As a result, the new API is _not_ compatible with previous
+versions, but migration should be trivial.
+
 ## 0.1.3
 
 - Added `arithmeticShiftRight`
