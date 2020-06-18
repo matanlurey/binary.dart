@@ -3,6 +3,7 @@
 Utilities for accessing binary data and bit manipulation in Dart and Flutter.
 
 ![pub_url][pub_img]
+![cov_url][cov_img]
 ![gha_url][gha_img]
 ![doc_url][doc_img]
 ![sty_url][sty_img]
@@ -11,9 +12,8 @@ Utilities for accessing binary data and bit manipulation in Dart and Flutter.
 [pub_img]: https://img.shields.io/pub/v/binary.svg
 [gha_url]: https://github.com/matanlurey/binary.dart/actions
 [gha_img]: https://github.com/matanlurey/binary.dart/workflows/Dart/badge.svg
-
-[cov_url]:
-[cov_img]:
+[cov_url]: https://codecov.io/gh/matanlurey/binary.dart
+[cov_img]: https://codecov.io/gh/matanlurey/binary.dart/branch/master/graph/badge.svg
 [doc_url]: https://www.dartdocs.org/documentation/binary/latest
 [doc_img]: https://img.shields.io/badge/Documentation-binary-blue.svg
 [sty_url]: https://pub.dev/packages/pedantic
