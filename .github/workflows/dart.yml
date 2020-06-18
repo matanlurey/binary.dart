@@ -18,13 +18,13 @@ jobs:
       uses: cedx/setup-dart@v2
 
     - name: Fetch Dependencies
-      uses: pub get
+      run: pub get
 
     - name: Dart Format
-      uses: dartfmt . --set-exit-if-changed
+      run: dartfmt . --set-exit-if-changed
 
     - name: Dart Analyzer
-      uses: dartanalyzer . --fatal-warnings
+      run: dartanalyzer . --fatal-warnings
 
     - name: Test
-      uses: pub run test --reporter expanded
+      run: pub run test --reporter expanded
