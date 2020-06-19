@@ -126,7 +126,7 @@ void main() {
   test('bitChunk should return a partial chunk of a number', () {
     expect(() => '1010'.parseBits().bitChunk(-1, 1), throwsRangeError);
     expect(() => '1010'.parseBits().bitChunk(0, 0), throwsRangeError);
-    expect(() => '1010'.parseBits().bitChunk(2, 3), throwsRangeError);
+    expect(() => '1010'.parseBits().bitChunk(2, 4), throwsRangeError);
     //      3210                       3->1               321
     expect('1010'.parseBits().bitChunk(3, 3).toBinary(), '101');
   });
@@ -136,6 +136,15 @@ void main() {
     expect('1010'.parseBits().bitRange(3, 2).toBinary(), '10');
     expect(0x01020304.toBinary(), '1000000100000001100000100');
     expect(0x01020304.bitRange(31, 24), 0x01);
+    expect(0x01020304.bitRange(4, 0), 4, reason: '${0x01020304.toBinary()}');
+  });
+
+  test('replaceBitRange should replace a range of bits', () {
+    expect(
+      //2-0
+      '1010'.parseBits().replaceBitRange(2, 0, '111'.parseBits()).toBinary(),
+      '1111',
+    );
   });
 
   test('toBinary should return a string representation', () {

@@ -248,12 +248,8 @@ extension BinaryInt on int {
       throw RangeError.value(left, 'left', 'Out of range. Must be > 0.');
     } else if (size < 1) {
       throw RangeError.value(size, 'size', 'Out of range. Must be >= 1.');
-    } else if (size > left) {
-      throw RangeError.value(
-        size,
-        'size',
-        'Out of range. Must be > left ($left).',
-      );
+    } else if (left - size < -1) {
+      throw RangeError.value(left - size, 'left - size', 'Expected >= -1');
     }
     return (this >> (left + 1 - size)) & ~(~0 << size);
   }
@@ -262,6 +258,13 @@ extension BinaryInt on int {
   ///
   /// The result is left-padded with 0's.
   int bitRange(int left, int right) => bitChunk(left, left - right + 1);
+
+  /// Returns an [int] replacing the bits from [left] to [right] with [bits].
+  int replaceBitRange(int left, int right, int bits) {
+    final orig = this;
+    final mask = ~(~0 << (left - right + 1));
+    return (orig & ~mask) | (bits & mask);
+  }
 
   /// Returns [this] as a binary string representation.
   String toBinary() => toRadixString(2);
@@ -527,6 +530,11 @@ extension BinaryList on List<int> {
   int bitRange(int index, int left, int right) {
     return this[index].bitRange(left, right);
   }
+
+  /// Returns [BinaryInt.replaceBitRange] applied to the [index]-th [int].
+  int replaceBitRange(int index, int left, int right, int bits) {
+    return this[index].replaceBitRange(left, right, bits);
+  }
 }
 
 /// A collection of binary methods to be applied to any [String] instance.
@@ -716,10 +724,18 @@ abstract class Integral<T extends Integral<T>> implements Comparable<Integral> {
   ///
   /// The result is left-padded with 0's.
   ///
-  /// Throws [RangeError] if [left] or [bitRange] is out of range.
+  /// Throws [RangeError] if [left] or [right] is out of range.
   T bitRange(int left, int right) {
     _assertMaxBits(left, 'left');
     return _wrap(value.bitRange(left, right));
+  }
+
+  /// Returns a new instance with bits [left] to [right], inclusive, replaced.
+  ///
+  /// Throws [RangeError] if [left] or [right] is out of range.
+  T replaceBitRange(int left, int right, int bits) {
+    _assertMaxBits(left, 'left');
+    return _wrap(value.replaceBitRange(left, right, bits));
   }
 
   /// Returns `true` iff [value] represents a negative number, else `false`.
