@@ -1,6 +1,6 @@
 // ignore_for_file: prefer_is_empty
 
-import 'package:meta/meta.dart';
+part of '../binary.dart';
 
 /// Builds a sequence of binary digits.
 ///
@@ -9,10 +9,10 @@ import 'package:meta/meta.dart';
 /// ## Usage
 /// ```
 /// final pattern = BitPattern([
-///   BitDynamic(1),
-///   BitStatic(0),
-///   BitStatic(1),
-///   BitStatic(1),
+///   BitPart(1),
+///   BitPart(0),
+///   BitPart(1),
+///   BitPart.v(1, 'FLAG'),
 /// ])
 /// 0x3.matches(pattern); // == true
 /// 0xB.matches(pattern); // == true
@@ -23,7 +23,7 @@ import 'package:meta/meta.dart';
 /// > code in the future, ensure that the resulting type is a compile-time
 /// > constant (`const`).
 @sealed
-abstract class BitPatternBuilder {
+class BitPatternBuilder {
   final List<BitPart> _parts;
 
   /// Creates a new builder of the provided parts.
@@ -37,14 +37,15 @@ abstract class BitPatternBuilder {
   BitPattern<List<int>> build() {
     var length = 0;
     for (final part in _parts) {
-      length += part.length;
+      length += part._length;
+    }
+    if (length > 32) {
+      throw StateError('Cannot build a pattern for > 32-bits, got $length');
     }
     return _InterpretedBitPattern(
       length,
-      _isSetMask(),
-      _nonVarMask(),
-      [],
-      [],
+      _isSetMask,
+      _nonVarMask,
     );
   }
 
@@ -55,55 +56,113 @@ abstract class BitPatternBuilder {
   /// - `{1, 1, V, 1} == 0xD == 0b1101`
   /// - `{0, 0, 0, 0} == 0x0 == 0b0000`
   /// - `{1, 0, 1, V} == 0xA == 0b1010`
-  int _isSetMask() {
-    return 0;
+  int get _isSetMask {
+    final length = _parts.length;
+    var mask = 0;
+    for (var i = 0; i < length; i++) {
+      if (_parts[i]._is1) {
+        mask = mask.setBit(length - i - 1);
+      }
+    }
+    return mask;
   }
 
-  int _nonVarMask() {
-    return 0;
+  /// Returns a "not-a-var" masking [int] for the current pattern.
+  ///
+  /// The k'th bit == 1 iff bit k of [this] is _not_ a variable:
+  /// - `{1, 1, 1, 1} == 0xF == 0b1111`
+  /// - `{1, 1, V, 1} == 0xD == 0b1101`
+  /// - `{0, 0, 0, 0} == 0x0 == 0b0000`
+  /// - `{1, 0, 1, V} == 0xE == 0b1110`
+  int get _nonVarMask {
+    final length = _parts.length;
+    var mask = 0;
+    for (var i = 0; i < length; i++) {
+      if (!_parts[i]._isVar) {
+        mask = mask.setBit(length - i - 1);
+      }
+    }
+    return mask;
   }
 }
 
 /// Part of a [BitPattern] that will be used to match.
 abstract class BitPart {
+  /// A static part of a pattern, e.g. either `0` or `1`, that _must_ match.
+  const factory BitPart(int bit) = _Bit;
+
+  /// A dynamic variable (segment) of a pattern of [length] bytes.
+  ///
+  /// Optionally has a [name] (for debug purposes).
+  const factory BitPart.v(int length, [String name]) = _Segment;
+
   /// Length of the part.
-  int get length;
+  int get _length;
+
+  bool get _is1;
+  bool get _isVar;
 }
 
-/// A static part of a [BitPattern], e.g. either `0` or `1`, that _must_ match.
-@sealed
-class BitStatic implements BitPart {
+class _Bit implements BitPart {
   final int _bit;
 
-  const BitStatic(this._bit) : assert(_bit == 0 || _bit == 1, 'Invalid: $_bit');
+  const _Bit(this._bit) : assert(_bit == 0 || _bit == 1, 'Invalid: $_bit');
 
   @override
-  bool operator ==(Object o) => o is BitStatic && _bit == o._bit;
+  bool operator ==(Object o) => o is _Bit && _bit == o._bit;
 
   @override
   int get hashCode => _bit.hashCode;
 
   @override
-  int get length => 1;
+  int get _length => 1;
+
+  @override
+  bool get _is1 => _bit == 1;
+
+  @override
+  bool get _isVar => false;
+
+  @override
+  String toString() {
+    if (_assertionsEnabled) {
+      return 'Bit { $_bit }';
+    } else {
+      return super.toString();
+    }
+  }
 }
 
-/// A dynamic variable (segment) of a [BitPattern] of [length] bytes.
-///
-/// Optionally has a [name] (for debug purposes).
-@sealed
-class BitDynamic implements BitPart {
-  final String name;
+class _Segment implements BitPart {
+  final String _name;
 
-  const BitDynamic(this.length, [this.name]) : assert(length >= 1);
+  const _Segment(this._length, [this._name]) : assert(_length >= 1);
 
   @override
-  bool operator ==(Object o) => o is BitDynamic && length == o.length;
+  bool operator ==(Object o) => o is _Segment && _length == o._length;
 
   @override
-  int get hashCode => length.hashCode;
+  int get hashCode => _length.hashCode;
 
   @override
-  final int length;
+  final int _length;
+
+  @override
+  bool get _is1 => false;
+
+  @override
+  bool get _isVar => true;
+
+  @override
+  String toString() {
+    if (_assertionsEnabled) {
+      return _name != null
+          ? 'Segment { $_name: $_length-bits }'
+          : 'Segment { $_length-bits }';
+    } else {
+      return super.toString();
+    }
+  }
 }
 
 /// Represents the result of calling [BitPattern.compile].
@@ -135,40 +194,34 @@ abstract class BitPattern<T> implements Comparable<BitPattern<T>> {
 
 /// A pre-computed [BitPattern] that relies on generic (programmatic) execution.
 class _InterpretedBitPattern implements BitPattern<List<int>> {
-  static bool _listEquals(List<Object> a, List<Object> b) {
-    if (a.length != b.length) {
-      return false;
-    }
-    for (var i = 0; i < a.length; i++) {
-      if (a[i] != b[i]) {
-        return false;
-      }
-    }
-    return true;
-  }
-
   final int _length;
   final int _isSetMask;
   final int _nonVarMask;
-  final List<BitStatic> _staticParts;
-  final List<BitDynamic> _dynamicParts;
 
   const _InterpretedBitPattern(
     this._length,
     this._isSetMask,
     this._nonVarMask,
-    this._staticParts,
-    this._dynamicParts,
   );
 
   @override
   int compareTo(covariant _InterpretedBitPattern other) {
-    if (_listEquals(_dynamicParts, other._dynamicParts)) {
-      return 0;
-    }
-    return _dynamicParts.length > other._dynamicParts.length ? 1 : -1;
+    throw UnimplementedError();
   }
 
   @override
   bool matches(int input) => ~(input ^ _isSetMask) & _nonVarMask == _nonVarMask;
+
+  @override
+  String toString() {
+    if (_assertionsEnabled) {
+      return (StringBuffer()
+            ..writeln('InterpretedBitPattern: $_length-bits {\n')
+            ..writeln('')
+            ..writeln('}'))
+          .toString();
+    } else {
+      return super.toString();
+    }
+  }
 }
