@@ -195,6 +195,10 @@ void main() {
       );
     });
 
+    test('parseBits should refuse on an empty string', () {
+      expect(() => ''.parseBits(), throwsFormatException);
+    });
+
     test('signExtend should work similarly to int.signExtend', () {
       final list = ['110'.parseBits()];
       expect(list.signExtend(0, 3, 5).toBinary(), '11110');
@@ -228,6 +232,16 @@ void main() {
       expect(['1010'.parseBits()].bitChunk(0, 3, 3).toBinary(), '101');
       //       32                             3->2               32
       expect(['1010'.parseBits()].bitRange(0, 3, 2).toBinary(), '10');
+    });
+
+    test('replaceBitRange works similar to int.*', () {
+      expect(
+        //2-0
+        ['1010'.parseBits()]
+            .replaceBitRange(0, 2, 0, '111'.parseBits())
+            .toBinary(),
+        '1111',
+      );
     });
   });
 }

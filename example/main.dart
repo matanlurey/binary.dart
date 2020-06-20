@@ -1,3 +1,4 @@
+// ignore_for_file: avoid_print
 import 'package:binary/binary.dart';
 
 void main() {

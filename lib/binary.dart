@@ -270,7 +270,9 @@ extension BinaryInt on int {
   String toBinary() => toRadixString(2);
 
   /// Returns [this] as a binary string representation, padded with `0`'s.
-  String toBinaryPadded(int length) => toBinary().padLeft(length, '0');
+  String toBinaryPadded(int length) {
+    return toUnsigned(length).toBinary().padLeft(length, '0');
+  }
 }
 
 /// A collection of binary methods to be applied to elements of [Uint8List].
@@ -612,11 +614,10 @@ abstract class Integral<T extends Integral<T>> implements Comparable<Integral> {
     @required this.value,
     @required this.size,
     @required this.signed,
-  }) {
-    ArgumentError.checkNotNull(value);
-    ArgumentError.checkNotNull(size);
-    ArgumentError.checkNotNull(signed);
-    RangeError.checkValueInInterval(value, _min, _max);
+  })  : assert(value != null),
+        assert(size != null),
+        assert(signed != null) {
+    RangeError.checkValueInInterval(this.value, _min, _max);
   }
 
   /// An unsafe constructor that does not verify if the values are within range.
@@ -631,6 +632,16 @@ abstract class Integral<T extends Integral<T>> implements Comparable<Integral> {
   /// Implement to create an instance of self around [value].
   T _wrap(int value);
 
+  /// Wraps [value], careful to normalize (unsign) if necessary.
+  T _wrapSignAware(int value) {
+    if (unsigned) {
+      value = value.toUnsigned(size);
+    } else {
+      value = value.toSigned(size);
+    }
+    return _wrap(value);
+  }
+
   @override
   int compareTo(Integral o) => value.compareTo(o.value);
 
@@ -644,6 +655,26 @@ abstract class Integral<T extends Integral<T>> implements Comparable<Integral> {
 
   @override
   int get hashCode => value.hashCode;
+
+  /// Bitwise OR operator.
+  T operator |(T other) => _wrapSignAware(value | other.value);
+
+  /// Bitwise AND operator.
+  T operator &(T other) => _wrapSignAware(value & other.value);
+
+  /// Bitwise XOR operator.
+  T operator ^(T other) => _wrapSignAware(value ^ other.value);
+
+  /// Bitwise NOT operator.
+  T operator ~() {
+    return _wrapSignAware(~value);
+  }
+
+  /// Left-shift operator.
+  T operator <<(T other) => _wrapSignAware(value << other.value);
+
+  /// Right-shift operator.
+  T operator >>(T other) => _wrapSignAware(value >> other.value);
 
   /// Minimum value representable by this type.
   int get _min {

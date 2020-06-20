@@ -12,6 +12,7 @@ linter:
   rules:
     - annotate_overrides
     - avoid_null_checks_in_equality_operators
+    - avoid_print
     - await_only_futures
     - hash_and_equals
     - package_api_docs

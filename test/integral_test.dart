@@ -3,6 +3,16 @@ import 'package:test/test.dart';
 
 /// Tests the [Integral] implementations.
 void main() {
+  test('should, in debug mode, have a descriptive toString()', () {
+    var enabled = false;
+    assert(enabled = true);
+    if (enabled) {
+      expect(Bit.zero.toString(), 'Bit {0}');
+    } else {
+      expect(Bit.zero.toString(), isNot('Bit {0}'));
+    }
+  });
+
   // It would be a lot of work to test every variant, so instead we test one
   // variant of both signed and unsigned (Int4, Uint4), and then just assert
   // that the rest of the variants are configured properly.
@@ -20,6 +30,36 @@ void main() {
           Int4(3),
         ],
       );
+    });
+
+    test('should be hashable', () {
+      expect({Int4(1): 1, Int4(1): 1}, hasLength(1));
+    });
+
+    group('Bitwise operators', () {
+      test('&', () {
+        expect(Int4(1) & Int4(2), Int4(1 & 2));
+      });
+
+      test('|', () {
+        expect(Int4(1) | Int4(2), Int4(1 | 2));
+      });
+
+      test('^', () {
+        expect(Int4(1) ^ Int4(2), Int4(1 ^ 2));
+      });
+
+      test('~', () {
+        expect((~Int4('0101'.parseBits())).toBinaryPadded(), '1010');
+      });
+
+      test('<<', () {
+        expect(Int4(1) << Int4(2), Int4(1 << 2));
+      });
+
+      test('>>', () {
+        expect(Int4(1) >> Int4(2), Int4(1 >> 2));
+      });
     });
 
     test('should return signed/unsigned', () {
@@ -62,6 +102,19 @@ void main() {
         expect(() => Int4.zero.isSet(4), throwsRangeError);
       });
     });
+
+    group('clearBit', () {
+      test('should return', () {
+        final int = Int4('101'.parseBits());
+        expect(int.clearBit(0), Int4('100'.parseBits()));
+        expect(int.clearBit(1), Int4('101'.parseBits()));
+      });
+
+      test('should enforce range', () {
+        expect(() => Int4.zero.clearBit(4), throwsRangeError);
+      });
+    });
+
     group('isClear', () {
       test('should return', () {
         final int = Int4('101'.parseBits());
@@ -85,6 +138,16 @@ void main() {
         expect(() => Int4.zero.bitChunk(4, 4), throwsRangeError);
         expect(() => Int4.zero.bitRange(4, 1), throwsRangeError);
       });
+    });
+
+    test('replaceBitRange', () {
+      expect(
+        //2-0
+        Uint4('1010'.parseBits())
+            .replaceBitRange(2, 0, '111'.parseBits())
+            .toBinary(),
+        '1111',
+      );
     });
 
     test('shiftRight should infer size', () {
@@ -117,6 +180,10 @@ void main() {
     test('toBinaryPadded should infer size', () {
       expect(Uint8('0110' '0000'.parseBits()).toBinaryPadded(), '0110' '0000');
     });
+  });
+
+  test('Uint4 with ~ should work as expected', () {
+    expect((~Uint4('0101'.parseBits())).toBinaryPadded(), '1010');
   });
 
   group('Sign Checks [isPositive/isNegative]', () {
