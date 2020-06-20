@@ -3,9 +3,6 @@ name: binary
 description: >
   Utilities for working with binary data
 version: 1.0.0
-authors:
-  - Matan Lurey <matan@lurey.org>
-  - Kendal Harland <kendaljharland@gmail.com>
 
 homepage: https://github.com/matanlurey/binary
 
