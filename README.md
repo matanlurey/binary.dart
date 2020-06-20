@@ -2,11 +2,11 @@
 
 Utilities for accessing binary data and bit manipulation in Dart and Flutter.
 
-![pub_url][pub_img]
-![cov_url][cov_img]
-![gha_url][gha_img]
-![doc_url][doc_img]
-![sty_url][sty_img]
+[![Binary on pub.dev][pub_img]][pub_url]
+[![Code coverage][cov_img]][cov_url]
+[![Github action status][gha_img]][gha_url]
+[![Dartdocs][doc_img]][doc_url]
+[![Style guide][sty_img]][sty_url]
 
 [pub_url]: https://pub.dartlang.org/packages/binary
 [pub_img]: https://img.shields.io/pub/v/binary.svg
