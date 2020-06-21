@@ -1,5 +1,26 @@
 # CHANGELOG
 
+## 1.2.0
+
+- Added `BitPatternBuilder.parse`, a simplified-format for building `BitPattern`
+  from a string of alpha-numeric characters, where `0` and `1` are pre-defined
+  (static) flags for matching, and charaters are variable segments:
+
+  ```dart
+  // Create a BitPattern (Data Structures).
+  final $01V = BitPatternBuilder([
+    BitPart(0),
+    BitPart(1),
+    BitPart.v(1, 'A'),
+  ]).build();
+
+  // Create a BitPattern (Parse a String).
+  final $01Vs = BitPatternBuilder.parse('01A').build();
+  print($01V == $01Vs); // true
+  ```
+
+- Fixed a bug where it was not possible to capture variables that were >8-bit.
+
 ## 1.1.0
 
 - Added `BitPatternBuilder`, `BitPattern`, `BitPart`: a new API in order to

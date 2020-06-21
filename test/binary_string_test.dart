@@ -8,6 +8,10 @@ void main() {
       expect(() => ''.parseBits(), throwsFormatException);
     });
 
+    test('should fail on invalid characters', () {
+      expect(() => '1020'.parseBits(), throwsFormatException);
+    });
+
     test('should parse with leading 0s', () {
       expect('0110'.parseBits().toBinaryPadded(4), '0110');
     });

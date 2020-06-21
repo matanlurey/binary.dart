@@ -13,11 +13,15 @@ void main() {
   print(int8.shiftRight(5));
 
   // Using bit patterns.
-  final $01V = BitPatternBuilder([
+  final $01V = BitPatternBuilder(const [
     BitPart(0),
     BitPart(1),
-    BitPart.v(1),
+    BitPart.v(1, 'V'),
   ]).build();
   print($01V.matches('011'.parseBits())); // true
   print($01V.capture('011'.parseBits())); // [1]
+
+  // Alternative bit pattern.
+  final $01Vs = BitPatternBuilder.parse('01V').build();
+  print($01V == $01Vs); // true
 }
