@@ -616,9 +616,7 @@ abstract class Integral<T extends Integral<T>> implements Comparable<Integral> {
     @required this.value,
     @required this.size,
     @required this.signed,
-  })  : assert(value != null),
-        assert(size != null),
-        assert(signed != null) {
+  }) : assert(value != null) {
     RangeError.checkValueInInterval(this.value, _min, _max);
   }
 
@@ -627,9 +625,7 @@ abstract class Integral<T extends Integral<T>> implements Comparable<Integral> {
     @required this.value,
     @required this.size,
     @required this.signed,
-  })  : assert(value != null),
-        assert(size != null),
-        assert(signed != null);
+  });
 
   /// Implement to create an instance of self around [value].
   T _wrap(int value);

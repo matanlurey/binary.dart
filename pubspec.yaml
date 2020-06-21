@@ -2,7 +2,7 @@ name: binary
 
 description: >
   Utilities for accessing binary data and bit manipulation in Dart and Flutter
-version: 1.1.0
+version: 1.2.0
 
 homepage: https://github.com/matanlurey/binary
 

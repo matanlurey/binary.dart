@@ -3,13 +3,11 @@ import 'package:test/test.dart';
 
 /// Tests the [Integral] implementations.
 void main() {
-  test('should, in debug mode, have a descriptive toString()', () {
+  test('should, in debug mode, refuse null values', () {
     var enabled = false;
     assert(enabled = true);
     if (enabled) {
-      expect(Bit.zero.toString(), 'Bit {0}');
-    } else {
-      expect(Bit.zero.toString(), isNot('Bit {0}'));
+      expect(() => Int4(null), throwsA(TypeMatcher<AssertionError>()));
     }
   });
 
@@ -288,6 +286,44 @@ void main() {
         () => Uint32('1'.padRight(32 + 1, '0').parseBits()),
         throwsRangeError,
       );
+    });
+  });
+
+  test('<toDebugString>', () {
+    var enabled = false;
+    assert(enabled = true);
+    [
+      Bit.zero,
+      Uint4.zero,
+      Int4.zero,
+      Uint8.zero,
+      Int8.zero,
+      Uint16.zero,
+      Int16.zero,
+      Uint32.zero,
+      Int32.zero,
+    ].forEach((i) {
+      if (enabled) {
+        expect(Bit.zero.toString(), endsWith('{0}'));
+      } else {
+        expect(Bit.zero.toString(), isNot(endsWith('{0}')));
+      }
+    });
+  });
+
+  test('<wrappedOperators>', () {
+    <Integral>[
+      Bit.zero,
+      Uint4.zero,
+      Int4.zero,
+      Uint8.zero,
+      Int8.zero,
+      Uint16.zero,
+      Int16.zero,
+      Uint32.zero,
+      Int32.zero,
+    ].forEach((i) {
+      expect(i | i, i);
     });
   });
 }

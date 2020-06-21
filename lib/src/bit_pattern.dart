@@ -23,11 +23,20 @@ part of '../binary.dart';
 /// > code in the future, ensure that the resulting type is a compile-time
 /// > constant (`const`).
 @sealed
-class BitPatternBuilder {
-  final List<BitPart> _parts;
-
+abstract class BitPatternBuilder {
   /// Creates a new builder of the provided parts.
-  const BitPatternBuilder(this._parts) : assert(_parts.length > 0);
+  const factory BitPatternBuilder(List<BitPart> parts) = _BitPatternBuilder;
+
+  /// Creates a new builder that will parse [bits].
+  ///
+  /// Supported characters are `0`, `1`, `A-Za-z`, and `_`, where `0` and `1`
+  /// are parsed as a `BitPart`, and `A-Za-z` are parsed as a `BitPart.v`, and
+  /// `_` is ignored (can be used to help separate bits for readability).
+  ///
+  /// It is considered invalid to have the same variable more than once within
+  /// a pattern (e.g. `01AA01AA`), to have more than one `_` in a row (e.g.
+  /// `0101__0101`), or to have an empty or `null` string.
+  const factory BitPatternBuilder.parse(String bits) = _BitPatternParser;
 
   /// Compiles and returns a [BitPattern] capable of matching.
   ///
@@ -48,6 +57,15 @@ class BitPatternBuilder {
   ///
   /// print(pattern.match(0xD /* 0b1101 */)); // [1]
   /// ```
+  BitPattern<List<int>> build([String name]);
+}
+
+class _BitPatternBuilder implements BitPatternBuilder {
+  final List<BitPart> _parts;
+
+  const _BitPatternBuilder(this._parts) : assert(_parts.length > 0);
+
+  @override
   BitPattern<List<int>> build([String name]) {
     var capture = 0;
     var length = 0;
@@ -125,14 +143,115 @@ class BitPatternBuilder {
   }
 }
 
+class _BitPatternParser implements BitPatternBuilder {
+  static bool _isAlphabetic(int c) {
+    const $a = 97;
+    const $z = 122;
+    const $A = 65;
+    const $Z = 90;
+    return c >= $a && c <= $z || c >= $A && c <= $Z;
+  }
+
+  final String _bits;
+
+  const _BitPatternParser(this._bits);
+
+  @override
+  BitPattern<List<int>> build([String name]) {
+    ArgumentError.checkNotNull(_bits);
+    if (_bits.isEmpty) {
+      throw ArgumentError.value(_bits, 'bits', 'Must be non-empty');
+    }
+
+    final used = Set<String>();
+    final parts = <BitPart>[];
+
+    String variable;
+    var variableLength = 0;
+    var parsedUnderscore = false;
+
+    void completeVariable() {
+      assert(variable.isNotEmpty);
+      assert(variableLength > 0);
+      parts.add(BitPart.v(variableLength, variable));
+      used.add(variable);
+      variableLength = 0;
+      variable = null;
+    }
+
+    for (var i = 0; i < _bits.length; i++) {
+      final character = _bits[i];
+      switch (character) {
+        case '0':
+          if (variable != null) {
+            completeVariable();
+          }
+          parts.add(const BitPart(0));
+          break;
+        case '1':
+          if (variable != null) {
+            completeVariable();
+          }
+          parts.add(const BitPart(1));
+          break;
+        case '_':
+          if (variable != null) {
+            completeVariable();
+          }
+          if (parsedUnderscore) {
+            throw FormatException('Cannot have mulitple _\'s', _bits, i);
+          } else {
+            parsedUnderscore = true;
+            continue;
+          }
+          break;
+        default:
+          final code = character.codeUnitAt(0);
+          if (_isAlphabetic(code)) {
+            if (variable == character) {
+              variableLength++;
+            } else {
+              if (variable != null) {
+                completeVariable();
+              }
+              if (used.contains(character)) {
+                throw FormatException(
+                  'Already used variable $character',
+                  _bits,
+                  i,
+                );
+              }
+              variable = character;
+              variableLength = 1;
+            }
+          } else {
+            throw FormatException(
+              'Not a valid character: $character',
+              _bits,
+              i,
+            );
+          }
+          break;
+      }
+      parsedUnderscore = false;
+    }
+    if (variable != null) {
+      completeVariable();
+    }
+    return _BitPatternBuilder(parts).build(name);
+  }
+}
+
 /// Part of a [BitPattern] that will be used to match.
 abstract class BitPart {
   /// A static part of a pattern, e.g. either `0` or `1`, that _must_ match.
+  @literal
   const factory BitPart(int bit) = _Bit;
 
   /// A dynamic variable (segment) of a pattern of [length] bytes.
   ///
   /// Optionally has a [name] (for debug purposes).
+  @literal
   const factory BitPart.v(int length, [String name]) = _Segment;
 
   /// Length of the part.
@@ -252,6 +371,17 @@ class _CaptureBits {
 
   const _CaptureBits(this.name, this.left, this.size);
 
+  @override
+  int get hashCode => name.hashCode ^ left.hashCode ^ size.hashCode;
+
+  @override
+  bool operator ==(Object o) {
+    if (o is _CaptureBits) {
+      return name == o.name && left == o.left && size == o.size;
+    }
+    return false;
+  }
+
   /// Returns bits from [bits] from [left] of [size].
   int capture(int bits) => bits.bitChunk(left, size);
 
@@ -267,6 +397,18 @@ class _CaptureBits {
 
 /// A pre-computed [BitPattern] that relies on generic (programmatic) execution.
 class _InterpretedBitPattern implements BitPattern<List<int>> {
+  static bool _listEquals(List<Object> a, List<Object> b) {
+    if (a.length != b.length) {
+      return false;
+    }
+    for (var i = 0; i < a.length; i++) {
+      if (a[i] != b[i]) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   final int _length;
   final int _nonVarBits;
   final int _isSetMask;
@@ -284,11 +426,31 @@ class _InterpretedBitPattern implements BitPattern<List<int>> {
   );
 
   List<int> _newList(int size) {
-    if (size <= 8) return Uint8List(size);
-    if (size <= 16) return Uint16List(size);
-    if (size <= 32) return Uint32List(size);
-    throw StateError('Cannot match a pattern of > 32-bits, got $size.');
+    if (_length <= 8) return Uint8List(size);
+    if (_length <= 16) return Uint16List(size);
+    // It's not possible for the size to be >= 32 at this point.
+    return Uint32List(size);
   }
+
+  @override
+  bool operator ==(Object o) {
+    if (o is _InterpretedBitPattern) {
+      return _length == o._length &&
+          _nonVarMask == o._nonVarMask &&
+          _isSetMask == o._isSetMask &&
+          _listEquals(_capture, o._capture) &&
+          _name == o._name;
+    }
+    return false;
+  }
+
+  @override
+  int get hashCode =>
+      _length.hashCode ^
+      _nonVarBits.hashCode ^
+      _isSetMask.hashCode ^
+      _nonVarMask.hashCode ^
+      _capture.map((c) => c.hashCode).reduce((a, b) => a ^ b);
 
   @override
   int compareTo(covariant _InterpretedBitPattern other) {
@@ -338,7 +500,7 @@ class _InterpretedBitPattern implements BitPattern<List<int>> {
       return (StringBuffer()
             ..writeln('InterpretedBitPattern: $_length-bits {')
             ..writeln('  name:       ${_name ?? '<Unnamed>'}')
-            ..writeln('  capture:    ${names.join(', ')}')
+            ..writeln('  capture:    ${_capture.join(', ')}')
             ..writeln('  isSetMask:  ${_isSetMask.toBinaryPadded(_length)}')
             ..writeln('  nonVarMask: ${_nonVarMask.toBinaryPadded(_length)}')
             ..writeln('}'))
