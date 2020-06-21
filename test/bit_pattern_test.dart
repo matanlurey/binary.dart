@@ -69,19 +69,19 @@ void main() {
     });
 
     test('should capture a set of variables/names', () {
+      // 10FFFFTT
       final pattern = build([
         BitPart(1),
         BitPart(0),
         BitPart.v(4, 'FOUR'),
         BitPart.v(2, 'TWO'),
       ]);
+      // 10FFFFTT
+      // 10111010
       final captured = pattern.capture('1011' '1010'.parseBits());
       expect(
         Map.fromIterables(pattern.names, captured),
-        {
-          'FOUR': '1110'.parseBits(),
-          'TWO': '10'.parseBits(),
-        },
+        {'FOUR': '1110'.parseBits(), 'TWO': '10'.parseBits()},
       );
     });
 
