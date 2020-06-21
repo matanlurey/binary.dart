@@ -34,10 +34,30 @@ class BitPatternBuilder {
   /// This relies on the default implementation [CompiledBitPattern], which is
   /// a programmatic execution based on some pre-computed values from the
   /// provided `List<BitPart>`.
+  ///
+  /// The result of [BitPattern.match] returns a `List<int>`, which is a list
+  /// encapsulating the bits that matched a [BitPart.v], if any, indexed by
+  /// their occurrence (left-to-right) when matched:
+  /// ```
+  /// final pattern = BitPatternBuilder([
+  ///   BitPart(1),
+  ///   BitPart(0),
+  ///   BitPart(1),
+  ///   BitPart.v(1)
+  /// ]).build();
+  ///
+  /// print(pattern.match(0xD /* 0b1101 */)); // [1]
+  /// ```
   BitPattern<List<int>> build() {
+    final names = <String>[];
     var length = 0;
-    for (final part in _parts) {
+    var index = 0; // ignore: prefer_final_locals
+    for (var i = 0; i < _parts.length; i++) {
+      final part = _parts[i];
       length += part._length;
+      if (part is _Segment) {
+        names.add(part._name ?? '$index++');
+      }
     }
     if (length > 32) {
       throw StateError('Cannot build a pattern for > 32-bits, got $length');
@@ -46,6 +66,7 @@ class BitPatternBuilder {
       length,
       _isSetMask,
       _nonVarMask,
+      names,
     );
   }
 
@@ -188,6 +209,12 @@ class _Segment implements BitPart {
 ///
 /// > NOTE: You can only compare [ComputedBitPattern]s of the same type!
 abstract class BitPattern<T> implements Comparable<BitPattern<T>> {
+  /// A list of named variables (to use in conjunction with [match]).
+  List<String> get names;
+
+  /// Returns an element [T] iff it [matches], otherwise `null`.
+  T match(int input);
+
   /// Returns true iff [input] bits matches this pattern.
   bool matches(int input);
 }
@@ -202,11 +229,24 @@ class _InterpretedBitPattern implements BitPattern<List<int>> {
     this._length,
     this._isSetMask,
     this._nonVarMask,
+    this.names,
   );
 
   @override
   int compareTo(covariant _InterpretedBitPattern other) {
     throw UnimplementedError();
+  }
+
+  @override
+  final List<String> names;
+
+  @override
+  List<int> match(int input) {
+    if (matches(input)) {
+      throw UnimplementedError();
+    } else {
+      return null;
+    }
   }
 
   @override
