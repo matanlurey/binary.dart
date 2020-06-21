@@ -48,6 +48,8 @@ import 'dart:typed_data';
 
 import 'package:meta/meta.dart';
 
+part 'src/bit_pattern.dart';
+
 bool get _assertionsEnabled {
   var enabled = false;
   assert(enabled = true);

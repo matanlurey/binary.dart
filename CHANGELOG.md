@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 1.1.0
+
+- Added `BitPatternBuilder`, `BitPattern`, `BitPart`: a new API in order to
+  build bit-based patterns and match against arbitrary sets of bits, optionally
+  extracting variable names. This API is intended to make it easier to build
+  apps and packages around implementing emulators and other decoders.
+
 ## 1.0.0
 
 A large update to bring into line for Dart 2, as well take advantage of newer

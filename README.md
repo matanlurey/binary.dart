@@ -111,6 +111,29 @@ provide these boxed types/classes:
 - `Int16` and `Uint16`
 - `Int32` and `Uint32`
 
+### Bit Patterns
+
+There is also builder-type API for generating patterns to match against bits.
+The easiest way to explain this API is it is _like_ `RegExp`, except for
+matching and capturing components of bits:
+
+```dart
+void main() {
+  // Create a BitPattern.
+  final $01V = BitPatternBuilder([
+    BitPart(0),
+    BitPart(1),
+    BitPart.v(1),
+  ]).build();
+
+  // Match it against bits.
+  print($01V.matches('011'.parseBits())); // true
+
+  // Capture variables (if any), similar to a RegExp.
+  print($01V.capture('011'.parseBits())); // [1]
+}
+```
+
 ## Compatibility
 
 This package is intended to work identically and well in both the standalone

@@ -11,4 +11,13 @@ void main() {
   final int8 = Int8('0111' '1111'.parseBits());
   // Note we did not need to pass in the length, it is provided by the class.
   print(int8.shiftRight(5));
+
+  // Using bit patterns.
+  final $01V = BitPatternBuilder([
+    BitPart(0),
+    BitPart(1),
+    BitPart.v(1),
+  ]).build();
+  print($01V.matches('011'.parseBits())); // true
+  print($01V.capture('011'.parseBits())); // [1]
 }
