@@ -48,7 +48,7 @@ class BitPatternBuilder {
   ///
   /// print(pattern.match(0xD /* 0b1101 */)); // [1]
   /// ```
-  BitPattern<List<int>> build() {
+  BitPattern<List<int>> build([String name]) {
     var capture = 0;
     var length = 0;
     for (final part in _parts) {
@@ -63,9 +63,10 @@ class BitPatternBuilder {
     return _InterpretedBitPattern(
       length,
       _parts.length - capture,
-      _isSetMask,
-      _nonVarMask,
+      _isSetMask(length),
+      _nonVarMask(length),
       _buildCapture(length, capture),
+      name,
     );
   }
 
@@ -94,13 +95,13 @@ class BitPatternBuilder {
   /// - `{1, 1, V, 1} == 0xD == 0b1101`
   /// - `{0, 0, 0, 0} == 0x0 == 0b0000`
   /// - `{1, 0, 1, V} == 0xA == 0b1010`
-  int get _isSetMask {
-    final length = _parts.length;
+  int _isSetMask(int length) {
     var mask = 0;
-    for (var i = 0; i < length; i++) {
-      if (_parts[i]._is1) {
-        mask = mask.setBit(length - i - 1);
+    for (final part in _parts) {
+      if (part._is1) {
+        mask = mask.setBit(length - 1);
       }
+      length -= part._length;
     }
     return mask;
   }
@@ -112,13 +113,13 @@ class BitPatternBuilder {
   /// - `{1, 1, V, 1} == 0xD == 0b1101`
   /// - `{0, 0, 0, 0} == 0x0 == 0b0000`
   /// - `{1, 0, 1, V} == 0xE == 0b1110`
-  int get _nonVarMask {
-    final length = _parts.length;
+  int _nonVarMask(int length) {
     var mask = 0;
-    for (var i = 0; i < length; i++) {
-      if (!_parts[i]._isVar) {
-        mask = mask.setBit(length - i - 1);
+    for (final part in _parts) {
+      if (!part._isVar) {
+        mask = mask.setBit(length - 1);
       }
+      length -= part._length;
     }
     return mask;
   }
@@ -271,6 +272,7 @@ class _InterpretedBitPattern implements BitPattern<List<int>> {
   final int _isSetMask;
   final int _nonVarMask;
   final List<_CaptureBits> _capture;
+  final String _name;
 
   const _InterpretedBitPattern(
     this._length,
@@ -278,6 +280,7 @@ class _InterpretedBitPattern implements BitPattern<List<int>> {
     this._isSetMask,
     this._nonVarMask,
     this._capture,
+    this._name,
   );
 
   List<int> _newList(int size) {
@@ -334,11 +337,72 @@ class _InterpretedBitPattern implements BitPattern<List<int>> {
     if (_assertionsEnabled) {
       return (StringBuffer()
             ..writeln('InterpretedBitPattern: $_length-bits {')
-            ..writeln('  names:      ${names.join(', ')}')
+            ..writeln('  name:       ${_name ?? '<Unnamed>'}')
+            ..writeln('  capture:    ${names.join(', ')}')
             ..writeln('  isSetMask:  ${_isSetMask.toBinaryPadded(_length)}')
             ..writeln('  nonVarMask: ${_nonVarMask.toBinaryPadded(_length)}')
             ..writeln('}'))
           .toString();
+    } else {
+      return super.toString();
+    }
+  }
+}
+
+/// Provides the capabilityto create a [BitPatternGroup] from multiple patterns.
+///
+/// See [BitPatternGroup] and [toGroup] for details.
+extension BitPatternsX<T> on List<BitPattern<T>> {
+  /// Returns a `List<BitPattern<?>>` as a computed group of [BitPatternGroup].
+  BitPatternGroup<T, V> toGroup<V extends BitPattern<T>>() {
+    ArgumentError.checkNotNull(this, 'this');
+    if (isEmpty) {
+      throw ArgumentError.value(this, 'this', 'Cannot be an empty list');
+    }
+    return BitPatternGroup._(toList()..sort());
+  }
+}
+
+/// Allows matching integer values against a collection of [BitPattern]s.
+///
+/// A [BitPatternGroup] is a collection of [BitPattern]s which may match a given
+/// set of bits (represented as an [int]). Unlike a [BitPattern], a
+/// [BitPatternGroup] _matches_ a [BitPattern], which in turn can then capture
+/// bits:
+/// ```
+/// void example(List<BitPattern<List<int>> patterns, int value) {
+///   final group = patterns.toGroup();
+///   final match = group.match(value);
+///
+///   // Prints out the captured bits.
+///   print(match.capture(value));
+/// }
+/// ```
+///
+/// This utility is useful for creating decoders (for example, for emulators).
+@sealed
+class BitPatternGroup<T, V extends BitPattern<T>> {
+  final List<BitPattern<T>> _sortedPatterns;
+
+  const BitPatternGroup._(this._sortedPatterns);
+
+  /// Returns which [BitPattern] is capable of decoding the provided [bits].
+  ///
+  /// Returns `null` if no match found.
+  BitPattern<T> match(int bits) {
+    for (final pattern in _sortedPatterns) {
+      if (pattern.matches(bits)) {
+        return pattern;
+      }
+    }
+
+    return null;
+  }
+
+  @override
+  String toString() {
+    if (_assertionsEnabled) {
+      return 'BitPatternGroup { $_sortedPatterns }';
     } else {
       return super.toString();
     }

@@ -2,8 +2,8 @@ import 'package:binary/binary.dart';
 import 'package:test/test.dart';
 
 void main() {
-  BitPattern<List<int>> build(List<BitPart> parts) {
-    return BitPatternBuilder(parts).build();
+  BitPattern<List<int>> build(List<BitPart> parts, [String name]) {
+    return BitPatternBuilder(parts).build(name);
   }
 
   group('_InterpretedBitPattern', () {
@@ -55,6 +55,19 @@ void main() {
       expect(pattern.matches('1011'.parseBits()), isTrue);
     });
 
+    test('0b01VV should match 0b01**', () {
+      final pattern = build([
+        BitPart(0),
+        BitPart(1),
+        BitPart.v(2, 'VV'),
+      ], '01VV');
+      expect(
+        pattern.matches('0110'.parseBits()),
+        isTrue,
+        reason: 'Did not match $pattern',
+      );
+    });
+
     test('should capture a set of variables/names', () {
       final pattern = build([
         BitPart(1),
@@ -93,6 +106,27 @@ void main() {
 
     test('should fail on a pattern > 32-bits', () {
       expect(() => build(List.filled(33, BitPart(0))), throwsStateError);
+    });
+  });
+
+  group('BitPatternGroup', () {
+    test('should fail on null', () {
+      List<BitPattern<void>> patterns;
+      expect(() => patterns.toGroup(), throwsArgumentError);
+    });
+
+    test('should fail on empty', () {
+      final patterns = <BitPattern<void>>[];
+      expect(() => patterns.toGroup(), throwsArgumentError);
+    });
+
+    test('should match a pattern', () {
+      final match$01VV = build([BitPart(0), BitPart(1), BitPart.v(2)], '01VV');
+      final match$11VV = build([BitPart(1), BitPart(1), BitPart.v(2)], '11VV');
+      final matchGroup = [match$01VV, match$11VV].toGroup();
+
+      expect(matchGroup.match('0000'.parseBits()), isNull);
+      expect(matchGroup.match('0100'.parseBits()), same(match$01VV));
     });
   });
 }
