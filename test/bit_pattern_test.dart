@@ -182,6 +182,18 @@ void main() {
         ]).build(),
       );
     });
+
+    test('should allow variables across _\'s', () {
+      expect(
+        BitPatternBuilder.parse('01AA_AABB').build(),
+        BitPatternBuilder(const [
+          BitPart(0),
+          BitPart(1),
+          BitPart.v(4, 'A'),
+          BitPart.v(2, 'B'),
+        ]).build(),
+      );
+    });
   });
 
   group('BitPatternGroup', () {

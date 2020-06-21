@@ -195,9 +195,6 @@ class _BitPatternParser implements BitPatternBuilder {
           parts.add(const BitPart(1));
           break;
         case '_':
-          if (variable != null) {
-            completeVariable();
-          }
           if (parsedUnderscore) {
             throw FormatException('Cannot have mulitple _\'s', _bits, i);
           } else {

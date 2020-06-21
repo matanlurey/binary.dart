@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 1.2.1
+
+- Fixed a bug where `BitPatternBuilder.parse('00AA_AABB')` incorrectly threw a
+  `FormatException` assuming that `_` deliniated the end of the `A` variable
+  segment and the subsequent `A` was a _new_ segment (which is invalid). It now
+  correctly parses the above as just two variable segments (`AAAA`, `BB`).
+
 ## 1.2.0
 
 - Added `BitPatternBuilder.parse`, a simplified-format for building `BitPattern`
