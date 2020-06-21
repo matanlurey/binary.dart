@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 1.2.2
+
+- Fixed a bug where `_InterpretedBitPattern` (the `BitPattern` generated from
+  `BitPatternBuilder`) was sorted in an incorrect order (ascending instead of
+  descending), which would not `match` correctly in some scenarios.
+
 ## 1.2.1
 
 - Fixed a bug where `BitPatternBuilder.parse('00AA_AABB')` incorrectly threw a
