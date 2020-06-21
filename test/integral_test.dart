@@ -7,7 +7,18 @@ void main() {
     var enabled = false;
     assert(enabled = true);
     if (enabled) {
-      expect(() => Int4(null), throwsA(TypeMatcher<AssertionError>()));
+      expect(
+        () => Int4(null),
+        throwsA(
+          anyOf(
+            // VM.
+            TypeMatcher<AssertionError>(),
+
+            // Dart2JS.
+            TypeMatcher<NoSuchMethodError>(),
+          ),
+        ),
+      );
     }
   });
 
