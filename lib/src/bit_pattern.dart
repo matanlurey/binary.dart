@@ -447,11 +447,13 @@ class _InterpretedBitPattern implements BitPattern<List<int>> {
       _nonVarBits.hashCode ^
       _isSetMask.hashCode ^
       _nonVarMask.hashCode ^
-      _capture.map((c) => c.hashCode).reduce((a, b) => a ^ b);
+      (_capture.isEmpty
+          ? 0
+          : _capture.map((c) => c.hashCode).reduce((a, b) => a ^ b));
 
   @override
   int compareTo(covariant _InterpretedBitPattern other) {
-    return _nonVarBits.compareTo(other._nonVarBits);
+    return other._nonVarBits.compareTo(_nonVarBits);
   }
 
   @override

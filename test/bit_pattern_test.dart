@@ -89,33 +89,36 @@ void main() {
       final v0 = build(const [
         BitPart(1),
         BitPart(1),
-      ]);
+        BitPart(1),
+        BitPart(1),
+      ], '1111');
       final v1 = build(const [
         BitPart(0),
         BitPart(0),
+        BitPart(0),
         BitPart.v(1),
-      ]);
+      ], '000V');
       final v2 = build(const [
         BitPart(0),
         BitPart(1),
         BitPart.v(1),
         BitPart.v(1),
-      ]);
+      ], '01VV');
       final v3 = build(const [
         BitPart(1),
         BitPart.v(1),
         BitPart.v(1),
         BitPart.v(1),
-      ]);
+      ], '1VVV');
       final input = [v2, v1, v3, v0];
       expect(
         input..sort(),
         orderedEquals(
           <Object>[
-            v3,
-            v2,
-            v1,
             v0,
+            v1,
+            v2,
+            v3,
           ],
         ),
       );
@@ -222,6 +225,25 @@ void main() {
 
       expect(matchGroup.match('0000'.parseBits()), isNull);
       expect(matchGroup.match('0100'.parseBits()), same(match$01VV));
+    });
+
+    // Reproduction case from package:armv4t.
+    test('should sort and match patterns by specificity', () {
+      // Reproduction case from package:armv4t.
+      //
+      // We will expect SOFTWARE_INTERRUPT, not CONDITIONAL_BRANCH.
+      final conditionalBranch = BitPatternBuilder.parse(
+        '1101_CCCC_SSSS_SSSS',
+      ).build('CONDITIONAL_BRANCH');
+      final softwareInterrupt = BitPatternBuilder.parse(
+        '1101_1111_VVVV_VVVV',
+      ).build('SOFTWARE_INTERRUPT');
+
+      //              1101   CCCC   SSSS   SSSS  <-- CONDITIONAL_BRANCH
+      //              1101   1111   VVVV   VVVV  <-- SOFTWARE_INTERRUPT
+      final input = ('1101' '1111' '0110' '1010').parseBits();
+      final group = [conditionalBranch, softwareInterrupt].toGroup();
+      expect(group.match(input), softwareInterrupt);
     });
   });
 
