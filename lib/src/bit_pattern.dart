@@ -35,7 +35,7 @@ class BitPatternBuilder {
   /// a programmatic execution based on some pre-computed values from the
   /// provided `List<BitPart>`.
   ///
-  /// The result of [BitPattern.match] returns a `List<int>`, which is a list
+  /// The result of [BitPattern.capture] returns a `List<int>`, which is a list
   /// encapsulating the bits that matched a [BitPart.v], if any, indexed by
   /// their occurrence (left-to-right) when matched:
   /// ```
@@ -49,14 +49,12 @@ class BitPatternBuilder {
   /// print(pattern.match(0xD /* 0b1101 */)); // [1]
   /// ```
   BitPattern<List<int>> build() {
-    final names = <String>[];
+    var capture = 0;
     var length = 0;
-    var index = 0; // ignore: prefer_final_locals
-    for (var i = 0; i < _parts.length; i++) {
-      final part = _parts[i];
+    for (final part in _parts) {
       length += part._length;
-      if (part is _Segment) {
-        names.add(part._name ?? '$index++');
+      if (part._isVar) {
+        capture++;
       }
     }
     if (length > 32) {
@@ -64,10 +62,29 @@ class BitPatternBuilder {
     }
     return _InterpretedBitPattern(
       length,
+      _parts.length - capture,
       _isSetMask,
       _nonVarMask,
-      names,
+      _buildCapture(length, capture),
     );
+  }
+
+  List<_CaptureBits> _buildCapture(int totalLength, int totalCaptures) {
+    if (totalCaptures == 0) return const [];
+
+    final result = List<_CaptureBits>();
+    var iterated = 0;
+
+    for (final part in _parts) {
+      if (part._isVar) {
+        final sPart = part.unsafeCast<_Segment>();
+        final left = totalLength - iterated;
+        result.add(_CaptureBits(sPart._name, left - 1, sPart._length));
+      }
+      iterated += part._length;
+    }
+
+    return result;
   }
 
   /// Returns a "is-set" masking [int] for the current pattern.
@@ -120,7 +137,10 @@ abstract class BitPart {
   /// Length of the part.
   int get _length;
 
+  /// Whether the value represents `1`.
   bool get _is1;
+
+  /// Whether the value represents a variable.
   bool get _isVar;
 }
 
@@ -199,7 +219,7 @@ class _Segment implements BitPart {
 /// through a `List<ComputedBitPattern>` and check for matches:
 /// ```
 /// void example(List<ComputedBitPattern> patterns, int bits) {
-///   for (final pattern in patterns.sort()) {
+///   for (final pattern in patterns..sort()) {
 ///     if (pattern.matches(bits)) {
 ///       // ...
 ///     }
@@ -209,46 +229,103 @@ class _Segment implements BitPart {
 ///
 /// > NOTE: You can only compare [ComputedBitPattern]s of the same type!
 abstract class BitPattern<T> implements Comparable<BitPattern<T>> {
-  /// A list of named variables (to use in conjunction with [match]).
+  /// A list of named variables (to use in conjunction with [capture]).
   List<String> get names;
 
   /// Returns an element [T] iff it [matches], otherwise `null`.
-  T match(int input);
+  T capture(int input);
 
   /// Returns true iff [input] bits matches this pattern.
   bool matches(int input);
 }
 
+class _CaptureBits {
+  /// Name of the variable capturing bits.
+  final String name;
+
+  /// Left-most bit.
+  final int left;
+
+  /// Size of capture.
+  final int size;
+
+  const _CaptureBits(this.name, this.left, this.size);
+
+  /// Returns bits from [bits] from [left] of [size].
+  int capture(int bits) => bits.bitChunk(left, size);
+
+  @override
+  String toString() {
+    if (_assertionsEnabled) {
+      return 'CaptureBits { $name, $left :: $size }';
+    } else {
+      return super.toString();
+    }
+  }
+}
+
 /// A pre-computed [BitPattern] that relies on generic (programmatic) execution.
 class _InterpretedBitPattern implements BitPattern<List<int>> {
   final int _length;
+  final int _nonVarBits;
   final int _isSetMask;
   final int _nonVarMask;
+  final List<_CaptureBits> _capture;
 
   const _InterpretedBitPattern(
     this._length,
+    this._nonVarBits,
     this._isSetMask,
     this._nonVarMask,
-    this.names,
+    this._capture,
   );
 
-  @override
-  int compareTo(covariant _InterpretedBitPattern other) {
-    throw UnimplementedError();
+  List<int> _newList(int size) {
+    if (size <= 8) return Uint8List(size);
+    if (size <= 16) return Uint16List(size);
+    if (size <= 32) return Uint32List(size);
+    throw StateError('Cannot match a pattern of > 32-bits, got $size.');
   }
 
   @override
-  final List<String> names;
+  int compareTo(covariant _InterpretedBitPattern other) {
+    return _nonVarBits.compareTo(other._nonVarBits);
+  }
 
   @override
-  List<int> match(int input) {
+  List<String> get names => _capture.map((b) => b.name).toList();
+
+  @override
+  List<int> capture(int input) {
     if (matches(input)) {
-      throw UnimplementedError();
+      // Short-circuit when there are no variables.
+      if (_capture.isEmpty) return const [];
+
+      // Return a variable for each capturing name.
+      final result = _newList(_capture.length);
+      for (var i = 0; i < _capture.length; i++) {
+        result[i] = _capture[i].capture(input);
+      }
+
+      return result;
     } else {
       return null;
     }
   }
 
+  /// Returns whether [input] matches this pattern.
+  ///
+  /// - First, bits are computed by XOR-ing (`^`) [input] and [_isSetMask],
+  ///   producing bits where the k-th byte is `1` iff either but not both the
+  ///   k-th bytes of [input] or [_isSetMask] is `1`.
+  ///
+  /// - Next, negate (`~`) the bits, flipping `0` and `1`s.
+  ///
+  /// - Next, bits are computed by AND-ing (`&`) bits with [_nonVarMask],
+  ///   producing bits where the k-th byte is `1` iff _both_ the k-th bytes of
+  ///   bits and [_nonVarMask] is `1`.
+  ///
+  /// - Finally, returns if the computed bits are identical to [_nonVarMask].
   @override
   bool matches(int input) => ~(input ^ _isSetMask) & _nonVarMask == _nonVarMask;
 
@@ -256,8 +333,10 @@ class _InterpretedBitPattern implements BitPattern<List<int>> {
   String toString() {
     if (_assertionsEnabled) {
       return (StringBuffer()
-            ..writeln('InterpretedBitPattern: $_length-bits {\n')
-            ..writeln('')
+            ..writeln('InterpretedBitPattern: $_length-bits {')
+            ..writeln('  names:      ${names.join(', ')}')
+            ..writeln('  isSetMask:  ${_isSetMask.toBinaryPadded(_length)}')
+            ..writeln('  nonVarMask: ${_nonVarMask.toBinaryPadded(_length)}')
             ..writeln('}'))
           .toString();
     } else {
