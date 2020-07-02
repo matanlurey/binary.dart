@@ -600,19 +600,33 @@ extension BinaryString on String {
 /// comes with that in the Dart and JavaScript VMs, and should be avoided in
 /// perf-sensitive code.
 ///
-/// **WARNING**: Do not implement, extend, or mix-in outside of this library.
+/// You can also _extend_ this class to create a custom implementation:
+///
+/// ```
+/// class Uint3 extends Integral<Uint3> {
+///   // Implement toDebugString(), wrapSafeValue(), and constructors.
+/// }
+/// ```
+///
+/// See [Int4] and [Uint4] for examples!
+///
+/// **WARNING**: Do not implement or mix-in this class.
+@immutable
 abstract class Integral<T extends Integral<T>> implements Comparable<Integral> {
   /// Value wrapped by the [Integral].
+  @nonVirtual
   final int value;
 
   /// Numbers of bits in this data type.
+  @nonVirtual
   final int size;
 
   /// Whether this data type supports negative numbers.
+  @nonVirtual
   final bool signed;
 
-  /// Internal constructor for implementing sub-types.
-  Integral._checked({
+  /// Used for implementing sub-types.
+  Integral.checked({
     @required this.value,
     @required this.size,
     @required this.signed,
@@ -621,14 +635,16 @@ abstract class Integral<T extends Integral<T>> implements Comparable<Integral> {
   }
 
   /// An unsafe constructor that does not verify if the values are within range.
-  const Integral._unchecked({
+  const Integral.unchecked({
     @required this.value,
     @required this.size,
     @required this.signed,
   });
 
   /// Implement to create an instance of self around [value].
-  T _wrap(int value);
+  @protected
+  @visibleForOverriding
+  T wrapSafeValue(int value);
 
   /// Wraps [value], careful to normalize (unsign) if necessary.
   T _wrapSignAware(int value) {
@@ -637,13 +653,15 @@ abstract class Integral<T extends Integral<T>> implements Comparable<Integral> {
     } else {
       value = value.toSigned(size);
     }
-    return _wrap(value);
+    return wrapSafeValue(value);
   }
 
   @override
+  @nonVirtual
   int compareTo(Integral o) => value.compareTo(o.value);
 
   @override
+  @nonVirtual
   bool operator ==(Object o) {
     return o is Integral &&
         value == o.value &&
@@ -652,26 +670,49 @@ abstract class Integral<T extends Integral<T>> implements Comparable<Integral> {
   }
 
   @override
+  @nonVirtual
   int get hashCode => value.hashCode;
 
+  /// Greater than comparison.
+  @nonVirtual
+  bool operator >(T other) => value > other.value;
+
+  /// Greater than or equal comparison.
+  @nonVirtual
+  bool operator >=(T other) => value >= other.value;
+
+  /// Less than comparison.
+  @nonVirtual
+  bool operator <(T other) => value < other.value;
+
+  /// Less than or equal comparison.
+  @nonVirtual
+  bool operator <=(T other) => value <= other.value;
+
   /// Bitwise OR operator.
+  @nonVirtual
   T operator |(T other) => _wrapSignAware(value | other.value);
 
   /// Bitwise AND operator.
+  @nonVirtual
   T operator &(T other) => _wrapSignAware(value & other.value);
 
   /// Bitwise XOR operator.
+  @nonVirtual
   T operator ^(T other) => _wrapSignAware(value ^ other.value);
 
   /// Bitwise NOT operator.
+  @nonVirtual
   T operator ~() {
     return _wrapSignAware(~value);
   }
 
   /// Left-shift operator.
+  @nonVirtual
   T operator <<(T other) => _wrapSignAware(value << other.value);
 
   /// Right-shift operator.
+  @nonVirtual
   T operator >>(T other) => _wrapSignAware(value >> other.value);
 
   /// Minimum value representable by this type.
@@ -697,11 +738,13 @@ abstract class Integral<T extends Integral<T>> implements Comparable<Integral> {
   }
 
   /// Where this data type is not signed (0 or positive integers only).
+  @nonVirtual
   bool get unsigned => !signed;
 
   /// Returns the [n]th bit from [value].
   ///
   /// Throws [RangeError] if [n] is out of range.
+  @nonVirtual
   int getBit(int n) {
     _assertMaxBits(n, 'n');
     return value.getBit(n);
@@ -710,14 +753,16 @@ abstract class Integral<T extends Integral<T>> implements Comparable<Integral> {
   /// Returns with the [n]th bit from [value] set.
   ///
   /// Throws [RangeError] if [n] is out of range.
+  @nonVirtual
   T setBit(int n) {
     _assertMaxBits(n, 'n');
-    return _wrap(value.setBit(n));
+    return wrapSafeValue(value.setBit(n));
   }
 
   /// Returns whether the [n]th bit from [value] is set.
   ///
   /// Throws [RangeError] if [n] is out of range.
+  @nonVirtual
   bool isSet(int n) {
     _assertMaxBits(n);
     return value.isSet(n);
@@ -726,14 +771,16 @@ abstract class Integral<T extends Integral<T>> implements Comparable<Integral> {
   /// Returns with the [n]th bit from [value] cleared.
   ///
   /// Throws [RangeError] if [n] is not [inRange].
+  @nonVirtual
   T clearBit(int n) {
     _assertMaxBits(n, 'n');
-    return _wrap(value.clearBit(n));
+    return wrapSafeValue(value.clearBit(n));
   }
 
   /// Returns whether the [n]th bit from [value] is cleared.
   ///
   /// Throws [RangeError] if [n] is out of range.
+  @nonVirtual
   bool isClear(int n) {
     _assertMaxBits(n, 'n');
     return value.isClear(n);
@@ -744,9 +791,10 @@ abstract class Integral<T extends Integral<T>> implements Comparable<Integral> {
   /// The result is left-padded with 0's.
   ///
   /// Throws [RangeError] if [left] or [size] is out of range.
+  @nonVirtual
   T bitChunk(int left, int size) {
     _assertMaxBits(left, 'left');
-    return _wrap(value.bitChunk(left, size));
+    return wrapSafeValue(value.bitChunk(left, size));
   }
 
   /// Returns a new instance with bits [left] to [right], inclusive.
@@ -754,68 +802,92 @@ abstract class Integral<T extends Integral<T>> implements Comparable<Integral> {
   /// The result is left-padded with 0's.
   ///
   /// Throws [RangeError] if [left] or [right] is out of range.
+  @nonVirtual
   T bitRange(int left, int right) {
     _assertMaxBits(left, 'left');
-    return _wrap(value.bitRange(left, right));
+    return wrapSafeValue(value.bitRange(left, right));
   }
 
   /// Returns a new instance with bits [left] to [right], inclusive, replaced.
   ///
   /// Throws [RangeError] if [left] or [right] is out of range.
+  @nonVirtual
   T replaceBitRange(int left, int right, int bits) {
     _assertMaxBits(left, 'left');
-    return _wrap(value.replaceBitRange(left, right, bits));
+    return wrapSafeValue(value.replaceBitRange(left, right, bits));
   }
 
   /// Returns `true` iff [value] represents a negative number, else `false`.
+  @nonVirtual
   bool get isNegative => signed ? msb : false;
 
   /// Returns `true` iff [value] represents a positive number, else `false`.
+  @nonVirtual
   bool get isPositive => !isNegative;
 
   /// Returns [value] arithmetically right-shifted [n] bits.
   ///
   /// See [BinaryInt.shiftRight].
+  @nonVirtual
   T shiftRight(int n) {
-    return _wrap(value.shiftRight(n, size));
+    return wrapSafeValue(value.shiftRight(n, size));
   }
 
   /// Returns a bit-wise right rotation on [value] by [number] of bits.
   ///
   /// See [BinaryInt.rotateRight].
+  @nonVirtual
   T rotateRight(int number) {
-    return _wrap(value.rotateRight(number));
+    return wrapSafeValue(value.rotateRight(number));
   }
 
   /// Returns the number of set bits in [value].
+  @nonVirtual
   int get setBits {
     return value.countSetBits(size);
   }
 
   /// Returns whether the most-significant-bit in [value] is set.
+  @nonVirtual
   bool get msb => isSet(size - 1);
 
   @override
+  @nonVirtual
   String toString() {
     if (_assertionsEnabled) {
-      return _toDebugString();
+      return toDebugString();
     } else {
       return super.toString();
     }
   }
 
   /// Returns [value] as a binary string representation.
+  @nonVirtual
   String toBinary() => value.toBinary();
 
   /// Returns [value] as a binary string representation, padded with `0`'s.
+  @nonVirtual
   String toBinaryPadded() => value.toBinaryPadded(size);
 
   /// Returns a debug-friendly representation of [toString].
-  String _toDebugString();
+  @protected
+  @visibleForOverriding
+  String toDebugString();
 }
 
 /// Encapsulates a single (unsigned) bit, i.e. either `0` or `1`.
+@sealed
 class Bit extends Integral<Bit> {
+  /// Returns [value] if in range, otherwise throws [RangeError].
+  static int checkRange(int value) => Bit(value).value;
+
+  /// Returns [value].
+  ///
+  /// When assertions are enabled, throws a [RangeError].
+  static int assertRange(int value) {
+    return _assertionsEnabled ? checkRange(value) : value;
+  }
+
   static const _name = 'Bit';
   static const _size = 1;
   static const _signed = false;
@@ -836,17 +908,17 @@ class Bit extends Integral<Bit> {
   }
 
   const Bit._(int value)
-      : super._unchecked(
+      : super.unchecked(
           value: value,
           signed: _signed,
           size: _size,
         );
 
   @override
-  Bit _wrap(int value) => Bit(value);
+  Bit wrapSafeValue(int value) => Bit(value);
 
   @override
-  String _toDebugString() => '$_name {$value}';
+  String toDebugString() => '$_name {$value}';
 }
 
 /// Encapsulates a signed 4-bit aggregation.
@@ -860,7 +932,18 @@ class Bit extends Integral<Bit> {
 /// Commonly used to represent:
 /// - Binary-coded decimal
 /// - Single decimal digits
+@sealed
 class Int4 extends Integral<Int4> {
+  /// Returns [value] if in range, otherwise throws [RangeError].
+  static int checkRange(int value) => Int4(value).value;
+
+  /// Returns [value].
+  ///
+  /// When assertions are enabled, throws a [RangeError].
+  static int assertRange(int value) {
+    return _assertionsEnabled ? checkRange(value) : value;
+  }
+
   static const _name = 'Int4';
   static const _size = 4;
   static const _signed = true;
@@ -870,24 +953,24 @@ class Int4 extends Integral<Int4> {
 
   /// Wraps a [value] that is otherwise a valid 4-bit signed integer.
   Int4(int value)
-      : super._checked(
+      : super.checked(
           value: value,
           signed: _signed,
           size: _size,
         );
 
   const Int4._(int value)
-      : super._unchecked(
+      : super.unchecked(
           value: value,
           signed: _signed,
           size: _size,
         );
 
   @override
-  Int4 _wrap(int value) => Int4(value);
+  Int4 wrapSafeValue(int value) => Int4(value);
 
   @override
-  String _toDebugString() => '$_name {$value}';
+  String toDebugString() => '$_name {$value}';
 }
 
 /// Encapsulates an unsigned 4-bit aggregation.
@@ -901,7 +984,18 @@ class Int4 extends Integral<Int4> {
 /// Commonly used to represent:
 /// - Binary-coded decimal
 /// - Single decimal digits
+@sealed
 class Uint4 extends Integral<Uint4> {
+  /// Returns [value] if in range, otherwise throws [RangeError].
+  static int checkRange(int value) => Uint4(value).value;
+
+  /// Returns [value].
+  ///
+  /// When assertions are enabled, throws a [RangeError].
+  static int assertRange(int value) {
+    return _assertionsEnabled ? checkRange(value) : value;
+  }
+
   static const _name = 'Uint4';
   static const _size = 4;
   static const _signed = false;
@@ -911,24 +1005,24 @@ class Uint4 extends Integral<Uint4> {
 
   /// Wraps a [value] that is otherwise a valid 4-bit unsigned integer.
   Uint4(int value)
-      : super._checked(
+      : super.checked(
           value: value,
           signed: _signed,
           size: _size,
         );
 
   const Uint4._(int value)
-      : super._unchecked(
+      : super.unchecked(
           value: value,
           signed: _signed,
           size: _size,
         );
 
   @override
-  Uint4 _wrap(int value) => Uint4(value);
+  Uint4 wrapSafeValue(int value) => Uint4(value);
 
   @override
-  String _toDebugString() => '$_name {$value}';
+  String toDebugString() => '$_name {$value}';
 }
 
 /// Encapsulates a signed 8-bit aggregation.
@@ -939,7 +1033,18 @@ class Uint4 extends Integral<Uint4> {
 ///
 /// Commonly used to represent:
 /// - ASCII characters
+@sealed
 class Int8 extends Integral<Int8> {
+  /// Returns [value] if in range, otherwise throws [RangeError].
+  static int checkRange(int value) => Int8(value).value;
+
+  /// Returns [value].
+  ///
+  /// When assertions are enabled, throws a [RangeError].
+  static int assertRange(int value) {
+    return _assertionsEnabled ? checkRange(value) : value;
+  }
+
   static const _name = 'Int8';
   static const _size = 8;
   static const _signed = true;
@@ -949,24 +1054,24 @@ class Int8 extends Integral<Int8> {
 
   /// Wraps a [value] that is otherwise a valid 8-bit signed integer.
   Int8(int value)
-      : super._checked(
+      : super.checked(
           value: value,
           signed: _signed,
           size: _size,
         );
 
   const Int8._(int value)
-      : super._unchecked(
+      : super.unchecked(
           value: value,
           signed: _signed,
           size: _size,
         );
 
   @override
-  Int8 _wrap(int value) => Int8(value);
+  Int8 wrapSafeValue(int value) => Int8(value);
 
   @override
-  String _toDebugString() => '$_name {$value}';
+  String toDebugString() => '$_name {$value}';
 }
 
 /// Encapsulates an unsigned 8-bit aggregation.
@@ -977,7 +1082,18 @@ class Int8 extends Integral<Int8> {
 ///
 /// Commonly used to represent:
 /// - ASCII characters
+@sealed
 class Uint8 extends Integral<Uint8> {
+  /// Returns [value] if in range, otherwise throws [RangeError].
+  static int checkRange(int value) => Uint8(value).value;
+
+  /// Returns [value].
+  ///
+  /// When assertions are enabled, throws a [RangeError].
+  static int assertRange(int value) {
+    return _assertionsEnabled ? checkRange(value) : value;
+  }
+
   static const _name = 'Uint8';
   static const _size = 8;
   static const _signed = false;
@@ -987,24 +1103,24 @@ class Uint8 extends Integral<Uint8> {
 
   /// Wraps a [value] that is otherwise a valid 8-bit unsigned integer.
   Uint8(int value)
-      : super._checked(
+      : super.checked(
           value: value,
           signed: _signed,
           size: _size,
         );
 
   const Uint8._(int value)
-      : super._unchecked(
+      : super.unchecked(
           value: value,
           signed: _signed,
           size: _size,
         );
 
   @override
-  Uint8 _wrap(int value) => Uint8(value);
+  Uint8 wrapSafeValue(int value) => Uint8(value);
 
   @override
-  String _toDebugString() => '$_name {$value}';
+  String toDebugString() => '$_name {$value}';
 }
 
 /// Encapsulates a signed 16-bit aggregation.
@@ -1013,7 +1129,18 @@ class Uint8 extends Integral<Uint8> {
 ///
 /// Commonly used to represent:
 /// - USC-2 characters
+@sealed
 class Int16 extends Integral<Int16> {
+  /// Returns [value] if in range, otherwise throws [RangeError].
+  static int checkRange(int value) => Int16(value).value;
+
+  /// Returns [value].
+  ///
+  /// When assertions are enabled, throws a [RangeError].
+  static int assertRange(int value) {
+    return _assertionsEnabled ? checkRange(value) : value;
+  }
+
   static const _name = 'Int16';
   static const _size = 16;
   static const _signed = true;
@@ -1023,24 +1150,24 @@ class Int16 extends Integral<Int16> {
 
   /// Wraps a [value] that is otherwise a valid 16-bit signed integer.
   Int16(int value)
-      : super._checked(
+      : super.checked(
           value: value,
           signed: _signed,
           size: _size,
         );
 
   const Int16._(int value)
-      : super._unchecked(
+      : super.unchecked(
           value: value,
           signed: _signed,
           size: _size,
         );
 
   @override
-  Int16 _wrap(int value) => Int16(value);
+  Int16 wrapSafeValue(int value) => Int16(value);
 
   @override
-  String _toDebugString() => '$_name {$value}';
+  String toDebugString() => '$_name {$value}';
 }
 
 /// Encapsulates an unsigned 16-bit aggregation.
@@ -1049,7 +1176,18 @@ class Int16 extends Integral<Int16> {
 ///
 /// Commonly used to represent:
 /// - USC-2 characters
+@sealed
 class Uint16 extends Integral<Uint16> {
+  /// Returns [value] if in range, otherwise throws [RangeError].
+  static int checkRange(int value) => Uint16(value).value;
+
+  /// Returns [value].
+  ///
+  /// When assertions are enabled, throws a [RangeError].
+  static int assertRange(int value) {
+    return _assertionsEnabled ? checkRange(value) : value;
+  }
+
   static const _name = 'Uint16';
   static const _size = 16;
   static const _signed = false;
@@ -1059,24 +1197,24 @@ class Uint16 extends Integral<Uint16> {
 
   /// Wraps a [value] that is otherwise a valid 16-bit unsigned integer.
   Uint16(int value)
-      : super._checked(
+      : super.checked(
           value: value,
           signed: _signed,
           size: _size,
         );
 
   const Uint16._(int value)
-      : super._unchecked(
+      : super.unchecked(
           value: value,
           signed: _signed,
           size: _size,
         );
 
   @override
-  Uint16 _wrap(int value) => Uint16(value);
+  Uint16 wrapSafeValue(int value) => Uint16(value);
 
   @override
-  String _toDebugString() => '$_name {$value}';
+  String toDebugString() => '$_name {$value}';
 }
 
 /// Encapsulates a signed 32-bit aggregation.
@@ -1087,7 +1225,18 @@ class Uint16 extends Integral<Uint16> {
 /// - UTF-32 characters
 /// - True color with alpha
 /// - Pointers in 32-bit computing
+@sealed
 class Int32 extends Integral<Int32> {
+  /// Returns [value] if in range, otherwise throws [RangeError].
+  static int checkRange(int value) => Int32(value).value;
+
+  /// Returns [value].
+  ///
+  /// When assertions are enabled, throws a [RangeError].
+  static int assertRange(int value) {
+    return _assertionsEnabled ? checkRange(value) : value;
+  }
+
   static const _name = 'Int32';
   static const _size = 32;
   static const _signed = true;
@@ -1097,24 +1246,24 @@ class Int32 extends Integral<Int32> {
 
   /// Wraps a [value] that is otherwise a valid 32-bit signed integer.
   Int32(int value)
-      : super._checked(
+      : super.checked(
           value: value,
           signed: _signed,
           size: _size,
         );
 
   @override
-  Int32 _wrap(int value) => Int32(value);
+  Int32 wrapSafeValue(int value) => Int32(value);
 
   const Int32._(int value)
-      : super._unchecked(
+      : super.unchecked(
           value: value,
           signed: _signed,
           size: _size,
         );
 
   @override
-  String _toDebugString() => '$_name {$value}';
+  String toDebugString() => '$_name {$value}';
 }
 
 /// Encapsulates an unsigned 32-bit aggregation.
@@ -1125,7 +1274,18 @@ class Int32 extends Integral<Int32> {
 /// - UTF-32 characters
 /// - True color with alpha
 /// - Pointers in 32-bit computing
+@sealed
 class Uint32 extends Integral<Uint32> {
+  /// Returns [value] if in range, otherwise throws [RangeError].
+  static int checkRange(int value) => Uint32(value).value;
+
+  /// Returns [value].
+  ///
+  /// When assertions are enabled, throws a [RangeError].
+  static int assertRange(int value) {
+    return _assertionsEnabled ? checkRange(value) : value;
+  }
+
   static const _name = 'Uint32';
   static const _size = 32;
   static const _signed = false;
@@ -1135,22 +1295,22 @@ class Uint32 extends Integral<Uint32> {
 
   /// Wraps a [value] that is otherwise a valid 32-bit unsigned integer.
   Uint32(int value)
-      : super._checked(
+      : super.checked(
           value: value,
           signed: _signed,
           size: _size,
         );
 
   const Uint32._(int value)
-      : super._unchecked(
+      : super.unchecked(
           value: value,
           signed: _signed,
           size: _size,
         );
 
   @override
-  Uint32 _wrap(int value) => Uint32(value);
+  Uint32 wrapSafeValue(int value) => Uint32(value);
 
   @override
-  String _toDebugString() => '$_name {$value}';
+  String toDebugString() => '$_name {$value}';
 }
