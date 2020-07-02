@@ -69,6 +69,30 @@ void main() {
       test('>>', () {
         expect(Int4(1) >> Int4(2), Int4(1 >> 2));
       });
+
+      test('>', () {
+        expect(Int4(2) > Int4(1), isTrue);
+        expect(Int4(1) > Int4(2), isFalse);
+        expect(Int4(2) > Int4(2), isFalse);
+      });
+
+      test('>=', () {
+        expect(Int4(2) >= Int4(1), isTrue);
+        expect(Int4(1) >= Int4(2), isFalse);
+        expect(Int4(2) >= Int4(2), isTrue);
+      });
+
+      test('<', () {
+        expect(Int4(2) < Int4(1), isFalse);
+        expect(Int4(1) < Int4(2), isTrue);
+        expect(Int4(2) < Int4(2), isFalse);
+      });
+
+      test('<=', () {
+        expect(Int4(2) <= Int4(1), isFalse);
+        expect(Int4(1) <= Int4(2), isTrue);
+        expect(Int4(2) <= Int4(2), isTrue);
+      });
     });
 
     test('should return signed/unsigned', () {
@@ -335,6 +359,38 @@ void main() {
       Int32.zero,
     ].forEach((i) {
       expect(i | i, i);
+    });
+  });
+
+  test('<checkRange>', () {
+    [
+      Bit.checkRange,
+      Uint4.checkRange,
+      Int4.checkRange,
+      Uint8.checkRange,
+      Int8.checkRange,
+      Uint16.checkRange,
+      Int16.checkRange,
+      Uint32.checkRange,
+      Int32.checkRange,
+    ].forEach((c) {
+      expect(c(0), 0);
+    });
+  });
+
+  test('<assertRange>', () {
+    [
+      Bit.assertRange,
+      Uint4.assertRange,
+      Int4.assertRange,
+      Uint8.assertRange,
+      Int8.assertRange,
+      Uint16.assertRange,
+      Int16.assertRange,
+      Uint32.assertRange,
+      Int32.assertRange,
+    ].forEach((c) {
+      expect(c(0), 0);
     });
   });
 }

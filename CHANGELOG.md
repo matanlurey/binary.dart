@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 1.3.0
+
+- Added comparison operators (`>`, `>=`, `<`, `<=`) to `Integral`.
+- Added `<Integral>.checkRange` and `<Integral>.assertRange` static methods.
+- Added the abiltiy to extend `Integral` to create custom-sized integers.
+
 ## 1.2.2
 
 - Fixed a bug where `_InterpretedBitPattern` (the `BitPattern` generated from
