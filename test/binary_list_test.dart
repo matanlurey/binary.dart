@@ -6,7 +6,7 @@ import 'package:test/test.dart';
 /// Tests the [BinaryUint8List] extension methods.
 void main() {
   group('Uint8List', () {
-    Uint8List from(String s) => Uint8List.fromList([s.parseBits()]);
+    Uint8List from(String s) => Uint8List.fromList([s.bits]);
 
     test('getBoxed should return an appropriate boxed type', () {
       final list = from('1');
@@ -33,7 +33,7 @@ void main() {
   });
 
   group('Int8List', () {
-    Int8List from(String s) => Int8List.fromList([s.parseBits()]);
+    Int8List from(String s) => Int8List.fromList([s.bits]);
 
     test('getBoxed should return an appropriate boxed type', () {
       final list = from('1');
@@ -60,7 +60,7 @@ void main() {
   });
 
   group('Uint16List', () {
-    Uint16List from(String s) => Uint16List.fromList([s.parseBits()]);
+    Uint16List from(String s) => Uint16List.fromList([s.bits]);
 
     test('getBoxed should return an appropriate boxed type', () {
       final list = from('1');
@@ -90,7 +90,7 @@ void main() {
   });
 
   group('Int16List', () {
-    Int16List from(String s) => Int16List.fromList([s.parseBits()]);
+    Int16List from(String s) => Int16List.fromList([s.bits]);
 
     test('getBoxed should return an appropriate boxed type', () {
       final list = from('1');
@@ -120,7 +120,7 @@ void main() {
   });
 
   group('Uint32List', () {
-    Uint32List from(String s) => Uint32List.fromList([s.parseBits()]);
+    Uint32List from(String s) => Uint32List.fromList([s.bits]);
 
     test('getBoxed should return an appropriate boxed type', () {
       final list = from('1');
@@ -154,7 +154,7 @@ void main() {
   });
 
   group('Int32List', () {
-    Int32List from(String s) => Int32List.fromList([s.parseBits()]);
+    Int32List from(String s) => Int32List.fromList([s.bits]);
 
     test('getBoxed should return an appropriate boxed type', () {
       final list = from('1');
@@ -190,22 +190,22 @@ void main() {
   group('BinaryList', () {
     test('parseBits should parse a list of 0s and 1s', () {
       expect(
-        [0, 1, 1, 0, 0, 0, 0, 0].parseBits().toBinaryPadded(8),
+        [0, 1, 1, 0, 0, 0, 0, 0].toBits().toBinaryPadded(8),
         '0  1  1  0  0  0  0  0'.replaceAll(' ', ''),
       );
     });
 
     test('parseBits should refuse on an empty string', () {
-      expect(() => ''.parseBits(), throwsFormatException);
+      expect(() => ''.bits, throwsFormatException);
     });
 
     test('signExtend should work similarly to int.signExtend', () {
-      final list = ['110'.parseBits()];
+      final list = ['110'.bits];
       expect(list.signExtend(0, 3, 5).toBinary(), '11110');
     });
 
     test('rotateRight should work similarly to int.rotateRight', () {
-      final list = ['0110' '0000'.parseBits()];
+      final list = ['0110' '0000'.bits];
       expect(
         list.rotateRight(0, 1).toBinaryPadded(8),
         '0011' '0000',
@@ -213,12 +213,12 @@ void main() {
     });
 
     test('countSetBits should work similarly to int.countSetBits', () {
-      final list = ['0110'.parseBits()];
+      final list = ['0110'.bits];
       expect(list.countSetBits(0, 4), 2);
     });
 
     test('get/set/clearBit should work similarly to int.*', () {
-      final list = ['0110'.parseBits()];
+      final list = ['0110'.bits];
       expect(list.getBit(0, 0), 0);
       expect(list.getBit(0, 1), 1);
       expect(list.setBit(0, 0).toBinaryPadded(4), '0111');
@@ -229,17 +229,15 @@ void main() {
 
     test('bitChunk/bitRange work similarly to int.*', () {
       //       3210                           3->1               321
-      expect(['1010'.parseBits()].bitChunk(0, 3, 3).toBinary(), '101');
+      expect(['1010'.bits].bitChunk(0, 3, 3).toBinary(), '101');
       //       32                             3->2               32
-      expect(['1010'.parseBits()].bitRange(0, 3, 2).toBinary(), '10');
+      expect(['1010'.bits].bitRange(0, 3, 2).toBinary(), '10');
     });
 
     test('replaceBitRange works similar to int.*', () {
       expect(
         //2-0
-        ['1010'.parseBits()]
-            .replaceBitRange(0, 2, 0, '111'.parseBits())
-            .toBinary(),
+        ['1010'.bits].replaceBitRange(0, 2, 0, '111'.bits).toBinary(),
         '1111',
       );
     });

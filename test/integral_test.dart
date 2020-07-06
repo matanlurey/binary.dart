@@ -59,7 +59,7 @@ void main() {
       });
 
       test('~', () {
-        expect((~Int4('0101'.parseBits())).toBinaryPadded(), '1010');
+        expect((~Int4('0101'.bits)).toBinaryPadded(), '1010');
       });
 
       test('<<', () {
@@ -102,7 +102,7 @@ void main() {
 
     group('getBit', () {
       test('should return', () {
-        final int = Int4('101'.parseBits());
+        final int = Int4('101'.bits);
         expect(int.getBit(0), 1);
         expect(int.getBit(1), 0);
       });
@@ -114,9 +114,9 @@ void main() {
 
     group('setBit', () {
       test('should return', () {
-        final int = Int4('101'.parseBits());
-        expect(int.setBit(0), Int4('101'.parseBits()));
-        expect(int.setBit(1), Int4('111'.parseBits()));
+        final int = Int4('101'.bits);
+        expect(int.setBit(0), Int4('101'.bits));
+        expect(int.setBit(1), Int4('111'.bits));
       });
 
       test('should enforce range', () {
@@ -126,7 +126,7 @@ void main() {
 
     group('isSet', () {
       test('should return', () {
-        final int = Int4('101'.parseBits());
+        final int = Int4('101'.bits);
         expect(int.isSet(0), isTrue);
         expect(int.isSet(1), isFalse);
       });
@@ -138,9 +138,9 @@ void main() {
 
     group('clearBit', () {
       test('should return', () {
-        final int = Int4('101'.parseBits());
-        expect(int.clearBit(0), Int4('100'.parseBits()));
-        expect(int.clearBit(1), Int4('101'.parseBits()));
+        final int = Int4('101'.bits);
+        expect(int.clearBit(0), Int4('100'.bits));
+        expect(int.clearBit(1), Int4('101'.bits));
       });
 
       test('should enforce range', () {
@@ -150,7 +150,7 @@ void main() {
 
     group('isClear', () {
       test('should return', () {
-        final int = Int4('101'.parseBits());
+        final int = Int4('101'.bits);
         expect(int.isClear(0), isFalse);
         expect(int.isClear(1), isTrue);
       });
@@ -162,9 +162,9 @@ void main() {
 
     group('bitChunk/bitRange', () {
       test('should return', () {
-        final int = Int4('101'.parseBits());
-        expect(int.bitChunk(2, 2), Int4('10'.parseBits()));
-        expect(int.bitRange(2, 1), Int4('10'.parseBits()));
+        final int = Int4('101'.bits);
+        expect(int.bitChunk(2, 2), Int4('10'.bits));
+        expect(int.bitRange(2, 1), Int4('10'.bits));
       });
 
       test('should enforce range', () {
@@ -176,58 +176,56 @@ void main() {
     test('replaceBitRange', () {
       expect(
         //2-0
-        Uint4('1010'.parseBits())
-            .replaceBitRange(2, 0, '111'.parseBits())
-            .toBinary(),
+        Uint4('1010'.bits).replaceBitRange(2, 0, '111'.bits).toBinary(),
         '1111',
       );
     });
 
     test('shiftRight should infer size', () {
       expect(
-        Uint8('0111' '1111'.parseBits()).shiftRight(5),
-        Uint8('0000' '0011'.parseBits()),
+        Uint8('0111' '1111'.bits).shiftRight(5),
+        Uint8('0000' '0011'.bits),
       );
     });
 
     test('signExtend should work similar to int.rotateRight', () {
       expect(
-        Uint8('0110' '0000'.parseBits()).rotateRight(1),
-        Uint8('0011' '0000'.parseBits()),
+        Uint8('0110' '0000'.bits).rotateRight(1),
+        Uint8('0011' '0000'.bits),
       );
     });
 
     test('setBits should infer size', () {
-      expect(Uint8('0110' '0000'.parseBits()).setBits, 2);
+      expect(Uint8('0110' '0000'.bits).setBits, 2);
     });
 
     test('msb should infer size', () {
-      expect(Uint8('0110' '0000'.parseBits()).msb, isFalse);
-      expect(Uint8('1010' '0000'.parseBits()).msb, isTrue);
+      expect(Uint8('0110' '0000'.bits).msb, isFalse);
+      expect(Uint8('1010' '0000'.bits).msb, isTrue);
     });
 
     test('toBinary should return as a binary string', () {
-      expect(Uint8('0110' '0000'.parseBits()).toBinary(), '110' '0000');
+      expect(Uint8('0110' '0000'.bits).toBinary(), '110' '0000');
     });
 
     test('toBinaryPadded should infer size', () {
-      expect(Uint8('0110' '0000'.parseBits()).toBinaryPadded(), '0110' '0000');
+      expect(Uint8('0110' '0000'.bits).toBinaryPadded(), '0110' '0000');
     });
   });
 
   test('Uint4 with ~ should work as expected', () {
-    expect((~Uint4('0101'.parseBits())).toBinaryPadded(), '1010');
+    expect((~Uint4('0101'.bits)).toBinaryPadded(), '1010');
   });
 
   group('Sign Checks [isPositive/isNegative]', () {
     test('is always positive if unsigned', () {
-      expect(Uint4('1010'.parseBits()).isPositive, isTrue);
-      expect(Uint4('1010'.parseBits()).isNegative, isFalse);
+      expect(Uint4('1010'.bits).isPositive, isTrue);
+      expect(Uint4('1010'.bits).isNegative, isFalse);
     });
 
     test('is negative if the left-most bit is 1', () {
       expect(Int4(-1).isNegative, isTrue);
-      expect(Int4('-101'.parseBits()).isNegative, isTrue);
+      expect(Int4('-101'.bits).isNegative, isTrue);
     });
   });
 
@@ -238,7 +236,7 @@ void main() {
       expect(Bit.one.signed, isFalse);
       expect(Bit.one.size, 1);
       expect(
-        () => Bit('1'.padRight(1 + 1, '0').parseBits()),
+        () => Bit('1'.padRight(1 + 1, '0').bits),
         throwsRangeError,
       );
     });
@@ -248,7 +246,7 @@ void main() {
       expect(Int4.zero.signed, isTrue);
       expect(Int4.zero.size, 4);
       expect(
-        () => Int4('1'.padRight(4 + 1, '0').parseBits()),
+        () => Int4('1'.padRight(4 + 1, '0').bits),
         throwsRangeError,
       );
     });
@@ -258,7 +256,7 @@ void main() {
       expect(Uint4.zero.signed, isFalse);
       expect(Uint4.zero.size, 4);
       expect(
-        () => Uint4('1'.padRight(4 + 1, '0').parseBits()),
+        () => Uint4('1'.padRight(4 + 1, '0').bits),
         throwsRangeError,
       );
     });
@@ -268,7 +266,7 @@ void main() {
       expect(Int8.zero.signed, isTrue);
       expect(Int8.zero.size, 8);
       expect(
-        () => Int8('1'.padRight(8 + 1, '0').parseBits()),
+        () => Int8('1'.padRight(8 + 1, '0').bits),
         throwsRangeError,
       );
     });
@@ -278,7 +276,7 @@ void main() {
       expect(Uint8.zero.signed, isFalse);
       expect(Uint8.zero.size, 8);
       expect(
-        () => Uint8('1'.padRight(8 + 1, '0').parseBits()),
+        () => Uint8('1'.padRight(8 + 1, '0').bits),
         throwsRangeError,
       );
     });
@@ -288,7 +286,7 @@ void main() {
       expect(Int16.zero.signed, isTrue);
       expect(Int16.zero.size, 16);
       expect(
-        () => Int16('1'.padRight(16 + 1, '0').parseBits()),
+        () => Int16('1'.padRight(16 + 1, '0').bits),
         throwsRangeError,
       );
     });
@@ -298,7 +296,7 @@ void main() {
       expect(Uint16.zero.signed, isFalse);
       expect(Uint16.zero.size, 16);
       expect(
-        () => Uint16('1'.padRight(16 + 1, '0').parseBits()),
+        () => Uint16('1'.padRight(16 + 1, '0').bits),
         throwsRangeError,
       );
     });
@@ -308,7 +306,7 @@ void main() {
       expect(Int32.zero.signed, isTrue);
       expect(Int32.zero.size, 32);
       expect(
-        () => Int32('1'.padRight(32 + 1, '0').parseBits()),
+        () => Int32('1'.padRight(32 + 1, '0').bits),
         throwsRangeError,
       );
     });
@@ -318,7 +316,7 @@ void main() {
       expect(Uint32.zero.signed, isFalse);
       expect(Uint32.zero.size, 32);
       expect(
-        () => Uint32('1'.padRight(32 + 1, '0').parseBits()),
+        () => Uint32('1'.padRight(32 + 1, '0').bits),
         throwsRangeError,
       );
     });
