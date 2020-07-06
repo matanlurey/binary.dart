@@ -71,8 +71,8 @@ Most users will use the extension methods on `int` or `String`:
 void main() {
   test('shiftRight should work identical to >>> in JavaScript', () {
     expect(
-      '0111' '1111'.parseBits().shiftRight(5, 8),
-      '0000' '0011'.parseBits(),
+      '0111' '1111'.bits.shiftRight(5, 8),
+      '0000' '0011'.bits,
     );
   });
 }
@@ -84,7 +84,7 @@ For convenience, extension methods are also present on `List<int>`:
 // Uses "rotateRight" (on List<int>).
 void main() {
   test('rotateRight should work similarly to int.rotateRight', () {
-    final list = ['0110' '0000'.parseBits()];
+    final list = ['0110' '0000'.bits];
     expect(
       list.rotateRight(0, 1).toBinaryPadded(8),
       '0011' '0000',
@@ -127,10 +127,10 @@ void main() {
   ]).build();
 
   // Match it against bits.
-  print($01V.matches('011'.parseBits())); // true
+  print($01V.matches('011'.bits)); // true
 
   // Capture variables (if any), similar to a RegExp.
-  print($01V.capture('011'.parseBits())); // [1]
+  print($01V.capture('011'.bits)); // [1]
 }
 ```
 

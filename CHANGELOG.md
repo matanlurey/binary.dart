@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 1.4.0
+
+- Added `List<int>.toBits()` as a replacement for `List<int>.parseBits()`.
+- Added `String.bits` as a replacement for `String.parseBits()`.
+- Deprecated `List<int>.parseBits()` and `String.parseBits()`.
+- Deprecated `int.as[U]Int{N}` functions in favor of manual wrapping.
+
 ## 1.3.0
 
 - Added comparison operators (`>`, `>=`, `<`, `<=`) to `Integral`.

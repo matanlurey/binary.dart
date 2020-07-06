@@ -5,19 +5,19 @@ import 'package:test/test.dart';
 void main() {
   group('parseBits', () {
     test('should fail on an empty string', () {
-      expect(() => ''.parseBits(), throwsFormatException);
+      expect(() => ''.bits, throwsFormatException);
     });
 
     test('should fail on invalid characters', () {
-      expect(() => '1020'.parseBits(), throwsFormatException);
+      expect(() => '1020'.bits, throwsFormatException);
     });
 
     test('should parse with leading 0s', () {
-      expect('0110'.parseBits().toBinaryPadded(4), '0110');
+      expect('0110'.bits.toBinaryPadded(4), '0110');
     });
 
     test('should parse without leading 0s', () {
-      expect('1010'.parseBits().toBinaryPadded(4), '1010');
+      expect('1010'.bits.toBinaryPadded(4), '1010');
     });
   });
 

@@ -14,9 +14,9 @@ void main() {
         BitPart(1),
         BitPart(1),
       ]);
-      expect(pattern.matches('1111'.parseBits()), isTrue);
-      expect(pattern.matches('1010'.parseBits()), isFalse);
-      expect(pattern.matches('0000'.parseBits()), isFalse);
+      expect(pattern.matches('1111'.bits), isTrue);
+      expect(pattern.matches('1010'.bits), isFalse);
+      expect(pattern.matches('0000'.bits), isFalse);
     });
 
     test('0b0000 should match 0b000', () {
@@ -26,9 +26,9 @@ void main() {
         BitPart(0),
         BitPart(0),
       ]);
-      expect(pattern.matches('0000'.parseBits()), isTrue);
-      expect(pattern.matches('1010'.parseBits()), isFalse);
-      expect(pattern.matches('1111'.parseBits()), isFalse);
+      expect(pattern.matches('0000'.bits), isTrue);
+      expect(pattern.matches('1010'.bits), isFalse);
+      expect(pattern.matches('1111'.bits), isFalse);
     });
 
     test('0b11V1 should match 0b1101, 0b1111', () {
@@ -38,10 +38,10 @@ void main() {
         BitPart.v(1),
         BitPart(1),
       ]);
-      expect(pattern.matches('1101'.parseBits()), isTrue);
-      expect(pattern.matches('1111'.parseBits()), isTrue);
-      expect(pattern.capture('1101'.parseBits()), [0]);
-      expect(pattern.capture('1111'.parseBits()), [1]);
+      expect(pattern.matches('1101'.bits), isTrue);
+      expect(pattern.matches('1111'.bits), isTrue);
+      expect(pattern.capture('1101'.bits), [0]);
+      expect(pattern.capture('1111'.bits), [1]);
     });
 
     test('0b101V should match 0b1010, 0b1011', () {
@@ -51,8 +51,8 @@ void main() {
         BitPart(1),
         BitPart.v(1),
       ]);
-      expect(pattern.matches('1010'.parseBits()), isTrue);
-      expect(pattern.matches('1011'.parseBits()), isTrue);
+      expect(pattern.matches('1010'.bits), isTrue);
+      expect(pattern.matches('1011'.bits), isTrue);
     });
 
     test('0b01VV should match 0b01**', () {
@@ -62,7 +62,7 @@ void main() {
         BitPart.v(2, 'VV'),
       ], '01VV');
       expect(
-        pattern.matches('0110'.parseBits()),
+        pattern.matches('0110'.bits),
         isTrue,
         reason: 'Did not match $pattern',
       );
@@ -78,10 +78,10 @@ void main() {
       ]);
       // 10FFFFTT
       // 10111010
-      final captured = pattern.capture('1011' '1010'.parseBits());
+      final captured = pattern.capture('1011' '1010'.bits);
       expect(
         Map.fromIterables(pattern.names, captured),
-        {'FOUR': '1110'.parseBits(), 'TWO': '10'.parseBits()},
+        {'FOUR': '1110'.bits, 'TWO': '10'.bits},
       );
     });
 
@@ -223,8 +223,8 @@ void main() {
       ], '11VV');
       final matchGroup = [match$01VV, match$11VV].toGroup();
 
-      expect(matchGroup.match('0000'.parseBits()), isNull);
-      expect(matchGroup.match('0100'.parseBits()), same(match$01VV));
+      expect(matchGroup.match('0000'.bits), isNull);
+      expect(matchGroup.match('0100'.bits), same(match$01VV));
     });
 
     // Reproduction case from package:armv4t.
@@ -241,7 +241,7 @@ void main() {
 
       //              1101   CCCC   SSSS   SSSS  <-- CONDITIONAL_BRANCH
       //              1101   1111   VVVV   VVVV  <-- SOFTWARE_INTERRUPT
-      final input = ('1101' '1111' '0110' '1010').parseBits();
+      final input = ('1101' '1111' '0110' '1010').bits;
       final group = [conditionalBranch, softwareInterrupt].toGroup();
       expect(group.match(input), softwareInterrupt);
     });

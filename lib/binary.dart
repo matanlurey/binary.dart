@@ -85,46 +85,55 @@ extension BinaryInt on int {
   /// Returns boxed as a [Bit] instance.
   ///
   /// This is a convenience and should be avoided for perf-sensitive code.
+  @Deprecated('Use Bit(int) instead')
   Bit asBit() => Bit(this);
 
   /// Returns boxed as an [Int4] instance.
   ///
   /// This is a convenience and should be avoided for perf-sensitive code.
+  @Deprecated('Use Int4(int) instead')
   Int4 asInt4() => Int4(this);
 
   /// Returns boxed as an [Uint4] instance.
   ///
   /// This is a convenience and should be avoided for perf-sensitive code.
+  @Deprecated('Use Uint4(int) instead')
   Uint4 asUint4() => Uint4(this);
 
   /// Returns boxed as an [Int8] instance.
   ///
   /// This is a convenience and should be avoided for perf-sensitive code.
+  @Deprecated('Use Int8(int) instead')
   Int8 asInt8() => Int8(this);
 
   /// Returns boxed as an [Uint8] instance.
   ///
   /// This is a convenience and should be avoided for perf-sensitive code.
+  @Deprecated('Use Uint8(int) instead')
   Uint8 asUint8() => Uint8(this);
 
   /// Returns boxed as an [Int16] instance.
   ///
   /// This is a convenience and should be avoided for perf-sensitive code.
+  @Deprecated('Use Int16(int) instead')
   Int16 asInt16() => Int16(this);
 
   /// Returns boxed as an [Uint16] instance.
   ///
   /// This is a convenience and should be avoided for perf-sensitive code.
+  @Deprecated('Use Uint16(int) instead')
   Uint16 asUint16() => Uint16(this);
 
   /// Returns boxed as an [Int32] instance.
   ///
-  /// This is a convenience and should be avoided for perf-sensitive code.
+  /// This is a Int32 and should be avoided for perf-sensitive code.
+  @Deprecated('Use Int8(int) instead')
   Int32 asInt32() => Int32(this);
 
   /// Returns boxed as an [Uint32] instance.
   ///
   /// This is a convenience and should be avoided for perf-sensitive code.
+  @Deprecated('Use Uint32(int) instead')
   Uint32 asUint32() => Uint32(this);
 
   /// Returns [this] arithetically right-shifted by [n] bytes assuming [length].
@@ -289,7 +298,7 @@ extension BinaryUint8List on Uint8List {
   static const _length = 8;
 
   /// Returns the [index]-th [int] boxed as a [Uint8].
-  Uint8 getBoxed(int index) => this[index].asUint8();
+  Uint8 getBoxed(int index) => Uint8(this[index]);
 
   /// Returns the [index]-th [int] right-shifted by [n].
   ///
@@ -321,7 +330,7 @@ extension BinaryInt8List on Int8List {
   static const _length = 8;
 
   /// Returns the [index]-th [int] boxed as a [Int8].
-  Int8 getBoxed(int index) => this[index].asInt8();
+  Int8 getBoxed(int index) => Int8(this[index]);
 
   /// Returns the [index]-th [int] right-shifted by [n].
   ///
@@ -353,7 +362,7 @@ extension BinaryUint16List on Uint16List {
   static const _length = 16;
 
   /// Returns the [index]-th [int] boxed as a [Uint16].
-  Uint16 getBoxed(int index) => this[index].asUint16();
+  Uint16 getBoxed(int index) => Uint16(this[index]);
 
   /// Returns the [index]-th [int] right-shifted by [n].
   ///
@@ -385,7 +394,7 @@ extension BinaryInt16List on Int16List {
   static const _length = 16;
 
   /// Returns the [index]-th [int] boxed as a [Int16].
-  Int16 getBoxed(int index) => this[index].asInt16();
+  Int16 getBoxed(int index) => Int16(this[index]);
 
   /// Returns the [index]-th [int] right-shifted by [n].
   ///
@@ -417,7 +426,7 @@ extension BinaryUint32List on Uint32List {
   static const _length = 32;
 
   /// Returns the [index]-th [int] boxed as a [Uint32].
-  Uint32 getBoxed(int index) => this[index].asUint32();
+  Uint32 getBoxed(int index) => Uint32(this[index]);
 
   /// Returns the [index]-th [int] right-shifted by [n].
   ///
@@ -449,7 +458,7 @@ extension BinaryInt32List on Int32List {
   static const _length = 32;
 
   /// Returns the [index]-th [int] boxed as a [Int32].
-  Int32 getBoxed(int index) => this[index].asInt32();
+  Int32 getBoxed(int index) => Int32(this[index]);
 
   /// Returns the [index]-th [int] right-shifted by [n].
   ///
@@ -474,13 +483,19 @@ extension BinaryList on List<int> {
   /// Converts a list of individual bytes to bits represented as an [int].
   ///
   /// Bytes are represented in order to right-most to left-most.
-  int parseBits() {
+  int toBits() {
     ArgumentError.checkNotNull(this, 'this');
     if (isEmpty) {
       throw ArgumentError.value('Must be non-empty', 'bits');
     }
-    return join('').parseBits();
+    return join('').bits;
   }
+
+  /// Converts a list of individual bytes to bits represented as an [int].
+  ///
+  /// Bytes are represented in order to right-most to left-most.
+  @Deprecated('Use <List>.toBits() instead')
+  int parseBits() => toBits();
 
   /// Returns the [index]-th [int] with [BinaryInt.signExtend] applied.
   int signExtend(int index, int startSize, int endSize) {
@@ -562,8 +577,8 @@ extension BinaryString on String {
 
   /// Parses a binary number made entirely of `0`'s and `1`'s into an [int].
   ///
-  /// Unlike [int.parse], this function allows `0` as a starting character.
-  int parseBits() {
+  /// Unlike [int.parse], this getter allows `0` as a starting character.
+  int get bits {
     var s = this;
     if (s.isEmpty) {
       throw FormatException('Non-empty string required.');
@@ -577,6 +592,12 @@ extension BinaryString on String {
       return int.parse(replaceAll(_left0s, ''), radix: 2);
     }
   }
+
+  /// Parses a binary number made entirely of `0`'s and `1`'s into an [int].
+  ///
+  /// Unlike [int.parse], this function allows `0` as a starting character.
+  @Deprecated('Use <String>.bits instead')
+  int parseBits() => bits;
 
   /// Parses a binary number made entirely of `0`'s and `1`'s into a list.
   ///
