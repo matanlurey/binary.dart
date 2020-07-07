@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.5.0
+
+- Exposed `BitPatternGroup`'s constructor, deprecating `.toGroup()`.
+
 ## 1.4.0
 
 - Added `List<int>.toBits()` as a replacement for `List<int>.parseBits()`.

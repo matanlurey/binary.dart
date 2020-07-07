@@ -510,17 +510,19 @@ class _InterpretedBitPattern implements BitPattern<List<int>> {
   }
 }
 
-/// Provides the capabilityto create a [BitPatternGroup] from multiple patterns.
+/// Provides the capability to create a [BitPatternGroup] from multiple patterns.
 ///
-/// See [BitPatternGroup] and [toGroup] for details.
+/// See [BitPatternGroup] for details.
+@Deprecated('Use BitPatternGroup(List) instead')
 extension BitPatternsX<T> on List<BitPattern<T>> {
   /// Returns a `List<BitPattern<?>>` as a computed group of [BitPatternGroup].
+  @Deprecated('Use BitPatternGroup(List) instead')
   BitPatternGroup<T, V> toGroup<V extends BitPattern<T>>() {
     ArgumentError.checkNotNull(this, 'this');
     if (isEmpty) {
       throw ArgumentError.value(this, 'this', 'Cannot be an empty list');
     }
-    return BitPatternGroup._(toList()..sort());
+    return BitPatternGroup(toList()..sort());
   }
 }
 
@@ -532,7 +534,7 @@ extension BitPatternsX<T> on List<BitPattern<T>> {
 /// bits:
 /// ```
 /// void example(List<BitPattern<List<int>> patterns, int value) {
-///   final group = patterns.toGroup();
+///   final group = BitPatternGroup(patterns);
 ///   final match = group.match(value);
 ///
 ///   // Prints out the captured bits.
@@ -545,7 +547,7 @@ extension BitPatternsX<T> on List<BitPattern<T>> {
 class BitPatternGroup<T, V extends BitPattern<T>> {
   final List<BitPattern<T>> _sortedPatterns;
 
-  const BitPatternGroup._(this._sortedPatterns);
+  const BitPatternGroup(this._sortedPatterns);
 
   /// Returns which [BitPattern] is capable of decoding the provided [bits].
   ///

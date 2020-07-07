@@ -202,12 +202,12 @@ void main() {
   group('BitPatternGroup', () {
     test('should fail on null', () {
       List<BitPattern<void>> patterns;
-      expect(() => patterns.toGroup(), throwsArgumentError);
+      expect(() => BitPatternGroup(patterns), throwsArgumentError);
     });
 
     test('should fail on empty', () {
       final patterns = <BitPattern<void>>[];
-      expect(() => patterns.toGroup(), throwsArgumentError);
+      expect(() => BitPatternGroup(patterns), throwsArgumentError);
     });
 
     test('should match a pattern', () {
@@ -221,7 +221,7 @@ void main() {
         BitPart(1),
         BitPart.v(2),
       ], '11VV');
-      final matchGroup = [match$01VV, match$11VV].toGroup();
+      final matchGroup = BitPatternGroup([match$01VV, match$11VV]);
 
       expect(matchGroup.match('0000'.bits), isNull);
       expect(matchGroup.match('0100'.bits), same(match$01VV));
@@ -242,7 +242,7 @@ void main() {
       //              1101   CCCC   SSSS   SSSS  <-- CONDITIONAL_BRANCH
       //              1101   1111   VVVV   VVVV  <-- SOFTWARE_INTERRUPT
       final input = ('1101' '1111' '0110' '1010').bits;
-      final group = [conditionalBranch, softwareInterrupt].toGroup();
+      final group = BitPatternGroup([conditionalBranch, softwareInterrupt]);
       expect(group.match(input), softwareInterrupt);
     });
   });
