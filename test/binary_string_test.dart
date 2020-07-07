@@ -26,6 +26,10 @@ void main() {
       expect(() => ''.toBitList(), throwsFormatException);
     });
 
+    test('should fail on an invalid string', () {
+      expect(() => '1020'.toBitList(), throwsFormatException);
+    });
+
     test('should parse', () {
       expect('1010'.toBitList(), [1, 0, 1, 0]);
     });

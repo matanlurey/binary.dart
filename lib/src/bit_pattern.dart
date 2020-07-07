@@ -9,9 +9,9 @@ part of '../binary.dart';
 /// ## Usage
 /// ```
 /// final pattern = BitPattern([
-///   BitPart(1),
-///   BitPart(0),
-///   BitPart(1),
+///   BitPart.one,
+///   BitPart.zero,
+///   BitPart.one,
 ///   BitPart.v(1, 'FLAG'),
 /// ])
 /// 0x3.matches(pattern); // == true
@@ -49,9 +49,9 @@ abstract class BitPatternBuilder {
   /// their occurrence (left-to-right) when matched:
   /// ```
   /// final pattern = BitPatternBuilder([
-  ///   BitPart(1),
-  ///   BitPart(0),
-  ///   BitPart(1),
+  ///   BitPart.one,
+  ///   BitPart.zero,
+  ///   BitPart.one,
   ///   BitPart.v(1)
   /// ]).build();
   ///
@@ -186,13 +186,13 @@ class _BitPatternParser implements BitPatternBuilder {
           if (variable != null) {
             completeVariable();
           }
-          parts.add(const BitPart(0));
+          parts.add(BitPart.zero);
           break;
         case '1':
           if (variable != null) {
             completeVariable();
           }
-          parts.add(const BitPart(1));
+          parts.add(BitPart.one);
           break;
         case '_':
           if (parsedUnderscore) {
@@ -241,7 +241,14 @@ class _BitPatternParser implements BitPatternBuilder {
 
 /// Part of a [BitPattern] that will be used to match.
 abstract class BitPart {
+  /// A static `0` within a [BitPattern].
+  static const BitPart zero = _Bit(0);
+
+  /// A static `1` within a [BitPattern].
+  static const BitPart one = _Bit(1);
+
   /// A static part of a pattern, e.g. either `0` or `1`, that _must_ match.
+  @Deprecated('Use BitPart.zero or BitPart.one instead')
   @literal
   const factory BitPart(int bit) = _Bit;
 

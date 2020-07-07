@@ -2,7 +2,8 @@
 
 ## 1.5.0
 
-- Exposed `BitPatternGroup`'s constructor, deprecating `.toGroup()`.
+- Added `BitPatternGroup`'s constructor, deprecating `.toGroup()`.
+- Added `BitPart.zero` and `BitPart.one` and deprecated `BitPart(int)`.
 
 ## 1.4.0
 
