@@ -121,8 +121,8 @@ matching and capturing components of bits:
 void main() {
   // Create a BitPattern.
   final $01V = BitPatternBuilder([
-    BitPart(0),
-    BitPart(1),
+    BitPart.zero,
+    BitPart.one,
     BitPart.v(1),
   ]).build();
 

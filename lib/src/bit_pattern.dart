@@ -9,9 +9,9 @@ part of '../binary.dart';
 /// ## Usage
 /// ```
 /// final pattern = BitPattern([
-///   BitPart(1),
-///   BitPart(0),
-///   BitPart(1),
+///   BitPart.one,
+///   BitPart.zero,
+///   BitPart.one,
 ///   BitPart.v(1, 'FLAG'),
 /// ])
 /// 0x3.matches(pattern); // == true
@@ -49,9 +49,9 @@ abstract class BitPatternBuilder {
   /// their occurrence (left-to-right) when matched:
   /// ```
   /// final pattern = BitPatternBuilder([
-  ///   BitPart(1),
-  ///   BitPart(0),
-  ///   BitPart(1),
+  ///   BitPart.one,
+  ///   BitPart.zero,
+  ///   BitPart.one,
   ///   BitPart.v(1)
   /// ]).build();
   ///
@@ -186,13 +186,13 @@ class _BitPatternParser implements BitPatternBuilder {
           if (variable != null) {
             completeVariable();
           }
-          parts.add(const BitPart(0));
+          parts.add(BitPart.zero);
           break;
         case '1':
           if (variable != null) {
             completeVariable();
           }
-          parts.add(const BitPart(1));
+          parts.add(BitPart.one);
           break;
         case '_':
           if (parsedUnderscore) {
@@ -241,7 +241,14 @@ class _BitPatternParser implements BitPatternBuilder {
 
 /// Part of a [BitPattern] that will be used to match.
 abstract class BitPart {
+  /// A static `0` within a [BitPattern].
+  static const BitPart zero = _Bit(0);
+
+  /// A static `1` within a [BitPattern].
+  static const BitPart one = _Bit(1);
+
   /// A static part of a pattern, e.g. either `0` or `1`, that _must_ match.
+  @Deprecated('Use BitPart.zero or BitPart.one instead')
   @literal
   const factory BitPart(int bit) = _Bit;
 
@@ -510,17 +517,15 @@ class _InterpretedBitPattern implements BitPattern<List<int>> {
   }
 }
 
-/// Provides the capabilityto create a [BitPatternGroup] from multiple patterns.
+/// Provides the capability to create a [BitPatternGroup] from multiple patterns.
 ///
-/// See [BitPatternGroup] and [toGroup] for details.
+/// See [BitPatternGroup] for details.
+@Deprecated('Use BitPatternGroup(List) instead')
 extension BitPatternsX<T> on List<BitPattern<T>> {
   /// Returns a `List<BitPattern<?>>` as a computed group of [BitPatternGroup].
+  @Deprecated('Use BitPatternGroup(List) instead')
   BitPatternGroup<T, V> toGroup<V extends BitPattern<T>>() {
-    ArgumentError.checkNotNull(this, 'this');
-    if (isEmpty) {
-      throw ArgumentError.value(this, 'this', 'Cannot be an empty list');
-    }
-    return BitPatternGroup._(toList()..sort());
+    return BitPatternGroup(this);
   }
 }
 
@@ -532,7 +537,7 @@ extension BitPatternsX<T> on List<BitPattern<T>> {
 /// bits:
 /// ```
 /// void example(List<BitPattern<List<int>> patterns, int value) {
-///   final group = patterns.toGroup();
+///   final group = BitPatternGroup.from(patterns);
 ///   final match = group.match(value);
 ///
 ///   // Prints out the captured bits.
@@ -544,6 +549,23 @@ extension BitPatternsX<T> on List<BitPattern<T>> {
 @sealed
 class BitPatternGroup<T, V extends BitPattern<T>> {
   final List<BitPattern<T>> _sortedPatterns;
+
+  /// Creates a [BitPatternGroup] `<T, V>` from the provided [patterns].
+  ///
+  /// ```
+  /// final group = BitPatternGroup([pattern1, pattern2]);
+  /// ```
+  factory BitPatternGroup(List<BitPattern<T>> patterns) {
+    ArgumentError.checkNotNull(patterns, 'patterns');
+    if (patterns.isEmpty) {
+      throw ArgumentError.value(
+        patterns,
+        'patterns',
+        'Cannot be an empty list',
+      );
+    }
+    return BitPatternGroup._(patterns.toList()..sort());
+  }
 
   const BitPatternGroup._(this._sortedPatterns);
 

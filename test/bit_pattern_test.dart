@@ -1,6 +1,8 @@
 import 'package:binary/binary.dart';
 import 'package:test/test.dart';
 
+const _isDart2JS = identical(1, 1.0);
+
 void main() {
   BitPattern<List<int>> build(List<BitPart> parts, [String name]) {
     return BitPatternBuilder(parts).build(name);
@@ -9,10 +11,10 @@ void main() {
   group('_InterpretedBitPattern', () {
     test('0b1111 should match 0b1111', () {
       final pattern = build(const [
-        BitPart(1),
-        BitPart(1),
-        BitPart(1),
-        BitPart(1),
+        BitPart.one,
+        BitPart.one,
+        BitPart.one,
+        BitPart.one,
       ]);
       expect(pattern.matches('1111'.bits), isTrue);
       expect(pattern.matches('1010'.bits), isFalse);
@@ -21,10 +23,10 @@ void main() {
 
     test('0b0000 should match 0b000', () {
       final pattern = build(const [
-        BitPart(0),
-        BitPart(0),
-        BitPart(0),
-        BitPart(0),
+        BitPart.zero,
+        BitPart.zero,
+        BitPart.zero,
+        BitPart.zero,
       ]);
       expect(pattern.matches('0000'.bits), isTrue);
       expect(pattern.matches('1010'.bits), isFalse);
@@ -33,10 +35,10 @@ void main() {
 
     test('0b11V1 should match 0b1101, 0b1111', () {
       final pattern = build(const [
-        BitPart(1),
-        BitPart(1),
+        BitPart.one,
+        BitPart.one,
         BitPart.v(1),
-        BitPart(1),
+        BitPart.one,
       ]);
       expect(pattern.matches('1101'.bits), isTrue);
       expect(pattern.matches('1111'.bits), isTrue);
@@ -46,9 +48,9 @@ void main() {
 
     test('0b101V should match 0b1010, 0b1011', () {
       final pattern = build(const [
-        BitPart(1),
-        BitPart(0),
-        BitPart(1),
+        BitPart.one,
+        BitPart.zero,
+        BitPart.one,
         BitPart.v(1),
       ]);
       expect(pattern.matches('1010'.bits), isTrue);
@@ -57,8 +59,8 @@ void main() {
 
     test('0b01VV should match 0b01**', () {
       final pattern = build(const [
-        BitPart(0),
-        BitPart(1),
+        BitPart.zero,
+        BitPart.one,
         BitPart.v(2, 'VV'),
       ], '01VV');
       expect(
@@ -71,8 +73,8 @@ void main() {
     test('should capture a set of variables/names', () {
       // 10FFFFTT
       final pattern = build(const [
-        BitPart(1),
-        BitPart(0),
+        BitPart.one,
+        BitPart.zero,
         BitPart.v(4, 'FOUR'),
         BitPart.v(2, 'TWO'),
       ]);
@@ -87,25 +89,25 @@ void main() {
 
     test('should be sortable by specificity', () {
       final v0 = build(const [
-        BitPart(1),
-        BitPart(1),
-        BitPart(1),
-        BitPart(1),
+        BitPart.one,
+        BitPart.one,
+        BitPart.one,
+        BitPart.one,
       ], '1111');
       final v1 = build(const [
-        BitPart(0),
-        BitPart(0),
-        BitPart(0),
+        BitPart.zero,
+        BitPart.zero,
+        BitPart.zero,
         BitPart.v(1),
       ], '000V');
       final v2 = build(const [
-        BitPart(0),
-        BitPart(1),
+        BitPart.zero,
+        BitPart.one,
         BitPart.v(1),
         BitPart.v(1),
       ], '01VV');
       final v3 = build(const [
-        BitPart(1),
+        BitPart.one,
         BitPart.v(1),
         BitPart.v(1),
         BitPart.v(1),
@@ -125,7 +127,30 @@ void main() {
     });
 
     test('should fail on a pattern > 32-bits', () {
-      expect(() => build(List.filled(33, const BitPart(0))), throwsStateError);
+      expect(() => build(List.filled(33, BitPart.zero)), throwsStateError);
+    });
+  });
+
+  group('BitPart', () {
+    test('_Bit should only allow 0 or 1 (In dev-mode)', () {
+      var assertions = false;
+      assert(assertions = true);
+      if (assertions) {
+        // Dart2JS does not run initializer assertions.
+        // https://github.com/dart-lang/sdk/issues/37881
+        if (_isDart2JS) {
+          return;
+        }
+        // ignore: deprecated_member_use_from_same_package
+        expect(() => BitPart(2), throwsA(TypeMatcher<AssertionError>()));
+      } else {
+        expect(BitPart.one.toString(), isNot(contains('Bit { 1 }')));
+      }
+    });
+
+    test('_Bit should implement == and hashCode', () {
+      expect(Bit.one, equals(Bit.one));
+      expect(Bit.one.hashCode, Bit.one.hashCode);
     });
   });
 
@@ -160,14 +185,14 @@ void main() {
       expect(
         BitPatternBuilder.parse('0101_1010').build(),
         BitPatternBuilder(const [
-          BitPart(0),
-          BitPart(1),
-          BitPart(0),
-          BitPart(1),
-          BitPart(1),
-          BitPart(0),
-          BitPart(1),
-          BitPart(0),
+          BitPart.zero,
+          BitPart.one,
+          BitPart.zero,
+          BitPart.one,
+          BitPart.one,
+          BitPart.zero,
+          BitPart.one,
+          BitPart.zero,
         ]).build(),
       );
     });
@@ -176,10 +201,10 @@ void main() {
       expect(
         BitPatternBuilder.parse('0101_AAAB').build(),
         BitPatternBuilder(const [
-          BitPart(0),
-          BitPart(1),
-          BitPart(0),
-          BitPart(1),
+          BitPart.zero,
+          BitPart.one,
+          BitPart.zero,
+          BitPart.one,
           BitPart.v(3, 'A'),
           BitPart.v(1, 'B'),
         ]).build(),
@@ -190,38 +215,57 @@ void main() {
       expect(
         BitPatternBuilder.parse('01AA_AABB').build(),
         BitPatternBuilder(const [
-          BitPart(0),
-          BitPart(1),
+          BitPart.zero,
+          BitPart.one,
           BitPart.v(4, 'A'),
           BitPart.v(2, 'B'),
         ]).build(),
       );
+    });
+
+    test('should complete variables when seeing 0 or 1', () {
+      expect(
+        BitPatternBuilder.parse('0A1B').build(),
+        BitPatternBuilder(const [
+          BitPart.zero,
+          BitPart.v(1, 'A'),
+          BitPart.one,
+          BitPart.v(1, 'B'),
+        ]).build(),
+      );
+    });
+
+    test('should implement hashCode and ==', () {
+      final a = BitPatternBuilder.parse('A').build();
+      final b = BitPatternBuilder.parse('A').build();
+      expect(a, b);
+      expect(a.hashCode, b.hashCode);
     });
   });
 
   group('BitPatternGroup', () {
     test('should fail on null', () {
       List<BitPattern<void>> patterns;
-      expect(() => patterns.toGroup(), throwsArgumentError);
+      expect(() => BitPatternGroup(patterns), throwsArgumentError);
     });
 
     test('should fail on empty', () {
       final patterns = <BitPattern<void>>[];
-      expect(() => patterns.toGroup(), throwsArgumentError);
+      expect(() => BitPatternGroup(patterns), throwsArgumentError);
     });
 
     test('should match a pattern', () {
       final match$01VV = build(const [
-        BitPart(0),
-        BitPart(1),
+        BitPart.zero,
+        BitPart.one,
         BitPart.v(2),
       ], '01VV');
       final match$11VV = build(const [
-        BitPart(1),
-        BitPart(1),
+        BitPart.one,
+        BitPart.one,
         BitPart.v(2),
       ], '11VV');
-      final matchGroup = [match$01VV, match$11VV].toGroup();
+      final matchGroup = BitPatternGroup([match$01VV, match$11VV]);
 
       expect(matchGroup.match('0000'.bits), isNull);
       expect(matchGroup.match('0100'.bits), same(match$01VV));
@@ -242,7 +286,7 @@ void main() {
       //              1101   CCCC   SSSS   SSSS  <-- CONDITIONAL_BRANCH
       //              1101   1111   VVVV   VVVV  <-- SOFTWARE_INTERRUPT
       final input = ('1101' '1111' '0110' '1010').bits;
-      final group = [conditionalBranch, softwareInterrupt].toGroup();
+      final group = BitPatternGroup([conditionalBranch, softwareInterrupt]);
       expect(group.match(input), softwareInterrupt);
     });
   });
@@ -268,7 +312,7 @@ void main() {
     var enabled = false;
     assert(enabled = true);
     if (enabled) {
-      expect(const BitPart(0).toString(), 'Bit { 0 }');
+      expect(BitPart.zero.toString(), 'Bit { 0 }');
       expect(const BitPart.v(1).toString(), 'Segment { 1-bits }');
       expect(const BitPart.v(1, 'A').toString(), 'Segment { A: 1-bits }');
       expect(
@@ -276,7 +320,7 @@ void main() {
         contains('CaptureBits { A, 0 :: 1 }'),
       );
     } else {
-      expect(const BitPart(0).toString(), isNot('Bit { 0 }'));
+      expect(BitPart.zero.toString(), isNot('Bit { 0 }'));
       expect(const BitPart.v(1).toString(), isNot('Segment { 1-bits }'));
       expect(
         BitPatternBuilder(const [BitPart.v(1, 'A')]).build().toString(),

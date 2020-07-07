@@ -14,8 +14,8 @@ void main() {
 
   // Using bit patterns.
   final $01V = BitPatternBuilder(const [
-    BitPart(0),
-    BitPart(1),
+    BitPart.zero,
+    BitPart.one,
     BitPart.v(1, 'V'),
   ]).build();
   print($01V.matches('011'.bits)); // true
