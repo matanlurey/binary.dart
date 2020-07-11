@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 1.6.0
+
+- Added `<BinaryInt|BinaryList|Integral>.toggleBit`.
+- Deprecated `Integral.setBits` in favor of `.bitsSet`.
+
 ## 1.5.0
 
 - Added `BitPatternGroup`'s constructor, deprecating `.toGroup()`.

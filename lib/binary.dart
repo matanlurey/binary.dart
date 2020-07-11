@@ -186,7 +186,7 @@ extension BinaryInt on int {
 
   /// Returns the number of set bits in [this], assuming a [length]-bit [this].
   ///
-  /// > NOTE: [length] is _not_ validated. See [Integral.setBits].
+  /// > NOTE: [length] is _not_ validated. See [Integral.bitsSet].
   int countSetBits(int length) {
     var count = 0;
     for (var i = 0; i < length; i++) {
@@ -237,6 +237,16 @@ extension BinaryInt on int {
   int clearBit(int n) {
     _mustBeAtLeast0(n);
     return _clearBit(n);
+  }
+
+  /// Returns a new [int] with the [n]th bit toggled.
+  ///
+  /// If [v] is provided, it is used as the new value. Otherwise the opposite
+  /// value (of the current value) is used - i.e. `1` becomes `0` and `0`
+  /// becomes `1` (logical not).
+  int toggleBit(int n, [bool v]) {
+    v ??= !isSet(n);
+    return v ? setBit(n) : clearBit(n);
   }
 
   /// Returns whether bit [n] is set (i.e. `1`).
@@ -510,7 +520,7 @@ extension BinaryList on List<int> {
   /// Returns the [index]-th [int] with [BinaryInt.countSetBits] applied.
   ///
   /// > NOTE: The [length] property is both required and not validated for
-  /// > correctness. See [Uint8List.countSetBits] or [Integral.setBits].
+  /// > correctness. See [Uint8List.countSetBits] or [Integral.bitsSet].
   int countSetBits(int index, int length) {
     return this[index].countSetBits(length);
   }
@@ -528,6 +538,12 @@ extension BinaryList on List<int> {
   /// Returns [BinaryInt.clearBit] applied to the [index]-th [int].
   int clearBit(int index, int n) {
     return this[index] = this[index].clearBit(n);
+  }
+
+  /// Returns [BinaryInt.toggleBit] applied to the [index]-th [int].
+  int toggleBit(int index, int n, [bool v]) {
+    v ??= !isSet(index, n);
+    return v ? setBit(index, n) : clearBit(index, n);
   }
 
   /// Returns [BinaryInt.isSet] applied to the [index]-th [int].
@@ -807,6 +823,17 @@ abstract class Integral<T extends Integral<T>> implements Comparable<Integral> {
     return value.isClear(n);
   }
 
+  /// Sets the [n]th bit if [v] is `true`, otherwise clears.
+  ///
+  /// If [v] is not provided defaults to the opposit of the current value.
+  ///
+  /// Returns the new value.
+  @nonVirtual
+  T toggleBit(int n, [bool v]) {
+    v ??= !isSet(n);
+    return v ? setBit(n) : clearBit(n);
+  }
+
   /// Returns a new instance with bits in [left] to [size].
   ///
   /// The result is left-padded with 0's.
@@ -863,8 +890,13 @@ abstract class Integral<T extends Integral<T>> implements Comparable<Integral> {
   }
 
   /// Returns the number of set bits in [value].
+  @Deprecated('Use bitsSet')
   @nonVirtual
-  int get setBits {
+  int get setBits => bitsSet;
+
+  /// Returns the number of set bits in [value].
+  @nonVirtual
+  int get bitsSet {
     return value.countSetBits(size);
   }
 

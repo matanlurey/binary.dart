@@ -219,12 +219,14 @@ void main() {
 
     test('get/set/clearBit should work similarly to int.*', () {
       final list = ['0110'.bits];
+      expect(list[0].toBinaryPadded(4), '0110');
       expect(list.getBit(0, 0), 0);
       expect(list.getBit(0, 1), 1);
       expect(list.setBit(0, 0).toBinaryPadded(4), '0111');
       expect(list.isSet(0, 0), isTrue);
       expect(list.clearBit(0, 1).toBinaryPadded(4), '0101');
       expect(list.isClear(0, 1), isTrue);
+      expect(list.toggleBit(0, 0).toBinaryPadded(4), '0100');
     });
 
     test('bitChunk/bitRange work similarly to int.*', () {

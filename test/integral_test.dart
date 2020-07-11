@@ -124,6 +124,13 @@ void main() {
       });
     });
 
+    test('toggleBit should return', () {
+      final int = Int4('101'.bits);
+      expect(int.toggleBit(0), Int4('100'.bits));
+      expect(int.toggleBit(1), Int4('111'.bits));
+      expect(int.toggleBit(2, true), int);
+    });
+
     group('isSet', () {
       test('should return', () {
         final int = Int4('101'.bits);
@@ -195,8 +202,10 @@ void main() {
       );
     });
 
-    test('setBits should infer size', () {
+    test('bitsSet should infer size', () {
+      // ignore: deprecated_member_use_from_same_package
       expect(Uint8('0110' '0000'.bits).setBits, 2);
+      expect(Uint8('0110' '0000'.bits).bitsSet, 2);
     });
 
     test('msb should infer size', () {
