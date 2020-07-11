@@ -116,6 +116,12 @@ void main() {
     expect('1010'.bits.clearBit(1).toBinary(), '1000');
   });
 
+  test('toggleBit should return a new number', () {
+    expect('1010'.bits.toggleBit(0).toBinaryPadded(4), '1011');
+    expect('1010'.bits.toggleBit(3, false).toBinaryPadded(4), '0010');
+    expect('1010'.bits.toggleBit(2, true).toBinaryPadded(4), '1110');
+  });
+
   test('isSet/isClear should check for 1', () {
     expect(() => '1010'.bits.isClear(-1), throwsRangeError);
     expect(() => '1010'.bits.isSet(-1), throwsRangeError);
