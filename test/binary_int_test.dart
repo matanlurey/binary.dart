@@ -78,10 +78,45 @@ void main() {
     });
   });
 
-  test('rotateRight should rotate bits to the right', () {
-    final input = '0110' '0000'.bits;
-    final output = '0011' '0000'.bits;
-    expect(input.rotateRight(1), output);
+  group('rotateRightShift should rotate bits to the right', () {
+    test('LSB -> MSB [1 Bit]', () {
+      final input = '0000' '0001'.bits;
+      final output = '1000' '0000'.bits;
+      final result = input.rotateRightShift(1, 8);
+      expect(
+        result,
+        output,
+        reason: ''
+            '${output.toBinaryPadded(8)} !=\n'
+            '${result.toBinaryPadded(8)}',
+      );
+    });
+
+    test('LSB -> MSB [2 Bits]', () {
+      final input = '0000' '0011'.bits;
+      final output = '1100' '0000'.bits;
+      final result = input.rotateRightShift(2, 8);
+      expect(
+        result,
+        output,
+        reason: ''
+            '${output.toBinaryPadded(8)} !=\n'
+            '${result.toBinaryPadded(8)}',
+      );
+    });
+
+    test('Unchanged MSB', () {
+      final input = '0001' '1000'.bits;
+      final output = '0000' '0110'.bits;
+      final result = input.rotateRightShift(2, 8);
+      expect(
+        result,
+        output,
+        reason: ''
+            '${output.toBinaryPadded(8)} !=\n'
+            '${result.toBinaryPadded(8)}',
+      );
+    });
   });
 
   test('countSetBits should return the number of set bits', () {

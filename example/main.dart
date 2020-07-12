@@ -3,14 +3,14 @@ import 'package:binary/binary.dart';
 
 void main() {
   // Using extension methods.
-  //                  String         int
-  //                 vvvvvvvvvv   vvvvvvvvvv
-  print('0111' '1111'.bits.shiftRight(5, 8));
+  //                  String            int
+  //                  vvvv vvvvvvvvvvvvvvvv
+  print('0111' '1111'.bits.signedRightShift(5, 8));
 
   // Using boxed types.
   final int8 = Int8('0111' '1111'.bits);
   // Note we did not need to pass in the length, it is provided by the class.
-  print(int8.shiftRight(5));
+  print(int8.signedRightShift(5));
 
   // Using bit patterns.
   final $01V = BitPatternBuilder(const [

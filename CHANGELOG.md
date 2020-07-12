@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 1.7.0
+
+- Deprecated `<*>.shiftRight` in favor of `<*>.signedShiftRight>`.
+- Deprecated `<*>.rotateRight`, which was not correctly implemeted.
+- Added `<*>.rotateRightShift` to replace `rotateRight`.
+- Updated some doc comments that referred to incorrect JavaScript operators.
+
 ## 1.6.0
 
 - Added `<BinaryInt|BinaryList|Integral>.toggleBit`.

@@ -190,14 +190,14 @@ void main() {
 
     test('shiftRight should infer size', () {
       expect(
-        Uint8('0111' '1111'.bits).shiftRight(5),
+        Uint8('0111' '1111'.bits).signedRightShift(5),
         Uint8('0000' '0011'.bits),
       );
     });
 
-    test('signExtend should work similar to int.rotateRight', () {
+    test('rotateRightShift', () {
       expect(
-        Uint8('0110' '0000'.bits).rotateRight(1),
+        Uint8('0110' '0000'.bits).rotateRightShift(1),
         Uint8('0011' '0000'.bits),
       );
     });
