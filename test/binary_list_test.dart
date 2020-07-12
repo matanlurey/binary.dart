@@ -15,7 +15,7 @@ void main() {
 
     test('shiftRight should infer length', () {
       final list = from('0111' '1111');
-      expect(list.shiftRight(0, 5).toBinaryPadded(8), '0000' '0011');
+      expect(list.signedRightShift(0, 5).toBinaryPadded(8), '0000' '0011');
     });
 
     test('countSetBits should infer length', () {
@@ -42,7 +42,7 @@ void main() {
 
     test('shiftRight should infer length', () {
       final list = from('0111' '1111');
-      expect(list.shiftRight(0, 5).toBinaryPadded(8), '0000' '0011');
+      expect(list.signedRightShift(0, 5).toBinaryPadded(8), '0000' '0011');
     });
 
     test('countSetBits should infer length', () {
@@ -70,7 +70,7 @@ void main() {
     test('shiftRight should infer length', () {
       final list = from('0111' '1111' '0000' '0000');
       expect(
-        list.shiftRight(0, 5).toBinaryPadded(16),
+        list.signedRightShift(0, 5).toBinaryPadded(16),
         '0000' '0011' '1111' '1000',
       );
     });
@@ -100,7 +100,7 @@ void main() {
     test('shiftRight should infer length', () {
       final list = from('0111' '1111' '0000' '0000');
       expect(
-        list.shiftRight(0, 5).toBinaryPadded(16),
+        list.signedRightShift(0, 5).toBinaryPadded(16),
         '0000' '0011' '1111' '1000',
       );
     });
@@ -132,7 +132,7 @@ void main() {
         '0111' '1111' '0000' '0000' '0000' '0000' '0000' '0000',
       );
       expect(
-        list.shiftRight(0, 5).toBinaryPadded(32),
+        list.signedRightShift(0, 5).toBinaryPadded(32),
         '0000' '0011' '1111' '1000' '0000' '0000' '0000' '0000',
       );
     });
@@ -166,7 +166,7 @@ void main() {
         '0111' '1111' '0000' '0000' '0000' '0000' '0000' '0000',
       );
       expect(
-        list.shiftRight(0, 5).toBinaryPadded(32),
+        list.signedRightShift(0, 5).toBinaryPadded(32),
         '0000' '0011' '1111' '1000' '0000' '0000' '0000' '0000',
       );
     });
@@ -207,7 +207,7 @@ void main() {
     test('rotateRight should work similarly to int.rotateRight', () {
       final list = ['0110' '0000'.bits];
       expect(
-        list.rotateRight(0, 1).toBinaryPadded(8),
+        list.rotateRightShift(0, 1, 8).toBinaryPadded(8),
         '0011' '0000',
       );
     });

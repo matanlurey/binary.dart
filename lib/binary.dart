@@ -138,12 +138,20 @@ extension BinaryInt on int {
 
   /// Returns [this] arithetically right-shifted by [n] bytes assuming [length].
   ///
-  /// This is intended to be roughly equivalent to JavaScript's `>>>` operator.
+  /// This is intended to be roughly equivalent to JavaScript's `>>` operator.
   ///
-  /// > NOTE: [length] is _not_ validated. See [Integral.shiftRight].
-  int shiftRight(int n, int length) {
-    final leftPadding = msb(length) ? math.pow(2, n).unsafeCast<int>() - 1 : 0;
-    return (leftPadding << (length - n)) | (this >> n);
+  /// > NOTE: [bitWidth] is _not_ validated. See [Integral.signedRightShift].
+  @Deprecated('Use signedRightShift')
+  int shiftRight(int n, int bitWidth) => signedRightShift(n, bitWidth);
+
+  /// Returns [this] arithetically right-shifted by [n] bytes assuming [length].
+  ///
+  /// This is intended to be roughly equivalent to JavaScript's `>>` operator.
+  ///
+  /// > NOTE: [bitWidth] is _not_ validated. See [Integral.signedRightShift].
+  int signedRightShift(int n, int bitWidth) {
+    final padding = msb(bitWidth) ? math.pow(2, n).unsafeCast<int>() - 1 : 0;
+    return (padding << (bitWidth - n)) | (this >> n);
   }
 
   /// Returns [this] sign-extended to [endSize] bits.
@@ -176,6 +184,9 @@ extension BinaryInt on int {
   }
 
   /// Returns a bit-wise right-rotation on [this] by an [amount] of bits.
+  ///
+  /// > NOTE: [length] is _not_ validated. See [Integral.signedRightShift].
+  @Deprecated('This implementation is incorrect. Use rotateRightShift instead')
   int rotateRight(int amount) {
     var bits = this;
     for (var i = 0; i < amount; i++) {
@@ -184,12 +195,28 @@ extension BinaryInt on int {
     return bits;
   }
 
+  static int _maskedRotation(int rotation, int bitWidth) {
+    return rotation & (bitWidth - 1);
+  }
+
+  /// Returns a bit-wise right-rotation on [this] by an [r] of bits.
+  ///
+  /// > NOTE: [bitWidth] is _not_ validated. See [Integral.rotateRightShift].
+  int rotateRightShift(int r, int bitWidth) {
+    final value = this;
+    final bitMask = math.pow(2, bitWidth).unsafeCast<int>() - 1;
+    final rotation = _maskedRotation(r, bitWidth);
+    final left = value >> rotation;
+    final right = (value << (bitWidth - rotation)) & bitMask;
+    return left | right;
+  }
+
   /// Returns the number of set bits in [this], assuming a [length]-bit [this].
   ///
-  /// > NOTE: [length] is _not_ validated. See [Integral.bitsSet].
-  int countSetBits(int length) {
+  /// > NOTE: [bitWidth] is _not_ validated. See [Integral.bitsSet].
+  int countSetBits(int bitWidth) {
     var count = 0;
-    for (var i = 0; i < length; i++) {
+    for (var i = 0; i < bitWidth; i++) {
       if (this & (1 << i) != 0) {
         count++;
       }
@@ -199,9 +226,9 @@ extension BinaryInt on int {
 
   /// Returns whether the most-significant-bit in [this] (of [length]) is set.
   ///
-  /// > NOTE: [length] is _not_ validated. See [Integral.msb].
-  bool msb(int length) {
-    return isSet(length - 1);
+  /// > NOTE: [bitWidth] is _not_ validated. See [Integral.msb].
+  bool msb(int bitWidth) {
+    return isSet(bitWidth - 1);
   }
 
   /// Throws [RangeError] if [n] is not at least `0`.
@@ -291,8 +318,8 @@ extension BinaryInt on int {
   String toBinary() => toRadixString(2);
 
   /// Returns [this] as a binary string representation, padded with `0`'s.
-  String toBinaryPadded(int length) {
-    return toUnsigned(length).toBinary().padLeft(length, '0');
+  String toBinaryPadded(int bitWidth) {
+    return toUnsigned(bitWidth).toBinary().padLeft(bitWidth, '0');
   }
 }
 
@@ -312,9 +339,17 @@ extension BinaryUint8List on Uint8List {
 
   /// Returns the [index]-th [int] right-shifted by [n].
   ///
-  /// See [BinaryInt.shiftRight].
+  /// See [BinaryInt.signedRightShift].
+  @Deprecated('Use signedRightShift instead')
   int shiftRight(int index, int n) {
     return this[index] = this[index].shiftRight(n, _length);
+  }
+
+  /// Returns the [index]-th [int] right-shifted by [n].
+  ///
+  /// See [BinaryInt.signedRightShift].
+  int signedRightShift(int index, int n) {
+    return this[index] = this[index].signedRightShift(n, _length);
   }
 
   /// Returns [BinaryInt.countSetBits] applied to the [index]-th [int].
@@ -344,9 +379,17 @@ extension BinaryInt8List on Int8List {
 
   /// Returns the [index]-th [int] right-shifted by [n].
   ///
-  /// See [BinaryInt.shiftRight].
+  /// See [BinaryInt.signedRightShift].
+  @Deprecated('Use signedRightShift instead')
   int shiftRight(int index, int n) {
     return this[index] = this[index].shiftRight(n, _length);
+  }
+
+  /// Returns the [index]-th [int] right-shifted by [n].
+  ///
+  /// See [BinaryInt.signedRightShift].
+  int signedRightShift(int index, int n) {
+    return this[index] = this[index].signedRightShift(n, _length);
   }
 
   /// Returns [BinaryInt.countSetBits] applied to the [index]-th [int].
@@ -376,9 +419,17 @@ extension BinaryUint16List on Uint16List {
 
   /// Returns the [index]-th [int] right-shifted by [n].
   ///
-  /// See [BinaryInt.shiftRight].
+  /// See [BinaryInt.signedRightShift].
+  @Deprecated('Use signedRightShift instead')
   int shiftRight(int index, int n) {
     return this[index] = this[index].shiftRight(n, _length);
+  }
+
+  /// Returns the [index]-th [int] right-shifted by [n].
+  ///
+  /// See [BinaryInt.signedRightShift].
+  int signedRightShift(int index, int n) {
+    return this[index] = this[index].signedRightShift(n, _length);
   }
 
   /// Returns [BinaryInt.countSetBits] applied to the [index]-th [int].
@@ -408,9 +459,17 @@ extension BinaryInt16List on Int16List {
 
   /// Returns the [index]-th [int] right-shifted by [n].
   ///
-  /// See [BinaryInt.shiftRight].
+  /// See [BinaryInt.signedRightShift].
+  @Deprecated('Use signedRightShift instead')
   int shiftRight(int index, int n) {
     return this[index] = this[index].shiftRight(n, _length);
+  }
+
+  /// Returns the [index]-th [int] right-shifted by [n].
+  ///
+  /// See [BinaryInt.signedRightShift].
+  int signedRightShift(int index, int n) {
+    return this[index] = this[index].signedRightShift(n, _length);
   }
 
   /// Returns [BinaryInt.countSetBits] applied to the [index]-th [int].
@@ -440,9 +499,17 @@ extension BinaryUint32List on Uint32List {
 
   /// Returns the [index]-th [int] right-shifted by [n].
   ///
-  /// See [BinaryInt.shiftRight].
+  /// See [BinaryInt.signedRightShift].
+  @Deprecated('Use signedRightShift instead')
   int shiftRight(int index, int n) {
     return this[index] = this[index].shiftRight(n, _length);
+  }
+
+  /// Returns the [index]-th [int] right-shifted by [n].
+  ///
+  /// See [BinaryInt.signedRightShift].
+  int signedRightShift(int index, int n) {
+    return this[index] = this[index].signedRightShift(n, _length);
   }
 
   /// Returns [BinaryInt.countSetBits] applied to the [index]-th [int].
@@ -472,9 +539,17 @@ extension BinaryInt32List on Int32List {
 
   /// Returns the [index]-th [int] right-shifted by [n].
   ///
-  /// See [BinaryInt.shiftRight].
+  /// See [BinaryInt.signedRightShift].
+  @Deprecated('Use signedRightShift instead')
   int shiftRight(int index, int n) {
     return this[index] = this[index].shiftRight(n, _length);
+  }
+
+  /// Returns the [index]-th [int] right-shifted by [n].
+  ///
+  /// See [BinaryInt.signedRightShift].
+  int signedRightShift(int index, int n) {
+    return this[index] = this[index].signedRightShift(n, _length);
   }
 
   /// Returns [BinaryInt.countSetBits] applied to the [index]-th [int].
@@ -513,16 +588,22 @@ extension BinaryList on List<int> {
   }
 
   /// Returns the [index]-th [int] with [BinaryInt.rotateRight] applied.
+  @Deprecated('This implementation is incorrect. Use rotateRightShift instead')
   int rotateRight(int index, int amount) {
     return this[index] = this[index].rotateRight(amount);
+  }
+
+  /// Returns the [index]-th [int] with [BinaryInt.rotateRightShift] applied.
+  int rotateRightShift(int index, int amount, int bitWidth) {
+    return this[index] = this[index].rotateRightShift(amount, bitWidth);
   }
 
   /// Returns the [index]-th [int] with [BinaryInt.countSetBits] applied.
   ///
   /// > NOTE: The [length] property is both required and not validated for
   /// > correctness. See [Uint8List.countSetBits] or [Integral.bitsSet].
-  int countSetBits(int index, int length) {
-    return this[index].countSetBits(length);
+  int countSetBits(int index, int bitWidth) {
+    return this[index].countSetBits(bitWidth);
   }
 
   /// Returns [BinaryInt.getInt] applied to the [index]-th [int].
@@ -875,18 +956,34 @@ abstract class Integral<T extends Integral<T>> implements Comparable<Integral> {
 
   /// Returns [value] arithmetically right-shifted [n] bits.
   ///
-  /// See [BinaryInt.shiftRight].
+  /// See [BinaryInt.signedRightShift].
+  @Deprecated('Use signedRightShift instead')
   @nonVirtual
-  T shiftRight(int n) {
-    return wrapSafeValue(value.shiftRight(n, size));
+  T shiftRight(int n) => signedRightShift(n);
+
+  /// Returns [value] arithmetically right-shifted [n] bits.
+  ///
+  /// See [BinaryInt.signedRightShift].
+  @nonVirtual
+  T signedRightShift(int n) {
+    return wrapSafeValue(value.signedRightShift(n, size));
   }
 
   /// Returns a bit-wise right rotation on [value] by [number] of bits.
   ///
   /// See [BinaryInt.rotateRight].
+  @Deprecated('This implementation is incorrect. Use rotateRightShift instead')
   @nonVirtual
   T rotateRight(int number) {
     return wrapSafeValue(value.rotateRight(number));
+  }
+
+  /// Returns a bit-wise right rotation on [value] by [number] of bits.
+  ///
+  /// See [BinaryInt.rotateRightShift].
+  @nonVirtual
+  T rotateRightShift(int number) {
+    return wrapSafeValue(value.rotateRightShift(number, size));
   }
 
   /// Returns the number of set bits in [value].
