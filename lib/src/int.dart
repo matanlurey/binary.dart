@@ -219,7 +219,7 @@ extension BinaryInt on int {
     } else if (left - size < -1) {
       throw RangeError.value(left - size, 'left - size', 'Expected >= -1');
     }
-    if (_usingJSNum && (left > _maxSmiBits || size > _maxSmiBits)) {
+    if (_usingJSNum && left > _maxSmiBits) {
       return bitChunkLong(left, size);
     } else {
       return (this >> (left + 1 - size)) & ~(~0 << size);
