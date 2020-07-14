@@ -1,6 +1,11 @@
 // ignore_for_file: prefer_is_empty
 
-part of '../binary.dart';
+import 'dart:typed_data';
+
+import 'package:meta/meta.dart';
+
+import 'int.dart';
+import '_utils.dart';
 
 /// Builds a sequence of binary digits.
 ///
@@ -290,7 +295,7 @@ class _Bit implements BitPart {
 
   @override
   String toString() {
-    if (_assertionsEnabled) {
+    if (assertionsEnabled) {
       return 'Bit { $_bit }';
     } else {
       return super.toString();
@@ -320,7 +325,7 @@ class _Segment implements BitPart {
 
   @override
   String toString() {
-    if (_assertionsEnabled) {
+    if (assertionsEnabled) {
       return _name != null
           ? 'Segment { $_name: $_length-bits }'
           : 'Segment { $_length-bits }';
@@ -391,7 +396,7 @@ class _CaptureBits {
 
   @override
   String toString() {
-    if (_assertionsEnabled) {
+    if (assertionsEnabled) {
       return 'CaptureBits { $name, $left :: $size }';
     } else {
       return super.toString();
@@ -502,7 +507,7 @@ class _InterpretedBitPattern implements BitPattern<List<int>> {
 
   @override
   String toString() {
-    if (_assertionsEnabled) {
+    if (assertionsEnabled) {
       return (StringBuffer()
             ..writeln('InterpretedBitPattern: $_length-bits {')
             ..writeln('  name:       ${_name ?? '<Unnamed>'}')
@@ -584,7 +589,7 @@ class BitPatternGroup<T, V extends BitPattern<T>> {
 
   @override
   String toString() {
-    if (_assertionsEnabled) {
+    if (assertionsEnabled) {
       return 'BitPatternGroup { $_sortedPatterns }';
     } else {
       return super.toString();

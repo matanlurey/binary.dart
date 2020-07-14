@@ -1,4 +1,5 @@
 // ignore_for_file: deprecated_member_use_from_same_package
+import 'dart:math' as math;
 
 import 'package:binary/binary.dart';
 import 'package:test/test.dart';
@@ -44,7 +45,11 @@ void main() {
     });
   });
 
-  test('shiftRight should work identical to >>> in JavaScript', () {
+  test('pow should work identical to math.pow', () {
+    expect(2.pow(10), math.pow(2, 10));
+  });
+
+  test('shiftRight should work identical to >> in JavaScript', () {
     const length = 8; // Assume 8-bit integer.
 
     // 1111 1111 -> 1111 1111
