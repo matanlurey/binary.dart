@@ -252,11 +252,6 @@ abstract class BitPart {
   /// A static `1` within a [BitPattern].
   static const BitPart one = _Bit(1);
 
-  /// A static part of a pattern, e.g. either `0` or `1`, that _must_ match.
-  @Deprecated('Use BitPart.zero or BitPart.one instead')
-  @literal
-  const factory BitPart(int bit) = _Bit;
-
   /// A dynamic variable (segment) of a pattern of [length] bytes.
   ///
   /// Optionally has a [name] (for debug purposes).
@@ -519,18 +514,6 @@ class _InterpretedBitPattern implements BitPattern<List<int>> {
     } else {
       return super.toString();
     }
-  }
-}
-
-/// Provides the capability to create a [BitPatternGroup] from multiple patterns.
-///
-/// See [BitPatternGroup] for details.
-@Deprecated('Use BitPatternGroup(List) instead')
-extension BitPatternsX<T> on List<BitPattern<T>> {
-  /// Returns a `List<BitPattern<?>>` as a computed group of [BitPatternGroup].
-  @Deprecated('Use BitPatternGroup(List) instead')
-  BitPatternGroup<T, V> toGroup<V extends BitPattern<T>>() {
-    return BitPatternGroup(this);
   }
 }
 

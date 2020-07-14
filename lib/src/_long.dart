@@ -8,9 +8,6 @@ import 'int.dart';
 ///
 /// Instead, this extension is used an _utility_ by the `BinaryInt` extension.
 extension BinaryLong on int {
-  /// Represents `math.pow(2, 32)`, precomputed.
-  static const _2p32 = 0x100000000;
-
   /// Represents the maximum amount of bits supported in a JS VM.
   static const _maxJs = 52;
 
@@ -49,23 +46,13 @@ extension BinaryLong on int {
     final andNotHiLo = hiLo() & ~bitWidth.hiLo();
     return andNotHiLo.toInt();
   }
-
-  /// Returns the current [int] split into an array of two elements where:
-  ///
-  /// - `list[0] = Hi Bits`
-  /// - `list[1] = Lo Bits`
-  @visibleForTesting
-  Uint32List hiLo() {
-    final hiBits = (this / _2p32).floor() | 0;
-    final loBits = (this % _2p32) | 0;
-    return Uint32List(2)
-      ..[0] = hiBits
-      ..[1] = loBits;
-  }
 }
 
 /// Extensions for the [BinaryLong.hiLo] resultant.
 extension _BinaryHiLo on Uint32List {
+  /// Represents `math.pow(2, 32)`, precomputed.
+  static const _2p32 = 0x100000000;
+
   Uint32List operator ~() {
     return Uint32List(2)
       ..[0] = ~this[0]
@@ -86,5 +73,5 @@ extension _BinaryHiLo on Uint32List {
       ..[1] = a[1] | b[1];
   }
 
-  int toInt() => this[0] * BinaryLong._2p32 + this[1];
+  int toInt() => this[0] * _2p32 + this[1];
 }

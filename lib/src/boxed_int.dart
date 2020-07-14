@@ -249,25 +249,9 @@ abstract class Integral<T extends Integral<T>> implements Comparable<Integral> {
   /// Returns [value] arithmetically right-shifted [n] bits.
   ///
   /// See [BinaryInt.signedRightShift].
-  @Deprecated('Use signedRightShift instead')
-  @nonVirtual
-  T shiftRight(int n) => signedRightShift(n);
-
-  /// Returns [value] arithmetically right-shifted [n] bits.
-  ///
-  /// See [BinaryInt.signedRightShift].
   @nonVirtual
   T signedRightShift(int n) {
     return wrapSafeValue(value.signedRightShift(n, size));
-  }
-
-  /// Returns a bit-wise right rotation on [value] by [number] of bits.
-  ///
-  /// See [BinaryInt.rotateRight].
-  @Deprecated('This implementation is incorrect. Use rotateRightShift instead')
-  @nonVirtual
-  T rotateRight(int number) {
-    return wrapSafeValue(value.rotateRight(number));
   }
 
   /// Returns a bit-wise right rotation on [value] by [number] of bits.
@@ -277,11 +261,6 @@ abstract class Integral<T extends Integral<T>> implements Comparable<Integral> {
   T rotateRightShift(int number) {
     return wrapSafeValue(value.rotateRightShift(number, size));
   }
-
-  /// Returns the number of set bits in [value].
-  @Deprecated('Use bitsSet')
-  @nonVirtual
-  int get setBits => bitsSet;
 
   /// Returns the number of set bits in [value].
   @nonVirtual

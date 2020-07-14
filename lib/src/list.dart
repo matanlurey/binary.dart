@@ -21,14 +21,6 @@ extension BinaryUint8List on Uint8List {
   /// Returns the [index]-th [int] right-shifted by [n].
   ///
   /// See [BinaryInt.signedRightShift].
-  @Deprecated('Use signedRightShift instead')
-  int shiftRight(int index, int n) {
-    return this[index] = this[index].shiftRight(n, _length);
-  }
-
-  /// Returns the [index]-th [int] right-shifted by [n].
-  ///
-  /// See [BinaryInt.signedRightShift].
   int signedRightShift(int index, int n) {
     return this[index] = this[index].signedRightShift(n, _length);
   }
@@ -57,14 +49,6 @@ extension BinaryInt8List on Int8List {
 
   /// Returns the [index]-th [int] boxed as a [Int8].
   Int8 getBoxed(int index) => Int8(this[index]);
-
-  /// Returns the [index]-th [int] right-shifted by [n].
-  ///
-  /// See [BinaryInt.signedRightShift].
-  @Deprecated('Use signedRightShift instead')
-  int shiftRight(int index, int n) {
-    return this[index] = this[index].shiftRight(n, _length);
-  }
 
   /// Returns the [index]-th [int] right-shifted by [n].
   ///
@@ -101,14 +85,6 @@ extension BinaryUint16List on Uint16List {
   /// Returns the [index]-th [int] right-shifted by [n].
   ///
   /// See [BinaryInt.signedRightShift].
-  @Deprecated('Use signedRightShift instead')
-  int shiftRight(int index, int n) {
-    return this[index] = this[index].shiftRight(n, _length);
-  }
-
-  /// Returns the [index]-th [int] right-shifted by [n].
-  ///
-  /// See [BinaryInt.signedRightShift].
   int signedRightShift(int index, int n) {
     return this[index] = this[index].signedRightShift(n, _length);
   }
@@ -139,12 +115,6 @@ extension BinaryInt16List on Int16List {
   Int16 getBoxed(int index) => Int16(this[index]);
 
   /// Returns the [index]-th [int] right-shifted by [n].
-  ///
-  /// See [BinaryInt.signedRightShift].
-  @Deprecated('Use signedRightShift instead')
-  int shiftRight(int index, int n) {
-    return this[index] = this[index].shiftRight(n, _length);
-  }
 
   /// Returns the [index]-th [int] right-shifted by [n].
   ///
@@ -181,14 +151,6 @@ extension BinaryUint32List on Uint32List {
   /// Returns the [index]-th [int] right-shifted by [n].
   ///
   /// See [BinaryInt.signedRightShift].
-  @Deprecated('Use signedRightShift instead')
-  int shiftRight(int index, int n) {
-    return this[index] = this[index].shiftRight(n, _length);
-  }
-
-  /// Returns the [index]-th [int] right-shifted by [n].
-  ///
-  /// See [BinaryInt.signedRightShift].
   int signedRightShift(int index, int n) {
     return this[index] = this[index].signedRightShift(n, _length);
   }
@@ -204,6 +166,40 @@ extension BinaryUint32List on Uint32List {
   }
 }
 
+extension BinaryUint64HiLo on Uint32List {
+  /// Represents `math.pow(2, 32)`, precomputed.
+  static const _2p32 = 0x100000000;
+
+  static Uint32List _new(int a, int b) => Uint32List(2)
+    ..[0] = a
+    ..[1] = b;
+
+  /// "Hi" (upper) bits.
+  ///
+  /// This is an alias for `[0]` and [first].
+  int get hi => this[0];
+
+  /// "Lo" (lower) bits.
+  ///
+  /// This is an alias for `[1]` and [last].
+  int get lo => this[1];
+
+  /// Returns a new [Uint32List] with bits logically negated (`~`).
+  Uint32List operator ~() => _new(~hi, ~lo);
+
+  /// Returns a new [Uint32List] with bits compared with [b] logical and (`&`).
+  Uint32List operator &(Uint32List b) => _new(hi & b.hi, lo & b.lo);
+
+  /// Returns a new [Uint32List] with bits compared with [b] logical or (`|`).
+  Uint32List operator |(Uint32List b) => _new(hi | b.hi, lo | b.lo);
+
+  /// Returns a new [Uint32List] with bits compared with [b] logical xor (`^`).
+  Uint32List operator ^(Uint32List b) => _new(hi ^ b.hi, lo ^ b.lo);
+
+  /// Returns, truncated if necessary, to fit as an [int].
+  int toInt() => this[0] * _2p32 + this[1];
+}
+
 /// A collection of binary methods to be applied to elements of [Int32List].
 ///
 /// The methods here are roughly the same as those on [BinaryInt], except that
@@ -217,14 +213,6 @@ extension BinaryInt32List on Int32List {
 
   /// Returns the [index]-th [int] boxed as a [Int32].
   Int32 getBoxed(int index) => Int32(this[index]);
-
-  /// Returns the [index]-th [int] right-shifted by [n].
-  ///
-  /// See [BinaryInt.signedRightShift].
-  @Deprecated('Use signedRightShift instead')
-  int shiftRight(int index, int n) {
-    return this[index] = this[index].shiftRight(n, _length);
-  }
 
   /// Returns the [index]-th [int] right-shifted by [n].
   ///
@@ -257,21 +245,9 @@ extension BinaryList on List<int> {
     return join('').bits;
   }
 
-  /// Converts a list of individual bytes to bits represented as an [int].
-  ///
-  /// Bytes are represented in order to right-most to left-most.
-  @Deprecated('Use <List>.toBits() instead')
-  int parseBits() => toBits();
-
   /// Returns the [index]-th [int] with [BinaryInt.signExtend] applied.
   int signExtend(int index, int startSize, int endSize) {
     return this[index] = this[index].signExtend(startSize, endSize);
-  }
-
-  /// Returns the [index]-th [int] with [BinaryInt.rotateRight] applied.
-  @Deprecated('This implementation is incorrect. Use rotateRightShift instead')
-  int rotateRight(int index, int amount) {
-    return this[index] = this[index].rotateRight(amount);
   }
 
   /// Returns the [index]-th [int] with [BinaryInt.rotateRightShift] applied.

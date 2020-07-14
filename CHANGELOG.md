@@ -1,5 +1,64 @@
 # CHANGELOG
 
+## 2.0.0
+
+### Highlights
+
+Added limited support for operations on integer values that exceed 32-bits.
+Before `2.0.0` most of the methods provided by this package had undefined
+behavior when accessing a bit > the 31st bit when compiled to JavaScript:
+
+- `msb`
+- `getBit`
+- `setBit` and `isSet`
+- `clearBit` and `isCleared`
+- `toggleBit`
+- `countSetBits`
+- `bitRange` and `bitChunk`
+- `hiLo`
+- `toBinary` and `toBinaryPadded`
+
+In addition, these operations will now throw `UnsupportedError` when compiled
+to JavaScript when attempting operations on integer values that exceed 52-bits,
+which is the maximum integer that is supported in JavaScript VMs.
+
+The remaining methods (i.e. `signedRightShift`, so on), unless otherwise
+documented are assumed to have _undefined behavior_ when compiled to JavaScript.
+
+### Operating on Larger Ints
+
+Added `<int>.hiLo()`, which returns a fixed 2-length `Uint32List` where
+element 0 is the "hi" (upper bits) and element 1 is the "lo" (lower bits).
+Because of platform limitations, "hi" may only include up to the 52nd bit.
+
+Additionally, `Uint32List` has received new extension methods through the
+extension class `BinaryUint64HiLo` (e.g. the result of `<int>.hiLo()`), which
+simplifies operations for integers larger than 32 bits:
+
+- `.hi` and `.lo`.
+- `~`
+- `&` and `|` and `^`
+- `<<`, `>>`, and `signedRightShift`
+- `+` and `-`
+- `*` and `/` and `%`
+- `signExtend`
+- `rotateRightShift`
+- `replaceBitRange`
+- `isEquivalentTo(Uint32List)`
+- `toInt()`
+
+These methods allow treating a `Uint32List` roughly as a 64-bit integer with
+limited boxing. We may still consider adding a `Uint64` boxed `Integral` in a
+future release, but you may also try using these other implemntations:
+
+- [BigInt](https://api.dart.dev/stable/2.8.4/dart-core/BigInt-class.html)
+- [Int64](https://pub.dev/documentation/fixnum/latest/fixnum/Int64-class.html)
+
+### Additional changes
+
+- Added `<int>.pow(n)`, which is like `<dart:math>.pow` with a return of `int`.
+- Removed all methods deprecated up to this point.
+
 ## 1.7.0
 
 - Deprecated `<*>.shiftRight` in favor of `<*>.signedShiftRight>`.

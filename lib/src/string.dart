@@ -37,12 +37,6 @@ extension BinaryString on String {
     }
   }
 
-  /// Parses a binary number made entirely of `0`'s and `1`'s into an [int].
-  ///
-  /// Unlike [int.parse], this function allows `0` as a starting character.
-  @Deprecated('Use <String>.bits instead')
-  int parseBits() => bits;
-
   /// Parses a binary number made entirely of `0`'s and `1`'s into a list.
   ///
   /// Each element in the resulting `List<int>` is either `0` or `1`.

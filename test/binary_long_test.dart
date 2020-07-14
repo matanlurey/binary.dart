@@ -1,5 +1,4 @@
 import 'package:binary/binary.dart' show BinaryInt;
-import 'package:binary/src/_long.dart' show BinaryLong;
 import 'package:test/test.dart';
 
 /// Indirectly tests the `BinaryLong` implementation via `BinaryInt`.
@@ -52,14 +51,6 @@ void main() {
       expect(maxJsUint.hiLo(), [0x1fffff, maxUint32]);
     });
   });
-
-  group('signedRightShift', () {});
-
-  group('signExtend', () {});
-
-  group('rotateRightShift', () {});
-
-  group('countSetBits', () {});
 
   group('getBit', () {
     test('should get the MSLo and MsHi of maxUint32', () {
@@ -225,6 +216,4 @@ void main() {
   });
 
   group('bitChunk/bitRange', () {});
-
-  group('replaceBitRange', () {});
 }

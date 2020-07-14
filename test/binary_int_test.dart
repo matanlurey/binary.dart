@@ -6,61 +6,22 @@ import 'package:test/test.dart';
 
 /// Tests the [BinaryInt] extension methods.
 void main() {
-  group('should box as an appropriate Integral:', () {
-    test('asBit', () {
-      expect(0.asBit(), Bit(0));
-      expect(1.asBit(), Bit(1));
-    });
-
-    test('asInt4', () {
-      expect(0.asInt4(), Int4(0));
-    });
-
-    test('asUint4', () {
-      expect(0.asUint4(), Uint4(0));
-    });
-
-    test('asInt8', () {
-      expect(0.asInt8(), Int8(0));
-    });
-
-    test('asUint8', () {
-      expect(0.asUint8(), Uint8(0));
-    });
-
-    test('asInt16', () {
-      expect(0.asInt16(), Int16(0));
-    });
-
-    test('asUint16', () {
-      expect(0.asUint16(), Uint16(0));
-    });
-
-    test('asInt32', () {
-      expect(0.asInt32(), Int32(0));
-    });
-
-    test('asUint32', () {
-      expect(0.asUint32(), Uint32(0));
-    });
-  });
-
   test('pow should work identical to math.pow', () {
     expect(2.pow(10), math.pow(2, 10));
   });
 
-  test('shiftRight should work identical to >> in JavaScript', () {
+  test('signedRightShift should work identical to >> in JavaScript', () {
     const length = 8; // Assume 8-bit integer.
 
     // 1111 1111 -> 1111 1111
     expect(
-      '1111' '1111'.bits.shiftRight(5, length),
+      '1111' '1111'.bits.signedRightShift(5, length),
       '1111' '1111'.bits,
     );
 
     // 0111 1111 -> 0000 0011
     expect(
-      '0111' '1111'.bits.shiftRight(5, length),
+      '0111' '1111'.bits.signedRightShift(5, length),
       '0000' '0011'.bits,
     );
   });

@@ -1,10 +1,26 @@
 import 'dart:math' as math;
+import 'dart:typed_data';
 
 import '_long.dart';
 import '_utils.dart';
 import 'boxed_int.dart';
 
-/// A collection of unchecked binary methods to be applied to an [int].
+/// A collection of unchecked binary methods to be applied to a 32-bit [int].
+///
+/// There are a small subset of methods that support integers > 32-bits:
+///
+/// - [msb]
+/// - [getBit]
+/// - [setBit] and [isSet]
+/// - [clearBit] and [iCleared]
+/// - [toggleBit]
+/// - [countSetBits]
+/// - [bitRange] and [bitChunk]
+/// - [hiLo]
+/// - [toBinary] and [toBinaryPadded]
+///
+/// Other methods (as documented) have _undefined behavior_ when operating on
+/// larger integers. It is instead recommended to
 ///
 /// > NOTE: There is limited range checking in this function. To verify
 /// > accessing a valid bit use one of the [Integral.getBit] implementations,
@@ -22,77 +38,25 @@ import 'boxed_int.dart';
 ///   print(bits.getBit(7));
 /// }
 /// ```
+///
+/// ## Warnings for Dart2JS
+///
+/// When running compiled to JavaScript, an alternative set of operations are
+/// used for integers or operations that exceed 32-bits, which may be noticeably
+/// slower. In addition, integers or operations that exceed 52-bits may throw
+/// an [UnsupportedError] instead of undefined behavior.
 extension BinaryInt on int {
   static const _usingJSNum = identical(1, 1.0);
   static const _maxSmiBits = 31;
 
-  /// Returns boxed as a [Bit] instance.
-  ///
-  /// This is a convenience and should be avoided for perf-sensitive code.
-  @Deprecated('Use Bit(int) instead')
-  Bit asBit() => Bit(this);
-
-  /// Returns boxed as an [Int4] instance.
-  ///
-  /// This is a convenience and should be avoided for perf-sensitive code.
-  @Deprecated('Use Int4(int) instead')
-  Int4 asInt4() => Int4(this);
-
-  /// Returns boxed as an [Uint4] instance.
-  ///
-  /// This is a convenience and should be avoided for perf-sensitive code.
-  @Deprecated('Use Uint4(int) instead')
-  Uint4 asUint4() => Uint4(this);
-
-  /// Returns boxed as an [Int8] instance.
-  ///
-  /// This is a convenience and should be avoided for perf-sensitive code.
-  @Deprecated('Use Int8(int) instead')
-  Int8 asInt8() => Int8(this);
-
-  /// Returns boxed as an [Uint8] instance.
-  ///
-  /// This is a convenience and should be avoided for perf-sensitive code.
-  @Deprecated('Use Uint8(int) instead')
-  Uint8 asUint8() => Uint8(this);
-
-  /// Returns boxed as an [Int16] instance.
-  ///
-  /// This is a convenience and should be avoided for perf-sensitive code.
-  @Deprecated('Use Int16(int) instead')
-  Int16 asInt16() => Int16(this);
-
-  /// Returns boxed as an [Uint16] instance.
-  ///
-  /// This is a convenience and should be avoided for perf-sensitive code.
-  @Deprecated('Use Uint16(int) instead')
-  Uint16 asUint16() => Uint16(this);
-
-  /// Returns boxed as an [Int32] instance.
-  ///
-  /// This is a Int32 and should be avoided for perf-sensitive code.
-  @Deprecated('Use Int8(int) instead')
-  Int32 asInt32() => Int32(this);
-
-  /// Returns boxed as an [Uint32] instance.
-  ///
-  /// This is a convenience and should be avoided for perf-sensitive code.
-  @Deprecated('Use Uint32(int) instead')
-  Uint32 asUint32() => Uint32(this);
+  /// Represents `math.pow(2, 32)`, precomputed.
+  static const _2p32 = 0x100000000;
 
   /// Returns [this] to the power of the provided [expontent].
   ///
   /// Unlike [math.pow], this is statically guaranteed to be the result of two
   /// [int]s, so we know the result is also an [int], and a cast is not needed.
   int pow(int expontent) => math.pow(this, expontent).unsafeCast();
-
-  /// Returns [this] arithetically right-shifted by [n] bytes assuming [length].
-  ///
-  /// This is intended to be roughly equivalent to JavaScript's `>>` operator.
-  ///
-  /// > NOTE: [bitWidth] is _not_ validated. See [Integral.signedRightShift].
-  @Deprecated('Use signedRightShift')
-  int shiftRight(int n, int bitWidth) => signedRightShift(n, bitWidth);
 
   /// Returns [this] arithetically right-shifted by [n] bytes assuming [length].
   ///
@@ -131,18 +95,6 @@ extension BinaryInt on int {
     } else {
       return this;
     }
-  }
-
-  /// Returns a bit-wise right-rotation on [this] by an [amount] of bits.
-  ///
-  /// > NOTE: [length] is _not_ validated. See [Integral.signedRightShift].
-  @Deprecated('This implementation is incorrect. Use rotateRightShift instead')
-  int rotateRight(int amount) {
-    var bits = this;
-    for (var i = 0; i < amount; i++) {
-      bits = bits >> 1 | bits & 0x01 << 31;
-    }
-    return bits;
   }
 
   static int _maskedRotation(int rotation, int bitWidth) {
@@ -288,5 +240,17 @@ extension BinaryInt on int {
   /// Returns [this] as a binary string representation, padded with `0`'s.
   String toBinaryPadded(int bitWidth) {
     return toUnsigned(bitWidth).toBinary().padLeft(bitWidth, '0');
+  }
+
+  /// Returns the current [int] split into an array of two elements where:
+  ///
+  /// - `list[0] = Hi Bits`
+  /// - `list[1] = Lo Bits`
+  Uint32List hiLo() {
+    final hiBits = (this / _2p32).floor() | 0;
+    final loBits = (this % _2p32) | 0;
+    return Uint32List(2)
+      ..[0] = hiBits
+      ..[1] = loBits;
   }
 }

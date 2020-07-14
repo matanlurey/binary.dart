@@ -1,8 +1,6 @@
 import 'package:binary/binary.dart';
 import 'package:test/test.dart';
 
-const _isDart2JS = identical(1, 1.0);
-
 void main() {
   BitPattern<List<int>> build(List<BitPart> parts, [String name]) {
     return BitPatternBuilder(parts).build(name);
@@ -132,22 +130,6 @@ void main() {
   });
 
   group('BitPart', () {
-    test('_Bit should only allow 0 or 1 (In dev-mode)', () {
-      var assertions = false;
-      assert(assertions = true);
-      if (assertions) {
-        // Dart2JS does not run initializer assertions.
-        // https://github.com/dart-lang/sdk/issues/37881
-        if (_isDart2JS) {
-          return;
-        }
-        // ignore: deprecated_member_use_from_same_package
-        expect(() => BitPart(2), throwsA(TypeMatcher<AssertionError>()));
-      } else {
-        expect(BitPart.one.toString(), isNot(contains('Bit { 1 }')));
-      }
-    });
-
     test('_Bit should implement == and hashCode', () {
       expect(Bit.one, equals(Bit.one));
       expect(Bit.one.hashCode, Bit.one.hashCode);

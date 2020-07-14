@@ -203,8 +203,6 @@ void main() {
     });
 
     test('bitsSet should infer size', () {
-      // ignore: deprecated_member_use_from_same_package
-      expect(Uint8('0110' '0000'.bits).setBits, 2);
       expect(Uint8('0110' '0000'.bits).bitsSet, 2);
     });
 
