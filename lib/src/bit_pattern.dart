@@ -1,6 +1,11 @@
 // ignore_for_file: prefer_is_empty
 
-part of '../binary.dart';
+import 'dart:typed_data';
+
+import 'package:meta/meta.dart';
+
+import 'int.dart';
+import '_utils.dart';
 
 /// Builds a sequence of binary digits.
 ///
@@ -247,11 +252,6 @@ abstract class BitPart {
   /// A static `1` within a [BitPattern].
   static const BitPart one = _Bit(1);
 
-  /// A static part of a pattern, e.g. either `0` or `1`, that _must_ match.
-  @Deprecated('Use BitPart.zero or BitPart.one instead')
-  @literal
-  const factory BitPart(int bit) = _Bit;
-
   /// A dynamic variable (segment) of a pattern of [length] bytes.
   ///
   /// Optionally has a [name] (for debug purposes).
@@ -290,7 +290,7 @@ class _Bit implements BitPart {
 
   @override
   String toString() {
-    if (_assertionsEnabled) {
+    if (assertionsEnabled) {
       return 'Bit { $_bit }';
     } else {
       return super.toString();
@@ -320,7 +320,7 @@ class _Segment implements BitPart {
 
   @override
   String toString() {
-    if (_assertionsEnabled) {
+    if (assertionsEnabled) {
       return _name != null
           ? 'Segment { $_name: $_length-bits }'
           : 'Segment { $_length-bits }';
@@ -391,7 +391,7 @@ class _CaptureBits {
 
   @override
   String toString() {
-    if (_assertionsEnabled) {
+    if (assertionsEnabled) {
       return 'CaptureBits { $name, $left :: $size }';
     } else {
       return super.toString();
@@ -502,7 +502,7 @@ class _InterpretedBitPattern implements BitPattern<List<int>> {
 
   @override
   String toString() {
-    if (_assertionsEnabled) {
+    if (assertionsEnabled) {
       return (StringBuffer()
             ..writeln('InterpretedBitPattern: $_length-bits {')
             ..writeln('  name:       ${_name ?? '<Unnamed>'}')
@@ -514,18 +514,6 @@ class _InterpretedBitPattern implements BitPattern<List<int>> {
     } else {
       return super.toString();
     }
-  }
-}
-
-/// Provides the capability to create a [BitPatternGroup] from multiple patterns.
-///
-/// See [BitPatternGroup] for details.
-@Deprecated('Use BitPatternGroup(List) instead')
-extension BitPatternsX<T> on List<BitPattern<T>> {
-  /// Returns a `List<BitPattern<?>>` as a computed group of [BitPatternGroup].
-  @Deprecated('Use BitPatternGroup(List) instead')
-  BitPatternGroup<T, V> toGroup<V extends BitPattern<T>>() {
-    return BitPatternGroup(this);
   }
 }
 
@@ -584,7 +572,7 @@ class BitPatternGroup<T, V extends BitPattern<T>> {
 
   @override
   String toString() {
-    if (_assertionsEnabled) {
+    if (assertionsEnabled) {
       return 'BitPatternGroup { $_sortedPatterns }';
     } else {
       return super.toString();
