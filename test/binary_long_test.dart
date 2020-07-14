@@ -1,4 +1,4 @@
-import 'package:binary/binary.dart' show BinaryInt;
+import 'package:binary/binary.dart' show BinaryInt, BinaryString;
 import 'package:test/test.dart';
 
 /// Indirectly tests the `BinaryLong` implementation via `BinaryInt`.
@@ -215,5 +215,58 @@ void main() {
     });
   });
 
-  group('bitChunk/bitRange', () {});
+  group('bitChunk', () {
+    test('should read ranges in maxUint32', () {
+      // 1111_1111_1111_1111_1111_1111_1111_1111
+      // ^
+      // msbLo
+      expect(maxUint32.bitChunk(msbLo, 4), '1111'.bits);
+      expect(maxUint32.bitChunk(lsbHi, 2), '01'.bits);
+      expect(maxUint32.bitChunk(msbHi, 22), '1'.bits);
+    });
+
+    test('should read ranges in minUint33', () {
+      // lsbHi
+      // v
+      // 1_0000_0000_0000_0000_0000_0000_0000_0000
+      //   ^
+      //   msbLo
+      expect(minUint33.bitChunk(msbLo, 4), 0);
+      expect(minUint33.bitChunk(lsbHi, 2), '10'.bits);
+      expect(minUint33.bitChunk(msbHi, 22), '10'.bits);
+    });
+
+    test('should read ranges in maxUint32x2', () {
+      // lsbHi
+      // v
+      // 1_1111_1111_1111_1111_1111_1111_1111_1110
+      //   ^
+      //   msbLo
+      expect(maxUint32x2.bitChunk(msbLo, 4), '1111'.bits);
+      expect(maxUint32x2.bitChunk(lsbHi, 5), '11111'.bits);
+      expect(maxUint32x2.bitChunk(msbHi, 40), 0xfffff);
+    });
+
+    test('should read ranges in b10Uint34', () {
+      //  lsbHi
+      //  v
+      // 10_1111_1111_1111_1111_1111_1111_1111_1110
+      //    ^
+      //    msbLo
+      expect(b10Uint34.bitChunk(msbLo, 4), '1111'.bits);
+      expect(b10Uint34.bitChunk(lsbHi, 5), '1111'.bits);
+      expect(b10Uint34.bitChunk(msbHi, 40), 0x17ffff);
+    });
+
+    test('should read ranges in maxJsUint', () {
+      // msbHi                    lsbHi
+      // v                        v
+      // 1_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111
+      //                            ^
+      //                            msbLo
+      expect(maxJsUint.bitChunk(msbLo, 4), '1111'.bits);
+      expect(maxJsUint.bitChunk(lsbHi, 5), '11111'.bits);
+      expect(maxJsUint.bitChunk(msbHi, 50), 0x3ffffffffffff);
+    });
+  });
 }

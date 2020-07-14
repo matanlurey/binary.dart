@@ -20,10 +20,11 @@ behavior when accessing a bit > the 31st bit when compiled to JavaScript:
 
 In addition, these operations will now throw `UnsupportedError` when compiled
 to JavaScript when attempting operations on integer values that exceed 52-bits,
-which is the maximum integer that is supported in JavaScript VMs.
+which is the maximum integer that is supported in JavaScript VMs. The remaining
+methods (i.e. `signedRightShift`, so on), unless otherwise documented are
+assumed to have _undefined behavior_ when compiled to JavaScript.
 
-The remaining methods (i.e. `signedRightShift`, so on), unless otherwise
-documented are assumed to have _undefined behavior_ when compiled to JavaScript.
+> Tip: Don't want to consider all of that? You can always just use `Uint32`!
 
 ### Operating on Larger Ints
 
@@ -35,17 +36,9 @@ Additionally, `Uint32List` has received new extension methods through the
 extension class `BinaryUint64HiLo` (e.g. the result of `<int>.hiLo()`), which
 simplifies operations for integers larger than 32 bits:
 
-- `.hi` and `.lo`.
-- `~`
-- `&` and `|` and `^`
-- `<<`, `>>`, and `signedRightShift`
-- `+` and `-`
-- `*` and `/` and `%`
-- `signExtend`
-- `rotateRightShift`
-- `replaceBitRange`
-- `isEquivalentTo(Uint32List)`
-- `toInt()`
+- `.hi` and `.lo` getters.
+- `~` and `&` and `|` operators.
+- `equals(Uint32List)` and `toInt()` methods.
 
 These methods allow treating a `Uint32List` roughly as a 64-bit integer with
 limited boxing. We may still consider adding a `Uint64` boxed `Integral` in a

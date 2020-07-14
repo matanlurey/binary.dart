@@ -178,11 +178,13 @@ extension BinaryUint64HiLo on Uint32List {
   ///
   /// This is an alias for `[0]` and [first].
   int get hi => this[0];
+  set hi(int hi) => this[0] = hi;
 
   /// "Lo" (lower) bits.
   ///
   /// This is an alias for `[1]` and [last].
   int get lo => this[1];
+  set lo(int lo) => this[1] = lo;
 
   /// Returns a new [Uint32List] with bits logically negated (`~`).
   Uint32List operator ~() => _new(~hi, ~lo);
@@ -193,8 +195,17 @@ extension BinaryUint64HiLo on Uint32List {
   /// Returns a new [Uint32List] with bits compared with [b] logical or (`|`).
   Uint32List operator |(Uint32List b) => _new(hi | b.hi, lo | b.lo);
 
-  /// Returns a new [Uint32List] with bits compared with [b] logical xor (`^`).
-  Uint32List operator ^(Uint32List b) => _new(hi ^ b.hi, lo ^ b.lo);
+  /// Returns a new [Uint32List] with bits added (`+`) to [b].
+  ///
+  /// Overflows are handled by moving bits from [lo] to [hi], or discard [hi].
+  Uint32List operator +(Uint32List b) {
+    final lo = (this.lo + b.lo).hiLo();
+    final hi = (this.hi + b.hi + lo.hi).hiLo();
+    return _new(hi.lo, lo.lo);
+  }
+
+  /// Returns whether structurally equal to [b].
+  bool equals(Uint32List b) => lo == b.lo && hi == b.hi;
 
   /// Returns, truncated if necessary, to fit as an [int].
   int toInt() => this[0] * _2p32 + this[1];

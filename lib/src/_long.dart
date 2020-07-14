@@ -1,8 +1,10 @@
+import 'dart:math' as math;
 import 'dart:typed_data';
 
 import 'package:meta/meta.dart';
 
 import 'int.dart';
+import 'list.dart';
 
 /// This is not an exposed interface because statically they are the same.
 ///
@@ -46,32 +48,27 @@ extension BinaryLong on int {
     final andNotHiLo = hiLo() & ~bitWidth.hiLo();
     return andNotHiLo.toInt();
   }
-}
 
-/// Extensions for the [BinaryLong.hiLo] resultant.
-extension _BinaryHiLo on Uint32List {
-  /// Represents `math.pow(2, 32)`, precomputed.
-  static const _2p32 = 0x100000000;
-
-  Uint32List operator ~() {
-    return Uint32List(2)
-      ..[0] = ~this[0]
-      ..[1] = ~this[1];
+  /// See [BinaryInt.bitChunk]; this is the version for >32-bits ints for JS.
+  int bitChunkLong(int left, int size) {
+    if (left > _maxJs) {
+      return _max52Bits();
+    }
+    assert(left > 31, 'Should not have been used over normal bitChunk');
+    final hiLeft = left - 32;
+    final hiSize = math.min(hiLeft, size) + 1;
+    final loLeft = 31;
+    final loSize = size - hiSize;
+    final hiLo = this.hiLo();
+    final hiChunk = hiLo.hi.bitChunk(hiLeft, hiSize);
+    if (loSize == 0) {
+      return hiChunk;
+    } else {
+      final loChunk = hiLo.lo.bitChunk(loLeft, loSize);
+      final hiUpper = 2.pow(math.max(loChunk.bitLength, 1));
+      final loParts = Uint32List(2)..lo = loChunk;
+      final result = (hiChunk * hiUpper).hiLo() | loParts;
+      return result.toInt();
+    }
   }
-
-  Uint32List operator &(Uint32List b) {
-    final a = this;
-    return Uint32List(2)
-      ..[0] = a[0] & b[0]
-      ..[1] = a[1] & b[1];
-  }
-
-  Uint32List operator |(Uint32List b) {
-    final a = this;
-    return Uint32List(2)
-      ..[0] = a[0] | b[0]
-      ..[1] = a[1] | b[1];
-  }
-
-  int toInt() => this[0] * _2p32 + this[1];
 }
