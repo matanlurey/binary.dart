@@ -51,6 +51,7 @@ future release, but you may also try using these other implemntations:
 
 - Added `<int>.pow(n)`, which is like `<dart:math>.pow` with a return of `int`.
 - Removed all methods deprecated up to this point.
+- Fixed a bug where `<int>.replaceBitRange` often emitted an incorrect result.
 
 ## 1.7.0
 
