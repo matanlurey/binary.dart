@@ -156,6 +156,13 @@ void main() {
     );
   });
 
+  test('replaceBitRange should not affect untargeted bits', () {
+    expect(
+      ('1000' '1000').bits.replaceBitRange(7, 4, '0101'.bits),
+      ('0101' '1000').bits,
+    );
+  });
+
   test('toBinary should return a string representation', () {
     expect(0xFF.toBinary(), '1111' '1111');
     expect(1.toBinaryPadded(8), '0000' '0001');

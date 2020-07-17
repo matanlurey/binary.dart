@@ -233,8 +233,12 @@ extension BinaryInt on int {
 
   /// Returns an [int] replacing the bits from [left] to [right] with [bits].
   int replaceBitRange(int left, int right, int bits) {
+    // Original value.
     final orig = this;
-    final mask = ~(~0 << (left - right + 1));
+    // Elongate bits so that "1b" becoms "1000b", for example, where L = 4.
+    bits = bits << math.max(0, left - bits.bitLength);
+    // Create a mask of 1s for the bits to be replaced.
+    final mask = (~(~0 << (left - right + 1))) << right;
     return (orig & ~mask) | (bits & mask);
   }
 
