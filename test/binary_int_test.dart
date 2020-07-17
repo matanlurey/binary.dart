@@ -148,19 +148,28 @@ void main() {
     expect(0x01020304.bitRange(4, 0), 4, reason: '${0x01020304.toBinary()}');
   });
 
-  test('replaceBitRange should replace a range of bits', () {
-    expect(
-      //2-0
-      '1010'.bits.replaceBitRange(2, 0, '111'.bits).toBinary(),
-      '1111',
-    );
-  });
+  group('replaceBitRange', () {
+    test('replaceBitRange should replace a range of bits', () {
+      expect(
+        //2-0
+        '1010'.bits.replaceBitRange(2, 0, '111'.bits).toBinary(),
+        '1111',
+      );
+    });
 
-  test('replaceBitRange should not affect untargeted bits', () {
-    expect(
-      ('1000' '1000').bits.replaceBitRange(7, 4, '0101'.bits),
-      ('0101' '1000').bits,
-    );
+    test('replaceBitRange should not affect untargeted bits', () {
+      expect(
+        ('1000' '1000').bits.replaceBitRange(7, 4, '0101'.bits),
+        ('0101' '1000').bits,
+      );
+    });
+
+    test('replaceBitRange should be able to set the msb', () {
+      expect(
+        ('0000' '1000').bits.replaceBitRange(7, 4, '1111'.bits),
+        ('1111' '1000').bits,
+      );
+    });
   });
 
   test('toBinary should return a string representation', () {
