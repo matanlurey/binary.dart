@@ -50,8 +50,11 @@ future release, but you may also try using these other implemntations:
 ### Additional changes
 
 - Added `<int>.pow(n)`, which is like `<dart:math>.pow` with a return of `int`.
+- Added `<Integral>.signExtend(startSize)`.
 - Removed all methods deprecated up to this point.
+- Removed `<Integral>.[un]signed`, which was misleading for unsigned integers.
 - Fixed a bug where `<int>.replaceBitRange` often emitted an incorrect result.
+- Fixed a bug where `<int>.signExtend` often emitted an incorrect result.
 
 ## 1.7.0
 

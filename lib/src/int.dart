@@ -88,12 +88,12 @@ extension BinaryInt on int {
         'Expected endSize ($endSize) <= startSize ($startSize).',
       );
     }
-    final extendBit = getBit(startSize - 1);
-    if (extendBit == 1) {
-      final highBits = 2.pow(endSize - startSize) - 1;
-      return (highBits << startSize) | this;
+    if (isClear(startSize)) {
+      return this.bitRange(startSize, 0);
     } else {
-      return this;
+      final mask = endSize == 32 ? 0xffffffff : (1 << endSize) - 1;
+      final bits = this | (mask & ~((1 << startSize) - 1));
+      return bits < 0 ? bits + 0x100000000 : bits;
     }
   }
 
