@@ -95,11 +95,6 @@ void main() {
       });
     });
 
-    test('should return signed/unsigned', () {
-      expect(Int4.zero.signed, isTrue);
-      expect(Int4.zero.unsigned, isFalse);
-    });
-
     group('getBit', () {
       test('should return', () {
         final int = Int4('101'.bits);
@@ -220,6 +215,18 @@ void main() {
     });
   });
 
+  group('Uint4.signExtend', () {
+    test('MSB = 0', () {
+      final int = Uint4('0101'.bits);
+      expect(int.signExtend(1), Uint4('0001'.bits));
+    });
+
+    test('MSB = 1', () {
+      final int = Uint4('0010'.bits);
+      expect(int.signExtend(1), Uint4('1110'.bits));
+    });
+  });
+
   test('Uint4 with ~ should work as expected', () {
     expect((~Uint4('0101'.bits)).toBinaryPadded(), '1010');
   });
@@ -240,7 +247,6 @@ void main() {
     test('Bit should be setup correctly', () {
       expect(Bit.zero.value, 0);
       expect(Bit.one.value, 1);
-      expect(Bit.one.signed, isFalse);
       expect(Bit.one.size, 1);
       expect(
         () => Bit('1'.padRight(1 + 1, '0').bits),
@@ -250,7 +256,6 @@ void main() {
 
     test('Int4 should be setup correctly', () {
       expect(Int4.zero.value, 0);
-      expect(Int4.zero.signed, isTrue);
       expect(Int4.zero.size, 4);
       expect(
         () => Int4('1'.padRight(4 + 1, '0').bits),
@@ -260,7 +265,6 @@ void main() {
 
     test('Uint4 should be setup correctly', () {
       expect(Uint4.zero.value, 0);
-      expect(Uint4.zero.signed, isFalse);
       expect(Uint4.zero.size, 4);
       expect(
         () => Uint4('1'.padRight(4 + 1, '0').bits),
@@ -270,7 +274,6 @@ void main() {
 
     test('Int8 should be setup correctly', () {
       expect(Int8.zero.value, 0);
-      expect(Int8.zero.signed, isTrue);
       expect(Int8.zero.size, 8);
       expect(
         () => Int8('1'.padRight(8 + 1, '0').bits),
@@ -280,7 +283,6 @@ void main() {
 
     test('Uint8 should be setup correctly', () {
       expect(Uint8.zero.value, 0);
-      expect(Uint8.zero.signed, isFalse);
       expect(Uint8.zero.size, 8);
       expect(
         () => Uint8('1'.padRight(8 + 1, '0').bits),
@@ -290,7 +292,6 @@ void main() {
 
     test('Int16 should be setup correctly', () {
       expect(Int16.zero.value, 0);
-      expect(Int16.zero.signed, isTrue);
       expect(Int16.zero.size, 16);
       expect(
         () => Int16('1'.padRight(16 + 1, '0').bits),
@@ -300,7 +301,6 @@ void main() {
 
     test('Uint16 should be setup correctly', () {
       expect(Uint16.zero.value, 0);
-      expect(Uint16.zero.signed, isFalse);
       expect(Uint16.zero.size, 16);
       expect(
         () => Uint16('1'.padRight(16 + 1, '0').bits),
@@ -310,7 +310,6 @@ void main() {
 
     test('Int32 should be setup correctly', () {
       expect(Int32.zero.value, 0);
-      expect(Int32.zero.signed, isTrue);
       expect(Int32.zero.size, 32);
       expect(
         () => Int32('1'.padRight(32 + 1, '0').bits),
@@ -320,7 +319,6 @@ void main() {
 
     test('Uint32 should be setup correctly', () {
       expect(Uint32.zero.value, 0);
-      expect(Uint32.zero.signed, isFalse);
       expect(Uint32.zero.size, 32);
       expect(
         () => Uint32('1'.padRight(32 + 1, '0').bits),

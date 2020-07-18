@@ -201,7 +201,7 @@ void main() {
 
     test('signExtend should work similarly to int.signExtend', () {
       final list = ['110'.bits];
-      expect(list.signExtend(0, 3, 5).toBinary(), '11110');
+      expect(list.signExtend(0, 2, 5).toBinary(), '11110');
     });
 
     test('rotateRight should work similarly to int.rotateRight', () {

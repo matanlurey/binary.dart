@@ -30,12 +30,12 @@ void main() {
     test('should extend a number with sign-bit 1', () {
       final input = '110'.bits;
       final output = '11110'.bits;
-      expect(input.signExtend(3, 5), output);
+      expect(input.signExtend(2, 5), output);
     });
 
     test('should extend a number with sign-bit 0', () {
       final input = '011'.bits;
-      expect(input.signExtend(3, 5), input);
+      expect(input.signExtend(2, 5), input);
     });
 
     test('should throw if endSize <= startSize', () {

@@ -33,14 +33,15 @@ abstract class Integral<T extends Integral<T>> implements Comparable<Integral> {
 
   /// Whether this data type supports negative numbers.
   @nonVirtual
-  final bool signed;
+  final bool _supportsSigns;
 
   /// Used for implementing sub-types.
   Integral.checked({
     @required this.value,
     @required this.size,
-    @required this.signed,
-  }) : assert(value != null) {
+    @required bool signed,
+  })  : assert(value != null),
+        _supportsSigns = signed {
     RangeError.checkValueInInterval(this.value, _min, _max);
   }
 
@@ -48,8 +49,8 @@ abstract class Integral<T extends Integral<T>> implements Comparable<Integral> {
   const Integral.unchecked({
     @required this.value,
     @required this.size,
-    @required this.signed,
-  });
+    @required bool signed,
+  }) : _supportsSigns = signed;
 
   /// Implement to create an instance of self around [value].
   @protected
@@ -58,7 +59,7 @@ abstract class Integral<T extends Integral<T>> implements Comparable<Integral> {
 
   /// Wraps [value], careful to normalize (unsign) if necessary.
   T _wrapSignAware(int value) {
-    if (unsigned) {
+    if (!_supportsSigns) {
       value = value.toUnsigned(size);
     } else {
       value = value.toSigned(size);
@@ -76,7 +77,7 @@ abstract class Integral<T extends Integral<T>> implements Comparable<Integral> {
     return o is Integral &&
         value == o.value &&
         size == o.size &&
-        signed == o.signed;
+        _supportsSigns == o._supportsSigns;
   }
 
   @override
@@ -127,7 +128,7 @@ abstract class Integral<T extends Integral<T>> implements Comparable<Integral> {
 
   /// Minimum value representable by this type.
   int get _min {
-    if (signed) {
+    if (_supportsSigns) {
       return -2.pow(size - 1);
     } else {
       return 0;
@@ -136,7 +137,7 @@ abstract class Integral<T extends Integral<T>> implements Comparable<Integral> {
 
   /// Maximum value representable by this type.
   int get _max {
-    if (signed) {
+    if (_supportsSigns) {
       return 2.pow(size - 1) - 1;
     } else {
       return 2.pow(size) - 1;
@@ -146,10 +147,6 @@ abstract class Integral<T extends Integral<T>> implements Comparable<Integral> {
   void _assertMaxBits(int value, [String name]) {
     RangeError.checkValueInInterval(value, 0, size - 1, name);
   }
-
-  /// Where this data type is not signed (0 or positive integers only).
-  @nonVirtual
-  bool get unsigned => !signed;
 
   /// Returns the [n]th bit from [value].
   ///
@@ -240,7 +237,7 @@ abstract class Integral<T extends Integral<T>> implements Comparable<Integral> {
 
   /// Returns `true` iff [value] represents a negative number, else `false`.
   @nonVirtual
-  bool get isNegative => signed ? msb : false;
+  bool get isNegative => _supportsSigns ? msb : false;
 
   /// Returns `true` iff [value] represents a positive number, else `false`.
   @nonVirtual
@@ -260,6 +257,14 @@ abstract class Integral<T extends Integral<T>> implements Comparable<Integral> {
   @nonVirtual
   T rotateRightShift(int number) {
     return wrapSafeValue(value.rotateRightShift(number, size));
+  }
+
+  /// Returns the current value [Binaryint.signExtend]-ed to the full size.
+  ///
+  /// All bits to the left (inclusive of [startSize]) are replaced as a result.
+  @nonVirtual
+  T signExtend(int startSize) {
+    return wrapSafeValue(value.signExtend(startSize, size));
   }
 
   /// Returns the number of set bits in [value].
