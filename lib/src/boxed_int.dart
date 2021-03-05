@@ -40,7 +40,7 @@ abstract class Integral<T extends Integral<T>> implements Comparable<Integral> {
     required this.value,
     required this.size,
     required bool signed,
-  })  : assert(value != null),
+  })   : assert(value != null),
         _supportsSigns = signed {
     RangeError.checkValueInInterval(this.value, _min, _max);
   }
