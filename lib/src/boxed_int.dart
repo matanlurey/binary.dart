@@ -37,9 +37,9 @@ abstract class Integral<T extends Integral<T>> implements Comparable<Integral> {
 
   /// Used for implementing sub-types.
   Integral.checked({
-    @required this.value,
-    @required this.size,
-    @required bool signed,
+    required this.value,
+    required this.size,
+    required bool signed,
   })  : assert(value != null),
         _supportsSigns = signed {
     RangeError.checkValueInInterval(this.value, _min, _max);
@@ -47,9 +47,9 @@ abstract class Integral<T extends Integral<T>> implements Comparable<Integral> {
 
   /// An unsafe constructor that does not verify if the values are within range.
   const Integral.unchecked({
-    @required this.value,
-    @required this.size,
-    @required bool signed,
+    required this.value,
+    required this.size,
+    required bool signed,
   }) : _supportsSigns = signed;
 
   /// Implement to create an instance of self around [value].
@@ -144,7 +144,7 @@ abstract class Integral<T extends Integral<T>> implements Comparable<Integral> {
     }
   }
 
-  void _assertMaxBits(int value, [String name]) {
+  void _assertMaxBits(int value, [String? name]) {
     RangeError.checkValueInInterval(value, 0, size - 1, name);
   }
 
@@ -199,7 +199,7 @@ abstract class Integral<T extends Integral<T>> implements Comparable<Integral> {
   ///
   /// Returns the new value.
   @nonVirtual
-  T toggleBit(int n, [bool v]) {
+  T toggleBit(int n, [bool? v]) {
     v ??= !isSet(n);
     return v ? setBit(n) : clearBit(n);
   }

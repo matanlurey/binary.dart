@@ -290,7 +290,7 @@ extension BinaryList on List<int> {
   }
 
   /// Returns [BinaryInt.toggleBit] applied to the [index]-th [int].
-  int toggleBit(int index, int n, [bool v]) {
+  int toggleBit(int index, int n, [bool? v]) {
     v ??= !isSet(index, n);
     return v ? setBit(index, n) : clearBit(index, n);
   }

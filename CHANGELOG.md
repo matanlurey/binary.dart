@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 3.0.0
+
+Support null-safety
+
 ## 2.0.0
 
 ### Highlights

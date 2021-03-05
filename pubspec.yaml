@@ -2,12 +2,12 @@ name: binary
 
 description: >
   Utilities for accessing binary data and bit manipulation in Dart and Flutter
-version: 2.0.0
+version: 3.0.0
 
 homepage: https://github.com/matanlurey/binary
 
 environment:
-  sdk: ">=2.8.0 <3.0.0"
+  sdk: '>=2.12.0 <3.0.0'
 
 dependencies:
   meta: ^1.1.8

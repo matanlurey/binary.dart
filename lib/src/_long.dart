@@ -22,7 +22,7 @@ extension BinaryLong on int {
   /// See [BinaryInt.getBit]; this is the version for >32-bit ints for JS.
   int getBitLong(int n) {
     if (n > _maxJs) {
-      return _max52Bits();
+      return _max52Bits()!;
     }
     final bitWidth = 2.pow(n);
     final andHiLo = hiLo() & bitWidth.hiLo();
@@ -32,7 +32,7 @@ extension BinaryLong on int {
   /// See [BinaryInt.setBit]; this is the version for >32-bit ints for JS.
   int setBitLong(int n) {
     if (n > _maxJs) {
-      return _max52Bits();
+      return _max52Bits()!;
     }
     final bitWidth = 2.pow(n);
     final orHiLo = hiLo() | bitWidth.hiLo();
@@ -42,7 +42,7 @@ extension BinaryLong on int {
   /// See [BinaryInt.clearBit]; this is the version for >32-bit ints for JS.
   int clearBitLong(int n) {
     if (n > _maxJs) {
-      return _max52Bits();
+      return _max52Bits()!;
     }
     final bitWidth = 2.pow(n);
     final andNotHiLo = hiLo() & ~bitWidth.hiLo();
@@ -52,7 +52,7 @@ extension BinaryLong on int {
   /// See [BinaryInt.bitChunk]; this is the version for >32-bits ints for JS.
   int bitChunkLong(int left, int size) {
     if (left > _maxJs) {
-      return _max52Bits();
+      return _max52Bits()!;
     }
     assert(left > 31, 'Should not have been used over normal bitChunk');
     final hiLeft = left - 32;

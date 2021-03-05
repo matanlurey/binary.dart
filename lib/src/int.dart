@@ -191,7 +191,7 @@ extension BinaryInt on int {
   /// If [v] is provided, it is used as the new value. Otherwise the opposite
   /// value (of the current value) is used - i.e. `1` becomes `0` and `0`
   /// becomes `1` (logical not).
-  int toggleBit(int n, [bool v]) {
+  int toggleBit(int n, [bool? v]) {
     v ??= !isSet(n);
     return v ? setBit(n) : clearBit(n);
   }

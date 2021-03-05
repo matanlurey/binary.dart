@@ -2,7 +2,7 @@ import 'package:binary/binary.dart';
 import 'package:test/test.dart';
 
 void main() {
-  BitPattern<List<int>> build(List<BitPart> parts, [String name]) {
+  BitPattern<List<int>?> build(List<BitPart> parts, [String? name]) {
     return BitPatternBuilder(parts).build(name);
   }
 
@@ -78,7 +78,7 @@ void main() {
       ]);
       // 10FFFFTT
       // 10111010
-      final captured = pattern.capture('1011' '1010'.bits);
+      final captured = pattern.capture('1011' '1010'.bits)!;
       expect(
         Map.fromIterables(pattern.names, captured),
         {'FOUR': '1110'.bits, 'TWO': '10'.bits},
@@ -226,10 +226,12 @@ void main() {
   });
 
   group('BitPatternGroup', () {
-    test('should fail on null', () {
-      List<BitPattern<void>> patterns;
-      expect(() => BitPatternGroup(patterns), throwsArgumentError);
-    });
+    // This test does not make sense now that the null-safety is activated
+
+    // test('should fail on null', () {
+    //   late List<BitPattern<void>> patterns;
+    //   expect(() => BitPatternGroup(patterns), throwsArgumentError);
+    // });
 
     test('should fail on empty', () {
       final patterns = <BitPattern<void>>[];

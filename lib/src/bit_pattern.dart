@@ -4,8 +4,8 @@ import 'dart:typed_data';
 
 import 'package:meta/meta.dart';
 
-import 'int.dart';
 import '_utils.dart';
+import 'int.dart';
 
 /// Builds a sequence of binary digits.
 ///
@@ -41,7 +41,7 @@ abstract class BitPatternBuilder {
   /// It is considered invalid to have the same variable more than once within
   /// a pattern (e.g. `01AA01AA`), to have more than one `_` in a row (e.g.
   /// `0101__0101`), or to have an empty or `null` string.
-  const factory BitPatternBuilder.parse(String bits) = _BitPatternParser;
+  const factory BitPatternBuilder.parse(String? bits) = _BitPatternParser;
 
   /// Compiles and returns a [BitPattern] capable of matching.
   ///
@@ -62,7 +62,7 @@ abstract class BitPatternBuilder {
   ///
   /// print(pattern.match(0xD /* 0b1101 */)); // [1]
   /// ```
-  BitPattern<List<int>> build([String name]);
+  BitPattern<List<int>?> build([String? name]);
 }
 
 class _BitPatternBuilder implements BitPatternBuilder {
@@ -71,7 +71,7 @@ class _BitPatternBuilder implements BitPatternBuilder {
   const _BitPatternBuilder(this._parts) : assert(_parts.length > 0);
 
   @override
-  BitPattern<List<int>> build([String name]) {
+  BitPattern<List<int>?> build([String? name]) {
     var capture = 0;
     var length = 0;
     for (final part in _parts) {
@@ -96,7 +96,7 @@ class _BitPatternBuilder implements BitPatternBuilder {
   List<_CaptureBits> _buildCapture(int totalLength, int totalCaptures) {
     if (totalCaptures == 0) return const [];
 
-    final result = List<_CaptureBits>();
+    final result = <_CaptureBits>[];
     var iterated = 0;
 
     for (final part in _parts) {
@@ -157,26 +157,26 @@ class _BitPatternParser implements BitPatternBuilder {
     return c >= $a && c <= $z || c >= $A && c <= $Z;
   }
 
-  final String _bits;
+  final String? _bits;
 
   const _BitPatternParser(this._bits);
 
   @override
-  BitPattern<List<int>> build([String name]) {
+  BitPattern<List<int>?> build([String? name]) {
     ArgumentError.checkNotNull(_bits);
-    if (_bits.isEmpty) {
+    if (_bits!.isEmpty) {
       throw ArgumentError.value(_bits, 'bits', 'Must be non-empty');
     }
 
-    final used = Set<String>();
+    final used = Set<String?>();
     final parts = <BitPart>[];
 
-    String variable;
+    String? variable;
     var variableLength = 0;
     var parsedUnderscore = false;
 
     void completeVariable() {
-      assert(variable.isNotEmpty);
+      assert(variable!.isNotEmpty);
       assert(variableLength > 0);
       parts.add(BitPart.v(variableLength, variable));
       used.add(variable);
@@ -184,8 +184,8 @@ class _BitPatternParser implements BitPatternBuilder {
       variable = null;
     }
 
-    for (var i = 0; i < _bits.length; i++) {
-      final character = _bits[i];
+    for (var i = 0; i < _bits!.length; i++) {
+      final character = _bits![i];
       switch (character) {
         case '0':
           if (variable != null) {
@@ -256,7 +256,7 @@ abstract class BitPart {
   ///
   /// Optionally has a [name] (for debug purposes).
   @literal
-  const factory BitPart.v(int length, [String name]) = _Segment;
+  const factory BitPart.v(int length, [String? name]) = _Segment;
 
   /// Length of the part.
   int get _length;
@@ -299,7 +299,7 @@ class _Bit implements BitPart {
 }
 
 class _Segment implements BitPart {
-  final String _name;
+  final String? _name;
 
   const _Segment(this._length, [this._name]) : assert(_length >= 1);
 
@@ -354,7 +354,7 @@ class _Segment implements BitPart {
 /// > NOTE: You can only compare [ComputedBitPattern]s of the same type!
 abstract class BitPattern<T> implements Comparable<BitPattern<T>> {
   /// A list of named variables (to use in conjunction with [capture]).
-  List<String> get names;
+  List<String?> get names;
 
   /// Returns an element [T] iff it [matches], otherwise `null`.
   T capture(int input);
@@ -365,7 +365,7 @@ abstract class BitPattern<T> implements Comparable<BitPattern<T>> {
 
 class _CaptureBits {
   /// Name of the variable capturing bits.
-  final String name;
+  final String? name;
 
   /// Left-most bit.
   final int left;
@@ -400,7 +400,7 @@ class _CaptureBits {
 }
 
 /// A pre-computed [BitPattern] that relies on generic (programmatic) execution.
-class _InterpretedBitPattern implements BitPattern<List<int>> {
+class _InterpretedBitPattern implements BitPattern<List<int>?> {
   static bool _listEquals(List<Object> a, List<Object> b) {
     if (a.length != b.length) {
       return false;
@@ -418,7 +418,7 @@ class _InterpretedBitPattern implements BitPattern<List<int>> {
   final int _isSetMask;
   final int _nonVarMask;
   final List<_CaptureBits> _capture;
-  final String _name;
+  final String? _name;
 
   const _InterpretedBitPattern(
     this._length,
@@ -464,10 +464,10 @@ class _InterpretedBitPattern implements BitPattern<List<int>> {
   }
 
   @override
-  List<String> get names => _capture.map((b) => b.name).toList();
+  List<String?> get names => _capture.map((b) => b.name).toList();
 
   @override
-  List<int> capture(int input) {
+  List<int>? capture(int input) {
     if (matches(input)) {
       // Short-circuit when there are no variables.
       if (_capture.isEmpty) return const [];
@@ -560,7 +560,7 @@ class BitPatternGroup<T, V extends BitPattern<T>> {
   /// Returns which [BitPattern] is capable of decoding the provided [bits].
   ///
   /// Returns `null` if no match found.
-  BitPattern<T> match(int bits) {
+  BitPattern<T>? match(int bits) {
     for (final pattern in _sortedPatterns) {
       if (pattern.matches(bits)) {
         return pattern;
