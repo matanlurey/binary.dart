@@ -129,6 +129,6 @@ Feel free to [file an issue][] if you'd like limited support for 64 and 128-bit.
 [doc_url]: https://www.dartdocs.org/documentation/binary/latest
 [doc_img]: https://img.shields.io/badge/Documentation-binary-blue.svg
 [sty_url]: https://pub.dev/packages/lints
-[sty_img]: https://img.shields.io/badge/style-pedantic-40c4ff.svg
+[sty_img]: https://img.shields.io/badge/style-lints-40c4ff.svg
 [extension methods in dart]: https://dart.dev/guides/language/extension-methods
 [file an issue]: https://github.com/matanlurey/binary.dart/issues
