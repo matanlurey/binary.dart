@@ -12,7 +12,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Install Dart
         uses: dart-lang/setup-dart@v1.3
@@ -33,4 +33,4 @@ jobs:
         run: pub run test_coverage --no-badge
 
       - name: Upload Coverage
-        uses: codecov/codecov-action@v1.0.7
+        uses: codecov/codecov-action@v3.1.0
