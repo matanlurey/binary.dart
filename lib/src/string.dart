@@ -5,7 +5,7 @@ extension BinaryString on String {
   int _parseCodeUnit(int index) {
     const $0 = 48;
     const $1 = 49;
-    final codeUnit = this.codeUnitAt(index);
+    final codeUnit = codeUnitAt(index);
     switch (codeUnit) {
       case $0:
         return 0;

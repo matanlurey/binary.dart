@@ -50,7 +50,7 @@ extension BinaryInt on int {
   static const _maxSmiBits = 31;
 
   /// Represents `math.pow(2, 32)`, precomputed.
-  static const _2p32 = 0x100000000;
+  static const _pow2to32 = 0x100000000;
 
   /// Returns [this] to the power of the provided [expontent].
   ///
@@ -89,7 +89,7 @@ extension BinaryInt on int {
       );
     }
     if (isClear(startSize)) {
-      return this.bitRange(startSize, 0);
+      return bitRange(startSize, 0);
     } else {
       final mask = endSize == 32 ? 0xffffffff : (1 << endSize) - 1;
       final bits = this | (mask & ~((1 << startSize) - 1));
@@ -258,8 +258,8 @@ extension BinaryInt on int {
   /// - `list[0] = Hi Bits`
   /// - `list[1] = Lo Bits`
   Uint32List hiLo() {
-    final hiBits = (this / _2p32).floor() | 0;
-    final loBits = (this % _2p32) | 0;
+    final hiBits = (this / _pow2to32).floor() | 0;
+    final loBits = (this % _pow2to32) | 0;
     return Uint32List(2)
       ..[0] = hiBits
       ..[1] = loBits;

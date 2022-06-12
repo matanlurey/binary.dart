@@ -40,9 +40,8 @@ abstract class Integral<T extends Integral<T>> implements Comparable<Integral> {
     required this.value,
     required this.size,
     required bool signed,
-  })   : assert(value != null),
-        _supportsSigns = signed {
-    RangeError.checkValueInInterval(this.value, _min, _max);
+  }) : _supportsSigns = signed {
+    RangeError.checkValueInInterval(value, _min, _max);
   }
 
   /// An unsafe constructor that does not verify if the values are within range.
@@ -73,11 +72,11 @@ abstract class Integral<T extends Integral<T>> implements Comparable<Integral> {
 
   @override
   @nonVirtual
-  bool operator ==(Object o) {
-    return o is Integral &&
-        value == o.value &&
-        size == o.size &&
-        _supportsSigns == o._supportsSigns;
+  bool operator ==(Object other) {
+    return other is Integral &&
+        value == other.value &&
+        size == other.size &&
+        _supportsSigns == other._supportsSigns;
   }
 
   @override

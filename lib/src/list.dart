@@ -168,7 +168,7 @@ extension BinaryUint32List on Uint32List {
 
 extension BinaryUint64HiLo on Uint32List {
   /// Represents `math.pow(2, 32)`, precomputed.
-  static const _2p32 = 0x100000000;
+  static const _pow2to32 = 0x100000000;
 
   static Uint32List _new(int a, int b) => Uint32List(2)
     ..[0] = a
@@ -208,7 +208,7 @@ extension BinaryUint64HiLo on Uint32List {
   bool equals(Uint32List b) => lo == b.lo && hi == b.hi;
 
   /// Returns, truncated if necessary, to fit as an [int].
-  int toInt() => this[0] * _2p32 + this[1];
+  int toInt() => this[0] * _pow2to32 + this[1];
 }
 
 /// A collection of binary methods to be applied to elements of [Int32List].

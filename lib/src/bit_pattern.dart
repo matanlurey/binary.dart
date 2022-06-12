@@ -168,7 +168,7 @@ class _BitPatternParser implements BitPatternBuilder {
       throw ArgumentError.value(_bits, 'bits', 'Must be non-empty');
     }
 
-    final used = Set<String?>();
+    final used = <String?>{};
     final parts = <BitPart>[];
 
     String? variable;
@@ -206,7 +206,6 @@ class _BitPatternParser implements BitPatternBuilder {
             parsedUnderscore = true;
             continue;
           }
-          break;
         default:
           final code = character.codeUnitAt(0);
           if (_isAlphabetic(code)) {
