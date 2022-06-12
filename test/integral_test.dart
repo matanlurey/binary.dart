@@ -3,27 +3,6 @@ import 'package:test/test.dart';
 
 /// Tests the [Integral] implementations.
 void main() {
-  // This test does not make sense now that the null-safety is activated
-
-  // test('should, in debug mode, refuse null values', () {
-  //   var enabled = false;
-  //   assert(enabled = true);
-  //   if (enabled) {
-  //     expect(
-  //       () => Int4(null),
-  //       throwsA(
-  //         anyOf(
-  //           // VM.
-  //           TypeMatcher<AssertionError>(),
-
-  //           // Dart2JS.
-  //           TypeMatcher<NoSuchMethodError>(),
-  //         ),
-  //       ),
-  //     );
-  //   }
-  // });
-
   // It would be a lot of work to test every variant, so instead we test one
   // variant of both signed and unsigned (Int4, Uint4), and then just assert
   // that the rest of the variants are configured properly.
