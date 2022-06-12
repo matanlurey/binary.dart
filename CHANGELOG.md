@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 3.0.1
+
+- Downgrade [meta](https://pub.dev/packages/meta) version to [v1.7.0](https://pub.dev/packages/meta/versions/1.7.0) for Flutter compatibility.
+
 ## 3.0.0
 
 Wooho: **🎉 Added support for Dart SDK 2.17.0 and Null Safety 🎉**
