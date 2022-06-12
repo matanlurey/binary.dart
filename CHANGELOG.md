@@ -2,7 +2,13 @@
 
 ## 3.0.0
 
-Support null-safety
+Wooho: **🎉 Added support for Dart SDK 2.17.0 and Null Safety 🎉**
+
+Changes are relatively minor, some code that threw an `ArgumentError` on a
+null value now fails statically, but otherwise there are no behavioral changes
+to well-behaving code.
+
+_Special thanks to <https://github.com/leynier> for driving this update!_
 
 ## 2.0.0
 
