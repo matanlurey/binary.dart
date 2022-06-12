@@ -17,20 +17,8 @@ jobs:
       - name: Install Dart
         uses: dart-lang/setup-dart@v1.3
 
-      - name: Fetch Dependencies
-        run: pub get
-
-      - name: Dart Format
-        run: dartfmt . --set-exit-if-changed
-
-      - name: Dart Analyzer
-        run: dartanalyzer . --fatal-warnings
-
-      - name: Test
-        run: pub run test --reporter expanded
-
-      - name: Generate Coverage
-        run: pub run test_coverage --no-badge
+      - name: Run tests
+        run: make
 
       - name: Upload Coverage
         uses: codecov/codecov-action@v3.1.0
