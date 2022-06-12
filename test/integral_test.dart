@@ -311,7 +311,7 @@ void main() {
   test('<toDebugString>', () {
     var enabled = false;
     assert(enabled = true);
-    [
+    for (var i in [
       Bit.zero,
       Uint4.zero,
       Int4.zero,
@@ -321,17 +321,17 @@ void main() {
       Int16.zero,
       Uint32.zero,
       Int32.zero,
-    ].forEach((i) {
+    ]) {
       if (enabled) {
-        expect(Bit.zero.toString(), endsWith('{0}'));
+        expect(i.toString(), endsWith('{0}'));
       } else {
-        expect(Bit.zero.toString(), isNot(endsWith('{0}')));
+        expect(i.toString(), isNot(endsWith('{0}')));
       }
-    });
+    }
   });
 
   test('<wrappedOperators>', () {
-    <Integral>[
+    for (var i in <Integral>[
       Bit.zero,
       Uint4.zero,
       Int4.zero,
@@ -341,13 +341,13 @@ void main() {
       Int16.zero,
       Uint32.zero,
       Int32.zero,
-    ].forEach((i) {
+    ]) {
       expect(i | i, i);
-    });
+    }
   });
 
   test('<checkRange>', () {
-    [
+    for (var c in [
       Bit.checkRange,
       Uint4.checkRange,
       Int4.checkRange,
@@ -357,13 +357,13 @@ void main() {
       Int16.checkRange,
       Uint32.checkRange,
       Int32.checkRange,
-    ].forEach((c) {
+    ]) {
       expect(c(0), 0);
-    });
+    }
   });
 
   test('<assertRange>', () {
-    [
+    for (var c in [
       Bit.assertRange,
       Uint4.assertRange,
       Int4.assertRange,
@@ -373,8 +373,8 @@ void main() {
       Int16.assertRange,
       Uint32.assertRange,
       Int32.assertRange,
-    ].forEach((c) {
+    ]) {
       expect(c(0), 0);
-    });
+    }
   });
 }
