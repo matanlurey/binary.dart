@@ -10,7 +10,7 @@ void main() {
 
     test('getBoxed should return an appropriate boxed type', () {
       final list = from('1');
-      expect(list.getBoxed(0), TypeMatcher<Uint8>());
+      expect(list.getBoxed(0), const TypeMatcher<Uint8>());
     });
 
     test('shiftRight should infer length', () {
@@ -37,7 +37,7 @@ void main() {
 
     test('getBoxed should return an appropriate boxed type', () {
       final list = from('1');
-      expect(list.getBoxed(0), TypeMatcher<Int8>());
+      expect(list.getBoxed(0), const TypeMatcher<Int8>());
     });
 
     test('shiftRight should infer length', () {
@@ -64,7 +64,7 @@ void main() {
 
     test('getBoxed should return an appropriate boxed type', () {
       final list = from('1');
-      expect(list.getBoxed(0), TypeMatcher<Uint16>());
+      expect(list.getBoxed(0), const TypeMatcher<Uint16>());
     });
 
     test('shiftRight should infer length', () {
@@ -94,7 +94,7 @@ void main() {
 
     test('getBoxed should return an appropriate boxed type', () {
       final list = from('1');
-      expect(list.getBoxed(0), TypeMatcher<Int16>());
+      expect(list.getBoxed(0), const TypeMatcher<Int16>());
     });
 
     test('shiftRight should infer length', () {
@@ -124,7 +124,7 @@ void main() {
 
     test('getBoxed should return an appropriate boxed type', () {
       final list = from('1');
-      expect(list.getBoxed(0), TypeMatcher<Uint32>());
+      expect(list.getBoxed(0), const TypeMatcher<Uint32>());
     });
 
     test('shiftRight should infer length', () {
@@ -158,7 +158,7 @@ void main() {
 
     test('getBoxed should return an appropriate boxed type', () {
       final list = from('1');
-      expect(list.getBoxed(0), TypeMatcher<Int32>());
+      expect(list.getBoxed(0), const TypeMatcher<Int32>());
     });
 
     test('shiftRight should infer length', () {

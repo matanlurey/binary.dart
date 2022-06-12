@@ -8,26 +8,16 @@ Utilities for accessing binary data and bit manipulation in Dart and Flutter.
 [![Dartdocs][doc_img]][doc_url]
 [![Style guide][sty_img]][sty_url]
 
-[pub_url]: https://pub.dartlang.org/packages/binary
-[pub_img]: https://img.shields.io/pub/v/binary.svg
-[gha_url]: https://github.com/matanlurey/binary.dart/actions
-[gha_img]: https://github.com/matanlurey/binary.dart/workflows/Dart/badge.svg
-[cov_url]: https://codecov.io/gh/matanlurey/binary.dart
-[cov_img]: https://codecov.io/gh/matanlurey/binary.dart/branch/master/graph/badge.svg
-[doc_url]: https://www.dartdocs.org/documentation/binary/latest
-[doc_img]: https://img.shields.io/badge/Documentation-binary-blue.svg
-[sty_url]: https://pub.dev/packages/pedantic
-[sty_img]: https://img.shields.io/badge/style-pedantic-40c4ff.svg
-
 ## Getting started
 
-Using `package:binary` is easy, we have almost no dependencies:
+Using `package:binary` is easy, we have almost no dependencies. First, is
+necesary to run the following command for add the binary package to your project:
 
-```yaml
-# Add a new dependency to "pubspec.yaml".
-dependencies:
-  binary:
+```bash
+dart pub add binary
 ```
+
+Then, import the package and start using it:
 
 ```dart
 import 'package:binary/binary.dart';
@@ -54,8 +44,6 @@ void main() {
   print(0x0C.toBinaryPadded(8)); // 00001100
 }
 ```
-
-[extension methods in dart]: https://dart.dev/guides/language/extension-methods
 
 ## Usage
 
@@ -143,4 +131,15 @@ web integers are limited).
 
 Feel free to [file an issue][] if you'd like limited support for 64 and 128-bit.
 
+[pub_url]: https://pub.dartlang.org/packages/binary
+[pub_img]: https://img.shields.io/pub/v/binary.svg
+[gha_url]: https://github.com/matanlurey/binary.dart/actions
+[gha_img]: https://github.com/matanlurey/binary.dart/workflows/Dart/badge.svg
+[cov_url]: https://codecov.io/gh/matanlurey/binary.dart
+[cov_img]: https://codecov.io/gh/matanlurey/binary.dart/branch/master/graph/badge.svg
+[doc_url]: https://www.dartdocs.org/documentation/binary/latest
+[doc_img]: https://img.shields.io/badge/Documentation-binary-blue.svg
+[sty_url]: https://pub.dev/packages/lints
+[sty_img]: https://img.shields.io/badge/style-lints-40c4ff.svg
+[extension methods in dart]: https://dart.dev/guides/language/extension-methods
 [file an issue]: https://github.com/matanlurey/binary.dart/issues

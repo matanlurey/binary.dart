@@ -1,27 +1,9 @@
 import 'package:binary/binary.dart';
+import 'package:binary/src/_utils.dart';
 import 'package:test/test.dart';
 
 /// Tests the [Integral] implementations.
 void main() {
-  test('should, in debug mode, refuse null values', () {
-    var enabled = false;
-    assert(enabled = true);
-    if (enabled) {
-      expect(
-        () => Int4(null),
-        throwsA(
-          anyOf(
-            // VM.
-            TypeMatcher<AssertionError>(),
-
-            // Dart2JS.
-            TypeMatcher<NoSuchMethodError>(),
-          ),
-        ),
-      );
-    }
-  });
-
   // It would be a lot of work to test every variant, so instead we test one
   // variant of both signed and unsigned (Int4, Uint4), and then just assert
   // that the rest of the variants are configured properly.
@@ -328,9 +310,7 @@ void main() {
   });
 
   test('<toDebugString>', () {
-    var enabled = false;
-    assert(enabled = true);
-    [
+    for (final i in [
       Bit.zero,
       Uint4.zero,
       Int4.zero,
@@ -340,17 +320,17 @@ void main() {
       Int16.zero,
       Uint32.zero,
       Int32.zero,
-    ].forEach((i) {
-      if (enabled) {
-        expect(Bit.zero.toString(), endsWith('{0}'));
+    ]) {
+      if (assertionsEnabled) {
+        expect(i.toString(), endsWith('{0}'));
       } else {
-        expect(Bit.zero.toString(), isNot(endsWith('{0}')));
+        expect(i.toString(), isNot(endsWith('{0}')));
       }
-    });
+    }
   });
 
   test('<wrappedOperators>', () {
-    <Integral>[
+    for (final i in <Integral>[
       Bit.zero,
       Uint4.zero,
       Int4.zero,
@@ -360,13 +340,13 @@ void main() {
       Int16.zero,
       Uint32.zero,
       Int32.zero,
-    ].forEach((i) {
+    ]) {
       expect(i | i, i);
-    });
+    }
   });
 
   test('<checkRange>', () {
-    [
+    for (final c in [
       Bit.checkRange,
       Uint4.checkRange,
       Int4.checkRange,
@@ -376,13 +356,13 @@ void main() {
       Int16.checkRange,
       Uint32.checkRange,
       Int32.checkRange,
-    ].forEach((c) {
+    ]) {
       expect(c(0), 0);
-    });
+    }
   });
 
   test('<assertRange>', () {
-    [
+    for (final c in [
       Bit.assertRange,
       Uint4.assertRange,
       Int4.assertRange,
@@ -392,8 +372,8 @@ void main() {
       Int16.assertRange,
       Uint32.assertRange,
       Int32.assertRange,
-    ].forEach((c) {
+    ]) {
       expect(c(0), 0);
-    });
+    }
   });
 }

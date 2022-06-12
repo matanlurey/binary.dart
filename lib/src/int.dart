@@ -12,7 +12,7 @@ import 'boxed_int.dart';
 /// - [msb]
 /// - [getBit]
 /// - [setBit] and [isSet]
-/// - [clearBit] and [iCleared]
+/// - [clearBit] and [isClear]
 /// - [toggleBit]
 /// - [countSetBits]
 /// - [bitRange] and [bitChunk]
@@ -50,15 +50,15 @@ extension BinaryInt on int {
   static const _maxSmiBits = 31;
 
   /// Represents `math.pow(2, 32)`, precomputed.
-  static const _2p32 = 0x100000000;
+  static const _pow2to32 = 0x100000000;
 
-  /// Returns [this] to the power of the provided [expontent].
+  /// Returns `this` to the power of the provided [expontent].
   ///
   /// Unlike [math.pow], this is statically guaranteed to be the result of two
   /// [int]s, so we know the result is also an [int], and a cast is not needed.
   int pow(int expontent) => math.pow(this, expontent).unsafeCast();
 
-  /// Returns [this] arithetically right-shifted by [n] bytes assuming [length].
+  /// Returns `this` right-shifted by [n] bytes assuming [bitWidth].
   ///
   /// This is intended to be roughly equivalent to JavaScript's `>>` operator.
   ///
@@ -68,7 +68,7 @@ extension BinaryInt on int {
     return (padding << (bitWidth - n)) | (this >> n);
   }
 
-  /// Returns [this] sign-extended to [endSize] bits.
+  /// Returns `this` sign-extended to [endSize] bits.
   ///
   /// Sign extension is the operation of increasing the number of bits of a
   /// binary number while preserving the number's sign. This is done by
@@ -89,7 +89,7 @@ extension BinaryInt on int {
       );
     }
     if (isClear(startSize)) {
-      return this.bitRange(startSize, 0);
+      return bitRange(startSize, 0);
     } else {
       final mask = endSize == 32 ? 0xffffffff : (1 << endSize) - 1;
       final bits = this | (mask & ~((1 << startSize) - 1));
@@ -101,7 +101,7 @@ extension BinaryInt on int {
     return rotation & (bitWidth - 1);
   }
 
-  /// Returns a bit-wise right-rotation on [this] by an [r] of bits.
+  /// Returns a bit-wise right-rotation on `this` by an [r] of bits.
   ///
   /// > NOTE: [bitWidth] is _not_ validated. See [Integral.rotateRightShift].
   int rotateRightShift(int r, int bitWidth) {
@@ -113,7 +113,7 @@ extension BinaryInt on int {
     return left | right;
   }
 
-  /// Returns the number of set bits in [this], assuming a [length]-bit [this].
+  /// Returns the number of set bits in `this`, assuming a [bitWidth]`this`.
   ///
   /// > NOTE: [bitWidth] is _not_ validated. See [Integral.bitsSet].
   int countSetBits(int bitWidth) {
@@ -126,7 +126,7 @@ extension BinaryInt on int {
     return count;
   }
 
-  /// Returns whether the most-significant-bit in [this] (of [length]) is set.
+  /// Returns whether the most-significant-bit in `this` (of [bitWidth]) is set.
   ///
   /// > NOTE: [bitWidth] is _not_ validated. See [Integral.msb].
   bool msb(int bitWidth) {
@@ -191,7 +191,8 @@ extension BinaryInt on int {
   /// If [v] is provided, it is used as the new value. Otherwise the opposite
   /// value (of the current value) is used - i.e. `1` becomes `0` and `0`
   /// becomes `1` (logical not).
-  int toggleBit(int n, [bool v]) {
+  // ignore: avoid_positional_boolean_parameters
+  int toggleBit(int n, [bool? v]) {
     v ??= !isSet(n);
     return v ? setBit(n) : clearBit(n);
   }
@@ -235,20 +236,21 @@ extension BinaryInt on int {
   int replaceBitRange(int left, int right, int bits) {
     final size = left - right;
     // Elongate bits so that "1b" becoms "1000b", for example, where L = 4.
-    var stretch = left - bits.bitLength;
+    var result = bits;
+    var stretch = left - result.bitLength;
     if (bits.isSet(size)) {
       stretch++;
     }
-    bits = bits << math.max(0, stretch);
+    result = result << math.max(0, stretch);
     // Create a mask of 1s for the bits to be replaced.
     final mask = (~(~0 << (size + 1))) << right;
-    return (this & ~mask) | (bits & mask);
+    return (this & ~mask) | (result & mask);
   }
 
-  /// Returns [this] as a binary string representation.
+  /// Returns `this` as a binary string representation.
   String toBinary() => toRadixString(2);
 
-  /// Returns [this] as a binary string representation, padded with `0`'s.
+  /// Returns `this` as a binary string representation, padded with `0`'s.
   String toBinaryPadded(int bitWidth) {
     return toUnsigned(bitWidth).toBinary().padLeft(bitWidth, '0');
   }
@@ -258,8 +260,8 @@ extension BinaryInt on int {
   /// - `list[0] = Hi Bits`
   /// - `list[1] = Lo Bits`
   Uint32List hiLo() {
-    final hiBits = (this / _2p32).floor() | 0;
-    final loBits = (this % _2p32) | 0;
+    final hiBits = (this / _pow2to32).floor() | 0;
+    final loBits = (this % _pow2to32) | 0;
     return Uint32List(2)
       ..[0] = hiBits
       ..[1] = loBits;

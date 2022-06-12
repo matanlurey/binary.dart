@@ -1,8 +1,6 @@
 import 'dart:math' as math;
 import 'dart:typed_data';
 
-import 'package:meta/meta.dart';
-
 import 'int.dart';
 import 'list.dart';
 
@@ -13,9 +11,7 @@ extension BinaryLong on int {
   /// Represents the maximum amount of bits supported in a JS VM.
   static const _maxJs = 52;
 
-  @alwaysThrows
-  // ignore: prefer_void_to_null
-  static Null _max52Bits() {
+  static Never _max52Bits() {
     throw UnsupportedError('Only up to 52-bits supported');
   }
 
@@ -57,18 +53,17 @@ extension BinaryLong on int {
     assert(left > 31, 'Should not have been used over normal bitChunk');
     final hiLeft = left - 32;
     final hiSize = math.min(hiLeft, size) + 1;
-    final loLeft = 31;
+    const loLeft = 31;
     final loSize = size - hiSize;
     final hiLo = this.hiLo();
     final hiChunk = hiLo.hi.bitChunk(hiLeft, hiSize);
     if (loSize == 0) {
       return hiChunk;
-    } else {
-      final loChunk = hiLo.lo.bitChunk(loLeft, loSize);
-      final hiUpper = 2.pow(math.max(loChunk.bitLength, 1));
-      final loParts = Uint32List(2)..lo = loChunk;
-      final result = (hiChunk * hiUpper).hiLo() | loParts;
-      return result.toInt();
     }
+    final loChunk = hiLo.lo.bitChunk(loLeft, loSize);
+    final hiUpper = 2.pow(math.max(loChunk.bitLength, 1));
+    final loParts = Uint32List(2)..lo = loChunk;
+    final result = (hiChunk * hiUpper).hiLo() | loParts;
+    return result.toInt();
   }
 }

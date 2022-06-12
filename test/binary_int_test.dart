@@ -1,4 +1,4 @@
-// ignore_for_file: deprecated_member_use_from_same_package
+// ignore_for_file: deprecated_member_use_from_same_package, noop_primitive_operations, unnecessary_parenthesis
 import 'dart:math' as math;
 
 import 'package:binary/binary.dart';
@@ -145,7 +145,7 @@ void main() {
     expect('1010'.bits.bitRange(3, 2).toBinary(), '10');
     expect(0x01020304.toBinary(), '1000000100000001100000100');
     expect(0x01020304.bitRange(31, 24), 0x01);
-    expect(0x01020304.bitRange(4, 0), 4, reason: '${0x01020304.toBinary()}');
+    expect(0x01020304.bitRange(4, 0), 4, reason: 0x01020304.toBinary());
   });
 
   group('replaceBitRange', () {
