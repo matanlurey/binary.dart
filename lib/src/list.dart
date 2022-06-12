@@ -7,7 +7,7 @@ import 'string.dart';
 /// A collection of binary methods to be applied to elements of [Uint8List].
 ///
 /// The methods here are roughly the same as those on [BinaryInt], except that
-/// they operate on an [index] of the underlying list, and infer the `length`
+/// they operate on an `index` of the underlying list, and infer the `length`
 /// property based on the data type of the underlying list (i.e. `Uint8List` has
 /// a `length` of `8`).
 ///
@@ -39,7 +39,7 @@ extension BinaryUint8List on Uint8List {
 /// A collection of binary methods to be applied to elements of [Int8List].
 ///
 /// The methods here are roughly the same as those on [BinaryInt], except that
-/// they operate on an [index] of the underlying list, and infer the `length`
+/// they operate on an `index` of the underlying list, and infer the `length`
 /// property based on the data type of the underlying list (i.e. `Int8List` has
 /// a `length` of `8`).
 ///
@@ -71,7 +71,7 @@ extension BinaryInt8List on Int8List {
 /// A collection of binary methods to be applied to elements of [Uint16List].
 ///
 /// The methods here are roughly the same as those on [BinaryInt], except that
-/// they operate on an [index] of the underlying list, and infer the `length`
+/// they operate on an `index` of the underlying list, and infer the `length`
 /// property based on the data type of the underlying list (i.e. `Uint16List`
 /// has a `length` of `16`).
 ///
@@ -103,7 +103,7 @@ extension BinaryUint16List on Uint16List {
 /// A collection of binary methods to be applied to elements of [Int16List].
 ///
 /// The methods here are roughly the same as those on [BinaryInt], except that
-/// they operate on an [index] of the underlying list, and infer the `length`
+/// they operate on an `index` of the underlying list, and infer the `length`
 /// property based on the data type of the underlying list (i.e. `Int16List`
 /// has a `length` of `16`).
 ///
@@ -137,7 +137,7 @@ extension BinaryInt16List on Int16List {
 /// A collection of binary methods to be applied to elements of [Uint32List].
 ///
 /// The methods here are roughly the same as those on [BinaryInt], except that
-/// they operate on an [index] of the underlying list, and infer the `length`
+/// they operate on an `index`of the underlying list, and infer the `length`
 /// property based on the data type of the underlying list (i.e. `Uint32List`
 /// has a `length` of `32`).
 ///
@@ -166,6 +166,14 @@ extension BinaryUint32List on Uint32List {
   }
 }
 
+/// A collection of binary methods to be applied to elements of [Uint32List].
+///
+/// The methods here are roughly the same as those on [BinaryInt], except that
+/// they operate on an `index` of the underlying list, and infer the `length`
+/// property based on the data type of the underlying list (i.e. `Uint32List`
+/// has a `length` of `32`).
+///
+/// See [BinaryList] for more extension methods that operate on any `List<int>`.
 extension BinaryUint64HiLo on Uint32List {
   /// Represents `math.pow(2, 32)`, precomputed.
   static const _pow2to32 = 0x100000000;
@@ -214,7 +222,7 @@ extension BinaryUint64HiLo on Uint32List {
 /// A collection of binary methods to be applied to elements of [Int32List].
 ///
 /// The methods here are roughly the same as those on [BinaryInt], except that
-/// they operate on an [index] of the underlying list, and infer the `length`
+/// they operate on an `index` of the underlying list, and infer the `length`
 /// property based on the data type of the underlying list (i.e. `Int32List`
 /// has a `length` of `32`).
 ///
@@ -253,7 +261,7 @@ extension BinaryList on List<int> {
     if (isEmpty) {
       throw ArgumentError.value('Must be non-empty', 'bits');
     }
-    return join('').bits;
+    return join().bits;
   }
 
   /// Returns the [index]-th [int] with [BinaryInt.signExtend] applied.
@@ -269,12 +277,12 @@ extension BinaryList on List<int> {
   /// Returns the [index]-th [int] with [BinaryInt.countSetBits] applied.
   ///
   /// > NOTE: The [length] property is both required and not validated for
-  /// > correctness. See [Uint8List.countSetBits] or [Integral.bitsSet].
+  /// > correctness. See [Integral.bitsSet].
   int countSetBits(int index, int bitWidth) {
     return this[index].countSetBits(bitWidth);
   }
 
-  /// Returns [BinaryInt.getInt] applied to the [index]-th [int].
+  /// Returns [BinaryInt.getBit] applied to the [index]-th [int].
   int getBit(int index, int n) {
     return this[index].getBit(n);
   }
@@ -290,6 +298,7 @@ extension BinaryList on List<int> {
   }
 
   /// Returns [BinaryInt.toggleBit] applied to the [index]-th [int].
+  // ignore: avoid_positional_boolean_parameters
   int toggleBit(int index, int n, [bool? v]) {
     v ??= !isSet(index, n);
     return v ? setBit(index, n) : clearBit(index, n);
@@ -300,7 +309,7 @@ extension BinaryList on List<int> {
     return this[index].isSet(n);
   }
 
-  /// Returns [BinarytInt.isClear] applied to the [index]-th [int].
+  /// Returns [BinaryInt.isClear] applied to the [index]-th [int].
   bool isClear(int index, int n) {
     return this[index].isClear(n);
   }

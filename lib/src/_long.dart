@@ -11,14 +11,14 @@ extension BinaryLong on int {
   /// Represents the maximum amount of bits supported in a JS VM.
   static const _maxJs = 52;
 
-  static void _max52Bits() {
+  static Never _max52Bits() {
     throw UnsupportedError('Only up to 52-bits supported');
   }
 
   /// See [BinaryInt.getBit]; this is the version for >32-bit ints for JS.
   int getBitLong(int n) {
     if (n > _maxJs) {
-      _max52Bits();
+      return _max52Bits();
     }
     final bitWidth = 2.pow(n);
     final andHiLo = hiLo() & bitWidth.hiLo();
@@ -28,7 +28,7 @@ extension BinaryLong on int {
   /// See [BinaryInt.setBit]; this is the version for >32-bit ints for JS.
   int setBitLong(int n) {
     if (n > _maxJs) {
-      _max52Bits();
+      return _max52Bits();
     }
     final bitWidth = 2.pow(n);
     final orHiLo = hiLo() | bitWidth.hiLo();
@@ -38,7 +38,7 @@ extension BinaryLong on int {
   /// See [BinaryInt.clearBit]; this is the version for >32-bit ints for JS.
   int clearBitLong(int n) {
     if (n > _maxJs) {
-      _max52Bits();
+      return _max52Bits();
     }
     final bitWidth = 2.pow(n);
     final andNotHiLo = hiLo() & ~bitWidth.hiLo();
@@ -48,12 +48,12 @@ extension BinaryLong on int {
   /// See [BinaryInt.bitChunk]; this is the version for >32-bits ints for JS.
   int bitChunkLong(int left, int size) {
     if (left > _maxJs) {
-      _max52Bits();
+      return _max52Bits();
     }
     assert(left > 31, 'Should not have been used over normal bitChunk');
     final hiLeft = left - 32;
     final hiSize = math.min(hiLeft, size) + 1;
-    final loLeft = 31;
+    const loLeft = 31;
     final loSize = size - hiSize;
     final hiLo = this.hiLo();
     final hiChunk = hiLo.hi.bitChunk(hiLeft, hiSize);

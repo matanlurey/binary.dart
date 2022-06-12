@@ -22,6 +22,6 @@ void main() {
   print($01V.capture('011'.bits)); // [1]
 
   // Alternative bit pattern.
-  final $01Vs = BitPatternBuilder.parse('01V').build();
+  final $01Vs = const BitPatternBuilder.parse('01V').build();
   print($01V == $01Vs); // true
 }

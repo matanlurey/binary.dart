@@ -3,7 +3,7 @@ import 'package:meta/meta.dart';
 import '_utils.dart';
 import 'int.dart';
 
-/// Encapsulates a common integral data type of declared [size] and [signed].
+/// Encapsulates a common integral data type of declared [size] and signs.
 ///
 /// These data structures are _easier_ to use than [BinaryInt], but come at a
 /// cost of needing to box (wrap) [int] values in a class, and the overhead that
@@ -58,12 +58,13 @@ abstract class Integral<T extends Integral<T>> implements Comparable<Integral> {
 
   /// Wraps [value], careful to normalize (unsign) if necessary.
   T _wrapSignAware(int value) {
+    var result = value;
     if (!_supportsSigns) {
-      value = value.toUnsigned(size);
+      result = result.toUnsigned(size);
     } else {
-      value = value.toSigned(size);
+      result = result.toSigned(size);
     }
-    return wrapSafeValue(value);
+    return wrapSafeValue(result);
   }
 
   @override
@@ -176,7 +177,7 @@ abstract class Integral<T extends Integral<T>> implements Comparable<Integral> {
 
   /// Returns with the [n]th bit from [value] cleared.
   ///
-  /// Throws [RangeError] if [n] is not [inRange].
+  /// Throws [RangeError] if [n] is not in range.
   @nonVirtual
   T clearBit(int n) {
     _assertMaxBits(n, 'n');
@@ -198,6 +199,7 @@ abstract class Integral<T extends Integral<T>> implements Comparable<Integral> {
   ///
   /// Returns the new value.
   @nonVirtual
+  // ignore: avoid_positional_boolean_parameters
   T toggleBit(int n, [bool? v]) {
     v ??= !isSet(n);
     return v ? setBit(n) : clearBit(n);
@@ -236,6 +238,7 @@ abstract class Integral<T extends Integral<T>> implements Comparable<Integral> {
 
   /// Returns `true` iff [value] represents a negative number, else `false`.
   @nonVirtual
+  // ignore: avoid_bool_literals_in_conditional_expressions
   bool get isNegative => _supportsSigns ? msb : false;
 
   /// Returns `true` iff [value] represents a positive number, else `false`.
@@ -258,7 +261,7 @@ abstract class Integral<T extends Integral<T>> implements Comparable<Integral> {
     return wrapSafeValue(value.rotateRightShift(number, size));
   }
 
-  /// Returns the current value [Binaryint.signExtend]-ed to the full size.
+  /// Returns the current value [BinaryInt.signExtend]-ed to the full size.
   ///
   /// All bits to the left (inclusive of [startSize]) are replaced as a result.
   @nonVirtual

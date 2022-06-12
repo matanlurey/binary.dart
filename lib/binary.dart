@@ -43,6 +43,11 @@
 /// > We could add limited forms of support with `BigInt`; file a request!
 library binary;
 
+import 'dart:typed_data';
+import '/src/boxed_int.dart';
+import '/src/int.dart';
+import '/src/list.dart';
+
 export 'src/bit_pattern.dart';
 export 'src/boxed_int.dart';
 export 'src/int.dart';

@@ -1,5 +1,6 @@
 .dart_tool/
 .packages
+.vscode/
 coverage/
 # https://github.com/pulyaevskiy/test-coverage/issues/15
 coverage_badge.svg

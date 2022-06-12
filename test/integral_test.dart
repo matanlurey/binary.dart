@@ -1,4 +1,5 @@
 import 'package:binary/binary.dart';
+import 'package:binary/src/_utils.dart';
 import 'package:test/test.dart';
 
 /// Tests the [Integral] implementations.
@@ -309,9 +310,7 @@ void main() {
   });
 
   test('<toDebugString>', () {
-    var enabled = false;
-    assert(enabled = true);
-    for (var i in [
+    for (final i in [
       Bit.zero,
       Uint4.zero,
       Int4.zero,
@@ -322,7 +321,7 @@ void main() {
       Uint32.zero,
       Int32.zero,
     ]) {
-      if (enabled) {
+      if (assertionsEnabled) {
         expect(i.toString(), endsWith('{0}'));
       } else {
         expect(i.toString(), isNot(endsWith('{0}')));
@@ -331,7 +330,7 @@ void main() {
   });
 
   test('<wrappedOperators>', () {
-    for (var i in <Integral>[
+    for (final i in <Integral>[
       Bit.zero,
       Uint4.zero,
       Int4.zero,
@@ -347,7 +346,7 @@ void main() {
   });
 
   test('<checkRange>', () {
-    for (var c in [
+    for (final c in [
       Bit.checkRange,
       Uint4.checkRange,
       Int4.checkRange,
@@ -363,7 +362,7 @@ void main() {
   });
 
   test('<assertRange>', () {
-    for (var c in [
+    for (final c in [
       Bit.assertRange,
       Uint4.assertRange,
       Int4.assertRange,

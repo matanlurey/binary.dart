@@ -1,4 +1,4 @@
-// ignore_for_file: deprecated_member_use_from_same_package
+// ignore_for_file: deprecated_member_use_from_same_package, noop_primitive_operations, unnecessary_parenthesis
 import 'dart:math' as math;
 
 import 'package:binary/binary.dart';

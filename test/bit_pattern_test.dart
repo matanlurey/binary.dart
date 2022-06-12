@@ -1,8 +1,11 @@
+// ignore_for_file: unnecessary_parenthesis
+
 import 'package:binary/binary.dart';
+import 'package:binary/src/_utils.dart';
 import 'package:test/test.dart';
 
 void main() {
-  BitPattern<List<int>?> build(List<BitPart> parts, [String? name]) {
+  BitPattern<List<int>> build(List<BitPart> parts, [String? name]) {
     return BitPatternBuilder(parts).build(name);
   }
 
@@ -78,7 +81,7 @@ void main() {
       ]);
       // 10FFFFTT
       // 10111010
-      final captured = pattern.capture('1011' '1010'.bits)!;
+      final captured = pattern.capture('1011' '1010'.bits);
       expect(
         Map.fromIterables(pattern.names, captured),
         {'FOUR': '1110'.bits, 'TWO': '10'.bits},
@@ -137,35 +140,37 @@ void main() {
   });
 
   group('BitPatternBuilder.parse', () {
-    test('should fail on null', () {
-      expect(() => BitPatternBuilder.parse(null).build(), throwsArgumentError);
-    });
-
     test('should fail on an empty string', () {
-      expect(() => BitPatternBuilder.parse('').build(), throwsArgumentError);
+      expect(
+        () => const BitPatternBuilder.parse('').build(),
+        throwsArgumentError,
+      );
     });
 
     test('should fail on an unexpected character', () {
-      expect(() => BitPatternBuilder.parse(' ').build(), throwsFormatException);
+      expect(
+        () => const BitPatternBuilder.parse(' ').build(),
+        throwsFormatException,
+      );
     });
 
     test('should fail on multiple _s', () {
       expect(
-        () => BitPatternBuilder.parse('1__0').build(),
+        () => const BitPatternBuilder.parse('1__0').build(),
         throwsFormatException,
       );
     });
 
     test('should fail on duplicate variables', () {
       expect(
-        () => BitPatternBuilder.parse('0101_AABA').build(),
+        () => const BitPatternBuilder.parse('0101_AABA').build(),
         throwsFormatException,
       );
     });
 
     test('should parse a simple set of flags', () {
       expect(
-        BitPatternBuilder.parse('0101_1010').build(),
+        const BitPatternBuilder.parse('0101_1010').build(),
         BitPatternBuilder(const [
           BitPart.zero,
           BitPart.one,
@@ -181,7 +186,7 @@ void main() {
 
     test('should parse a set of flags and variables', () {
       expect(
-        BitPatternBuilder.parse('0101_AAAB').build(),
+        const BitPatternBuilder.parse('0101_AAAB').build(),
         BitPatternBuilder(const [
           BitPart.zero,
           BitPart.one,
@@ -193,9 +198,9 @@ void main() {
       );
     });
 
-    test('should allow variables across _\'s', () {
+    test("should allow variables across _'s", () {
       expect(
-        BitPatternBuilder.parse('01AA_AABB').build(),
+        const BitPatternBuilder.parse('01AA_AABB').build(),
         BitPatternBuilder(const [
           BitPart.zero,
           BitPart.one,
@@ -207,7 +212,7 @@ void main() {
 
     test('should complete variables when seeing 0 or 1', () {
       expect(
-        BitPatternBuilder.parse('0A1B').build(),
+        const BitPatternBuilder.parse('0A1B').build(),
         BitPatternBuilder(const [
           BitPart.zero,
           BitPart.v(1, 'A'),
@@ -218,21 +223,14 @@ void main() {
     });
 
     test('should implement hashCode and ==', () {
-      final a = BitPatternBuilder.parse('A').build();
-      final b = BitPatternBuilder.parse('A').build();
+      final a = const BitPatternBuilder.parse('A').build();
+      final b = const BitPatternBuilder.parse('A').build();
       expect(a, b);
       expect(a.hashCode, b.hashCode);
     });
   });
 
   group('BitPatternGroup', () {
-    // This test does not make sense now that the null-safety is activated
-
-    // test('should fail on null', () {
-    //   late List<BitPattern<void>> patterns;
-    //   expect(() => BitPatternGroup(patterns), throwsArgumentError);
-    // });
-
     test('should fail on empty', () {
       final patterns = <BitPattern<void>>[];
       expect(() => BitPatternGroup(patterns), throwsArgumentError);
@@ -260,10 +258,10 @@ void main() {
       // Reproduction case from package:armv4t.
       //
       // We will expect SOFTWARE_INTERRUPT, not CONDITIONAL_BRANCH.
-      final conditionalBranch = BitPatternBuilder.parse(
+      final conditionalBranch = const BitPatternBuilder.parse(
         '1101_CCCC_SSSS_SSSS',
       ).build('CONDITIONAL_BRANCH');
-      final softwareInterrupt = BitPatternBuilder.parse(
+      final softwareInterrupt = const BitPatternBuilder.parse(
         '1101_1111_VVVV_VVVV',
       ).build('SOFTWARE_INTERRUPT');
 
@@ -293,9 +291,7 @@ void main() {
   });
 
   test('<toString>', () {
-    var enabled = false;
-    assert(enabled = true);
-    if (enabled) {
+    if (assertionsEnabled) {
       expect(BitPart.zero.toString(), 'Bit { 0 }');
       expect(const BitPart.v(1).toString(), 'Segment { 1-bits }');
       expect(const BitPart.v(1, 'A').toString(), 'Segment { A: 1-bits }');
