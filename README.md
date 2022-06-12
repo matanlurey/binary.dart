@@ -11,7 +11,8 @@ Utilities for accessing binary data and bit manipulation in Dart and Flutter.
 ## Getting started
 
 Using `package:binary` is easy, we have almost no dependencies. First, is
-necesary to run the following command for add the binary package to your project:
+necesary to run the following command for add the binary package to your
+project:
 
 ```bash
 dart pub add binary
@@ -136,10 +137,10 @@ Feel free to [file an issue][] if you'd like limited support for 64 and 128-bit.
 [gha_url]: https://github.com/matanlurey/binary.dart/actions
 [gha_img]: https://github.com/matanlurey/binary.dart/workflows/Dart/badge.svg
 [cov_url]: https://codecov.io/gh/matanlurey/binary.dart
-[cov_img]: https://codecov.io/gh/matanlurey/binary.dart/branch/master/graph/badge.svg
+[cov_img]: https://codecov.io/gh/matanlurey/binary.dart/branch/main/graph/badge.svg
 [doc_url]: https://www.dartdocs.org/documentation/binary/latest
 [doc_img]: https://img.shields.io/badge/Documentation-binary-blue.svg
-[sty_url]: https://pub.dev/packages/lints
-[sty_img]: https://img.shields.io/badge/style-lints-40c4ff.svg
+[sty_url]: https://pub.dev/packages/matan
+[sty_img]: https://img.shields.io/badge/style-matan-9cf.svg
 [extension methods in dart]: https://dart.dev/guides/language/extension-methods
 [file an issue]: https://github.com/matanlurey/binary.dart/issues
