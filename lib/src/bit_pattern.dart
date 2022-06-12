@@ -390,7 +390,7 @@ class _CaptureBits {
   const _CaptureBits(this.name, this.left, this.size);
 
   @override
-  int get hashCode => name.hashCode ^ left.hashCode ^ size.hashCode;
+  int get hashCode => Object.hash(name.hashCode, left.hashCode, size.hashCode);
 
   @override
   bool operator ==(Object o) {
@@ -452,14 +452,15 @@ class _InterpretedBitPattern implements BitPattern<List<int>> {
   }
 
   @override
-  int get hashCode =>
-      _length.hashCode ^
-      _nonVarBits.hashCode ^
-      _isSetMask.hashCode ^
-      _nonVarMask.hashCode ^
-      (_capture.isEmpty
-          ? 0
-          : _capture.map((c) => c.hashCode).reduce((a, b) => a ^ b));
+  int get hashCode {
+    return Object.hash(
+      _length.hashCode,
+      _nonVarBits.hashCode,
+      _isSetMask.hashCode,
+      _nonVarMask.hashCode,
+      Object.hashAll(_capture),
+    );
+  }
 
   @override
   int compareTo(covariant _InterpretedBitPattern other) {
