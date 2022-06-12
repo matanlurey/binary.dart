@@ -13,7 +13,7 @@ Utilities for accessing binary data and bit manipulation in Dart and Flutter.
 Using `package:binary` is easy, we have almost no dependencies. First, is necesary to run the following command for add the binary package to your project:
 
 ```bash
-dart pub add bynary
+dart pub add binary
 ```
 
 Then, import the package and start using it:
