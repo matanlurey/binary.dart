@@ -914,16 +914,6 @@ void main() {
     });
   });
 
-  group('countLeadingOnes', () {
-    test('countLeadingOnes(0) is 0', () {
-      check(Int8(0).countLeadingOnes()).equals(0);
-    });
-
-    test('countLeadingOnes(1) is 0', () {
-      check(Int8(1).countLeadingOnes()).equals(0);
-    });
-  });
-
   group('countTrailingOnes', () {
     test('countTrailingOnes(0) is 0', () {
       check(Int8(0).countTrailingOnes()).equals(0);
@@ -973,12 +963,6 @@ void main() {
   group('bitSlice', () {
     test('bitSlice(0, 0) is 0', () {
       check(Int8(0).bitSlice(0, 0)).equals(Int8(0));
-    });
-  });
-
-  group('bitReplace', () {
-    test('bitReplace(0xF, 0) in 0 is 0xF', () {
-      check(Int8(0).bitReplace(0xF, 0)).equals(Int8(0xF));
     });
   });
 

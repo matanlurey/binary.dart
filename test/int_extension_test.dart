@@ -328,26 +328,6 @@ void main() {
     });
   });
 
-  group('setNthBit', () {
-    test('0x0F.setNthBit(2, false) == 0x0B', () {
-      check(0x0F.setNthBit(2, false)).equals(0x0B);
-    });
-
-    test('0x0F.setNthBit(2) == 15', () {
-      check(0x0F.setNthBit(2)).equals(15);
-    });
-  });
-
-  group('toggleNthBit', () {
-    test('0x0F.toggleNthBit(2) == 11', () {
-      check(0x0F.toggleNthBit(2)).equals(11);
-    });
-
-    test('0x0B.toggleNthBit(2) == 0x0F', () {
-      check(0x0B.toggleNthBit(2)).equals(0x0F);
-    });
-  });
-
   group('nextPowerOf2', () {
     test('0.nextPowerOf2() == 1', () {
       check(() => 0.nextPowerOf2()).throws<Error>();
@@ -449,48 +429,6 @@ void main() {
 
     test('4.nextMultipleOf(2) == 4', () {
       check(4.nextMultipleOf(2)).equals(4);
-    });
-  });
-
-  group('countOnes', () {
-    test('0.countOnes() == 0', () {
-      check(0.countOnes()).equals(0);
-    });
-
-    test('1.countOnes() == 1', () {
-      check(1.countOnes()).equals(1);
-    });
-
-    test('2.countOnes() == 1', () {
-      check(2.countOnes()).equals(1);
-    });
-
-    test('3.countOnes() == 2', () {
-      check(3.countOnes()).equals(2);
-    });
-
-    test('4.countOnes() == 1', () {
-      check(4.countOnes()).equals(1);
-    });
-
-    test('5.countOnes() == 2', () {
-      check(5.countOnes()).equals(2);
-    });
-
-    test('6.countOnes() == 2', () {
-      check(6.countOnes()).equals(2);
-    });
-
-    test('7.countOnes() == 3', () {
-      check(7.countOnes()).equals(3);
-    });
-
-    test('8.countOnes() == 1', () {
-      check(8.countOnes()).equals(1);
-    });
-
-    test('9.countOnes() == 2', () {
-      check(9.countOnes()).equals(2);
     });
   });
 }

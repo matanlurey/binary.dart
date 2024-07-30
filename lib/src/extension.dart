@@ -1,7 +1,5 @@
 import 'dart:math' as math;
 
-import 'package:meta/meta.dart';
-
 /// Additional functionality for any integer, without size restrictions.
 ///
 /// This extension provides additional functionality for integers that is not
@@ -151,39 +149,6 @@ extension IntExtension on int {
   /// This is an alias for [nthBit].
   bool operator [](int n) => nthBit(n);
 
-  /// Sets the n-th bit to [value], where `true` is `1` and `false` is `0`.
-  ///
-  /// ## Example
-  ///
-  /// ```dart
-  /// final v = 0x0F.setNthBit(2, false);
-  /// print(v.toRadixString(16)); // 7
-  /// ```
-  @pragma('dart2js:tryInline')
-  @pragma('vm:prefer-inline')
-  @useResult
-  // ignore: avoid_positional_boolean_parameters
-  int setNthBit(int n, [bool value = true]) {
-    if (value) {
-      return this | (1 << n);
-    } else {
-      return this & ~(1 << n);
-    }
-  }
-
-  /// Toggles the n-th bit.
-  ///
-  /// ## Example
-  ///
-  /// ```dart
-  /// final v = 0x0F.toggleNthBit(2);
-  /// print(v.toRadixString(16)); // 3
-  /// ```
-  @pragma('dart2js:tryInline')
-  @pragma('vm:prefer-inline')
-  @useResult
-  int toggleNthBit(int n) => this ^ (1 << n);
-
   /// Returns the smallest power of two greater than or equal to `this`.
   ///
   /// If `this` is already a power of two, it is returned.
@@ -215,22 +180,5 @@ extension IntExtension on int {
   @pragma('vm:prefer-inline')
   int nextMultipleOf(int n) {
     return ((this + n - 1) ~/ RangeError.checkNotNegative(n)) * n;
-  }
-
-  /// Returns the number of `1`s in the binary representation of `this`.
-  ///
-  /// ## Example
-  ///
-  /// ```dart
-  /// 0xFF.countOnes(); // 8
-  /// ```
-  int countOnes() {
-    var count = 0;
-    var value = this;
-    while (value != 0) {
-      count += value & 1;
-      value >>= 1;
-    }
-    return count;
   }
 }

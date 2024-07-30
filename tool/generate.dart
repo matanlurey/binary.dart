@@ -87,7 +87,22 @@ void main() {
         ),
         '',
       );
+
+      // Just remove each line that contains the above region blocks.
+      output = output.split('\n').where((line) {
+        return !line.contains('{{#UNSIGNED}}') &&
+            !line.contains('{{/UNSIGNED}}');
+      }).join('\n');
     } else {
+      output = output.replaceAll(
+        RegExp(
+          '{{#UNSIGNED}}.*?{{/UNSIGNED}}',
+          dotAll: true,
+          multiLine: true,
+        ),
+        '',
+      );
+
       // Just remove each line that contains the above region blocks.
       output = output.split('\n').where((line) {
         return !line.contains('{{#SIGNED}}') && !line.contains('{{/SIGNED}}');

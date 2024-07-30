@@ -1,4 +1,6 @@
-import 'package:binary/binary.dart';
+import 'dart:math' as math;
+
+import 'package:binary/binary.dart' show Uint8, debugCheckFixedWithInRange;
 import 'package:test/test.dart';
 
 import 'src/prelude.dart';
@@ -95,6 +97,226 @@ void main() {
     );
     check(Uint8(2)).checkPow(8, result);
   });
+
+  test('sqrt', () {
+    check(Uint8(16).sqrt()).equals(Uint8(4));
+  });
+
+  test('log without base', () {
+    check(Uint8(16))
+        .has((p) => p.log(), 'log()')
+        .equals(Uint8(math.log(16).floor()));
+  });
+
+  test('log with base 6', () {
+    check(Uint8(16))
+        .has((p) => p.log(6), 'log(6)')
+        .equals(Uint8(math.log(16) ~/ math.log(6)));
+  });
+
+  test('log with base 2', () {
+    check(Uint8(16))
+        .has((p) => p.log2(), 'log2()')
+        .equals(Uint8(math.log(16) ~/ math.log(2)));
+  });
+
+  test('log with base 10', () {
+    check(Uint8(16))
+        .has((p) => p.log10(), 'log10()')
+        .equals(Uint8(math.log(16) ~/ math.log(10)));
+  });
+
+  test('midpoint', () {
+    check(Uint8(0).midpoint(Uint8(255))).equals(Uint8(127));
+  });
+
+  group('individual bit operations', () {
+    test('msb is true numbers that are >= 128', () {
+      for (var i = 0; i < 128; i++) {
+        check(Uint8(i).msb).isFalse();
+      }
+      for (var i = 128; i < 256; i++) {
+        check(Uint8(i).msb).isTrue();
+      }
+    });
+
+    test('nth bit returns true for a 1 represented in binaru', () {
+      // A Uint8 in binary is "00000000" to "11111111".
+      for (var i = 0; i < 8; i++) {
+        check(Uint8(1 << i)[i]).isTrue();
+      }
+      for (var i = 0; i < 8; i++) {
+        check(Uint8(0)[i]).isFalse();
+      }
+    });
+
+    test('setNthBit sets the nth bit to 1', () {
+      for (var i = 0; i < 8; i++) {
+        check(Uint8(0).setNthBit(i)).equals(Uint8(1 << i));
+      }
+    });
+
+    test('toggleNthBit toggles the nth bit', () {
+      for (var i = 0; i < 8; i++) {
+        check(Uint8(0).toggleNthBit(i)).equals(Uint8(1 << i));
+        check(Uint8(1 << i).toggleNthBit(i)).equals(Uint8(0));
+      }
+    });
+  });
+
+  test('nextPowerOf2 in range', () {
+    check(Uint8(1)).checkNextPowerOf2(
+      const _Uint8Result.all(1),
+    );
+    check(Uint8(2)).checkNextPowerOf2(
+      const _Uint8Result.all(2),
+    );
+    check(Uint8(63)).checkNextPowerOf2(
+      const _Uint8Result.all(64),
+    );
+  });
+
+  test('nextPowerOf2 overflows', () {
+    check(Uint8(245)).checkNextPowerOf2(
+      const _Uint8Result.fails(
+        expectedClamp: 255,
+        expectedWrap: 0,
+      ),
+    );
+  });
+
+  test('nextMultipleOf in range', () {
+    check(Uint8(1)).checkNextMultipleOf(
+      const _Uint8Result.all(1),
+      Uint8(1),
+    );
+    check(Uint8(2)).checkNextMultipleOf(
+      const _Uint8Result.all(2),
+      Uint8(1),
+    );
+    check(Uint8(63)).checkNextMultipleOf(
+      const _Uint8Result.all(63),
+      Uint8(1),
+    );
+  });
+
+  test('nextMultipleOf overflows', () {
+    check(Uint8(245)).checkNextMultipleOf(
+      const _Uint8Result.fails(
+        expectedClamp: 255,
+        expectedWrap: 44,
+      ),
+      Uint8(100),
+    );
+  });
+
+  test('countOnes', () {
+    final i1 = int.parse('11111111', radix: 2);
+    check(Uint8(i1).countOnes()).equals(8);
+
+    final i2 = int.parse('01010101', radix: 2);
+    check(Uint8(i2).countOnes()).equals(4);
+  });
+
+  test('countLeadingOnes', () {
+    final i1 = int.parse('11111111', radix: 2);
+    check(Uint8(i1).countLeadingOnes()).equals(8);
+
+    final i2 = int.parse('01010101', radix: 2);
+    check(Uint8(i2).countLeadingOnes()).equals(0);
+  });
+
+  test('countTrailingOnes', () {
+    final i1 = int.parse('11111111', radix: 2);
+    check(Uint8(i1).countTrailingOnes()).equals(8);
+
+    final i2 = int.parse('01010101', radix: 2);
+    check(Uint8(i2).countTrailingOnes()).equals(1);
+  });
+
+  test('countZeros', () {
+    final i1 = int.parse('00000000', radix: 2);
+    check(Uint8(i1).countZeros()).equals(8);
+
+    final i2 = int.parse('01010101', radix: 2);
+    check(Uint8(i2).countZeros()).equals(4);
+  });
+
+  test('countLeadingZeros', () {
+    final i1 = int.parse('00000000', radix: 2);
+    check(Uint8(i1).countLeadingZeros()).equals(8);
+
+    final i2 = int.parse('01010101', radix: 2);
+    check(Uint8(i2).countLeadingZeros()).equals(1);
+  });
+
+  test('countTrailingZeros', () {
+    final i1 = int.parse('00000000', radix: 2);
+    check(Uint8(i1).countTrailingZeros()).equals(8);
+
+    final i2 = int.parse('01010101', radix: 2);
+    check(Uint8(i2).countTrailingZeros()).equals(0);
+  });
+
+  group('bit slice and range operations', () {
+    test('should return the last 4 bits, left-padded with 0s', () {
+      final i1 = int.parse('01111111', radix: 2);
+      //                    ^^^^
+      final s1 = Uint8(i1).bitChunk(4).toBinaryString();
+      check(s1).equals('00000111');
+    });
+
+    test('should return the first 4 bits', () {
+      final i1 = int.parse('01111111', radix: 2);
+      //                        ^^^^
+      final s1 = Uint8(i1).bitChunk(0, 4).toBinaryString();
+      check(s1).equals('00001111');
+    });
+
+    test('should return the middle 4 bits', () {
+      final i1 = int.parse('01111111', radix: 2);
+      //                      ^^^^
+      final s1 = Uint8(i1).bitChunk(2, 4).toBinaryString();
+      check(s1).equals('00001111');
+    });
+
+    test('should use slice to get the last 4 bits', () {
+      final i1 = int.parse('01111111', radix: 2);
+      //                    ^^^^
+      final s1 = Uint8(i1).bitSlice(4).toBinaryString();
+      check(s1).equals('00000111');
+    });
+
+    test('should use slice to get the first 4 bits', () {
+      final i1 = int.parse('01111111', radix: 2);
+      //                        ^^^^
+      final s1 = Uint8(i1).bitSlice(0, 3).toBinaryString();
+      check(s1).equals('00001111');
+    });
+
+    test('should use slice to get the middle 4 bits', () {
+      final i1 = int.parse('01111111', radix: 2);
+      //                      ^^^^
+      final s1 = Uint8(i1).bitSlice(2, 5).toBinaryString();
+      check(s1).equals('00001111');
+    });
+
+    test('should replace the first 4 bits with 1010', () {
+      final i1 = int.parse('01111111', radix: 2);
+      //                        ^^^^
+      final i2 = int.parse('1010', radix: 2);
+      final s1 = Uint8(i1).bitReplace(0, 3, i2).toBinaryString();
+      check(s1).equals('01111010');
+    });
+
+    test('should replace the last 4 bits with 1010', () {
+      final i1 = int.parse('11111111', radix: 2);
+      //                    ^^^^
+      final i2 = int.parse('1010', radix: 2);
+      final s1 = Uint8(i1).bitReplace(4, null, i2).toBinaryString();
+      check(s1).equals('10101111');
+    });
+  });
 }
 
 final class _Uint8Result {
@@ -138,5 +360,56 @@ extension on Subject<Uint8> {
     has((p) => p.wrappedPow(exponent), 'wrappedPow($exponent)').equals(
       result.expectedWrap as Uint8,
     );
+  }
+
+  void checkNextPowerOf2(_Uint8Result result) {
+    if (result.expected != null) {
+      has((p) => p.nextPowerOf2(), 'nextPowerOf2()').equals(
+        result.expected as Uint8,
+      );
+    } else {
+      has((p) => () => p.nextPowerOf2(), 'nextPowerOf2()').throws<Error>();
+    }
+
+    has((p) => p.tryNextPowerOf2(), 'tryNextPowerOf2()').equals(
+      result.expectedTry as Uint8?,
+    );
+
+    has((p) => p.clampedNextPowerOf2(), 'clampedNextPowerOf2()').equals(
+      result.expectedClamp as Uint8,
+    );
+
+    has((p) => p.wrappedNextPowerOf2(), 'wrappedNextPowerOf2()').equals(
+      result.expectedWrap as Uint8,
+    );
+  }
+
+  void checkNextMultipleOf(_Uint8Result result, Uint8 multiple) {
+    if (result.expected != null) {
+      has(
+        (p) => p.nextMultipleOf(multiple),
+        'nextMultipleOf($multiple)',
+      ).equals(result.expected as Uint8);
+    } else {
+      has(
+        (p) => () => p.nextMultipleOf(multiple),
+        'nextMultipleOf($multiple)',
+      ).throws<Error>();
+    }
+
+    has(
+      (p) => p.tryNextMultipleOf(multiple),
+      'tryNextMultipleOf($multiple)',
+    ).equals(result.expectedTry as Uint8?);
+
+    has(
+      (p) => p.clampedNextMultipleOf(multiple),
+      'clampedNextMultipleOf($multiple)',
+    ).equals(result.expectedClamp as Uint8);
+
+    has(
+      (p) => p.wrappedNextMultipleOf(multiple),
+      'wrappedNextMultipleOf($multiple)',
+    ).equals(result.expectedWrap as Uint8);
   }
 }

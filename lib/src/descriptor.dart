@@ -13,15 +13,15 @@ var debugCheckFixedWithInRange = true;
 /// Whether `unchecked` methods on fixed-width integers assert when out of
 /// range.
 ///
-/// In debug mode, methods such as `Uint8.fromUnchecked` are ignored and do not
-/// assert that the value is in a valid range. This can be overriden by setting
-/// this variable to `true`.
+/// In debug mode, methods such as `Uint8.fromUnchecked` are checked to ensure
+/// that the value is in a valid range. This can be disabled by setting this
+/// variable to `false`, `-DdebugCheckUncheckedInRange=false`.
 ///
 /// In release mode, these assertions are always disabled and cannot be enabled.
 // ignore: do_not_use_environment
 const debugCheckUncheckedInRange = bool.fromEnvironment(
   'debugCheckUncheckedInRange',
-  defaultValue: true /* FIXME: Remove before release */,
+  defaultValue: true,
 );
 
 /// A descriptor for a fixed-width integer of type [T].
@@ -170,7 +170,20 @@ final class IntDescriptor<T> {
   /// Returns the number of zeros in the binary representation of [v].
   @pragma('dart2js:tryInline')
   @pragma('vm:prefer-inline')
-  int countZeros(int v) => width - v.countOnes();
+  int countZeros(int v) => width - countOnes(v);
+
+  /// Returns the number of ones in the binary representation of [v].
+  @pragma('dart2js:tryInline')
+  @pragma('vm:prefer-inline')
+  int countOnes(int v) {
+    var count = 0;
+    for (var i = 0; i < width; i++) {
+      if (v.nthBit(i)) {
+        count++;
+      }
+    }
+    return count;
+  }
 
   /// Returns the number of leading ones in the binary representation of [v].
   @pragma('dart2js:tryInline')
@@ -232,6 +245,35 @@ final class IntDescriptor<T> {
     return count;
   }
 
+  /// Sets and returns the [n]th bit in [v] to [value].
+  // ignore: avoid_positional_boolean_parameters
+  T uncheckedSetNthBit(int v, int n, [bool value = true]) {
+    if (signed) {
+      v = v.toUnsigned(width);
+    }
+    if (value) {
+      v |= 1 << n;
+    } else {
+      v &= ~(1 << n);
+    }
+    if (signed) {
+      v = v.toSigned(width);
+    }
+    return _uncheckedCast(v);
+  }
+
+  /// Toggles and returns the [n]th bit in [v].
+  T uncheckedToggleNthBit(int v, int n) {
+    if (signed) {
+      v = v.toUnsigned(width);
+    }
+    v ^= 1 << n;
+    if (signed) {
+      v = v.toSigned(width);
+    }
+    return _uncheckedCast(v);
+  }
+
   /// Returns a new instance with bits in [left] to [size].
   ///
   /// The result is left-padded with 0s.
@@ -266,19 +308,17 @@ final class IntDescriptor<T> {
   }
 
   /// Replaces bits [left] to [right], inclusive, with the same number of bits
-  /// from [source].
+  /// from [replacement].
   ///
   /// Both [left] and [right] must be in the range of the integer descriptor
   /// or the behavior is undefined.
   @pragma('dart2js:tryInline')
   @pragma('vm:prefer-inline')
-  T uncheckedBitReplace(int target, int source, int left, [int? right]) {
-    right ??= left + width - 1;
-    var mask = 0;
-    for (var i = left; i <= right; i++) {
-      mask |= 1 << i;
-    }
-    return _uncheckedCast(target & ~mask | source << left);
+  T uncheckedBitReplace(int target, int left, int? right, int replacement) {
+    right ??= width - 1;
+    final mask = ((1 << (right - left + 1)) - 1) << left;
+    final result = (target & ~mask) | ((replacement << left) & mask);
+    return _uncheckedCast(result);
   }
 
   /// Rotates the bits in [v] to the left by [n] positions.
@@ -300,8 +340,14 @@ final class IntDescriptor<T> {
   @pragma('dart2js:tryInline')
   @pragma('vm:prefer-inline')
   T rotateRight(int v, int n) {
+    if (signed) {
+      v = v.toUnsigned(width);
+    }
     n %= width;
-    final result = (v >> n | v << (width - n)) & ((1 << width) - 1);
+    var result = (v >> n | v << (width - n)) & ((1 << width) - 1);
+    if (signed) {
+      result = result.toSigned(width);
+    }
     return _uncheckedCast(result);
   }
 
@@ -353,6 +399,15 @@ final class IntDescriptor<T> {
     }
     final result = v | ~((1 << startWidth) - 1);
     return _uncheckedCast(result);
+  }
+
+  /// Returns [v] as a binary string.
+  String toBinaryString(int v, {bool padded = true}) {
+    var result = v.toUnsigned(width).toRadixString(2);
+    if (padded) {
+      result = result.padLeft(width, '0');
+    }
+    return result;
   }
 }
 

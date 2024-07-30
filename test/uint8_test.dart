@@ -1068,24 +1068,6 @@ void main() {
     });
   });
 
-  group('bitReplace', () {
-    test('bitReplace(0xF, 0) in 0 is 0xF', () {
-      check(Uint8(0).bitReplace(0xF, 0)).equals(Uint8(0xF));
-    });
-
-    test('bitReplace(0xF, 0) in 0xFF is 0xF', () {
-      check(Uint8(0xFF).bitReplace(0xF, 0)).equals(Uint8(0xF));
-    });
-
-    test('bitReplace(0xF, 4) in 0xFF is 0xFF', () {
-      check(Uint8(0xFF).bitReplace(0xF, 4)).equals(Uint8(0xFF));
-    });
-
-    test('bitReplace(0xF, 4) in 0 is 0xF0', () {
-      check(Uint8(0).bitReplace(0xF, 4)).equals(Uint8(0xF0));
-    });
-  });
-
   group('rotateLeft', () {
     test('0xF.rotateLeft(0) is 0xF', () {
       check(Uint8(0xF).rotateLeft(0)).equals(Uint8(0xF));

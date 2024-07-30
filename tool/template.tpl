@@ -235,7 +235,7 @@ extension type const {{NAME}}._(int _) implements Comparable<num> {
   /// {{NAME}}(8).log(); // 2
   /// {{NAME}}(8).log(2); // 3
   /// ```
-  {{NAME}} log([int base = 10]) => {{NAME}}.fromUnchecked(_.log(base));
+  {{NAME}} log([int? base]) => {{NAME}}.fromUnchecked(_.log(base));
 
   /// Returns the base 2 logarithm of this integer, rounded down.
   /// 
@@ -263,7 +263,7 @@ extension type const {{NAME}}._(int _) implements Comparable<num> {
   /// ```
   {{NAME}} log10() => {{NAME}}.fromUnchecked(_.log10());
 
-  /// Returns the midpoint between this integer and [other].
+  /// Returns the midpoint between this integer and [other], rounded down.
   /// 
   /// ## Example
   /// 
@@ -303,7 +303,7 @@ extension type const {{NAME}}._(int _) implements Comparable<num> {
   /// If [n] is out of range, the behavior is undefined.
   // ignore: avoid_positional_boolean_parameters
   {{NAME}} uncheckedSetNthBit(int n, [bool value = true]) {
-    return {{NAME}}.fromUnchecked(_.setNthBit(n, value));
+    return _descriptor.uncheckedSetNthBit(_, n, value);
   }
 
   /// Toggles the n-th bit.
@@ -318,7 +318,7 @@ extension type const {{NAME}}._(int _) implements Comparable<num> {
   /// 
   /// If [n] is out of range, the behavior is undefined.
   {{NAME}} uncheckedToggleNthBit(int n) {
-    return {{NAME}}.fromUnchecked(_.toggleNthBit(n));
+    return _descriptor.uncheckedToggleNthBit(_, n);
   }
 
   /// Returns the smallest power of two greater than or equal to `this`.
@@ -513,8 +513,9 @@ extension type const {{NAME}}._(int _) implements Comparable<num> {
   /// ```dart
   /// {{NAME}}(3).countOnes(); // 2
   /// ```
-  int countOnes() => _.countOnes();
+  int countOnes() => _descriptor.countOnes(_);
 
+  {{#UNSIGNED}}
   /// Returns the number of leading ones in the binary representation of `this`.
   /// 
   /// ## Example
@@ -523,6 +524,7 @@ extension type const {{NAME}}._(int _) implements Comparable<num> {
   /// {{NAME}}(3).countLeadingOnes(); // <width - 2>
   /// ```
   int countLeadingOnes() => _descriptor.countLeadingOnes(_);
+  {{/UNSIGNED}}
 
   /// Returns the number of trailing ones in the binary representation of `this`.
   /// 
@@ -607,27 +609,27 @@ extension type const {{NAME}}._(int _) implements Comparable<num> {
   }
 
   /// Returns a new instance with bits [left] to [right], inclusive, replaced
-  /// with the same number of bits from [value].
+  /// with the same number of bits from [replacement].
   ///
-  /// Additional bits in [value] are ignored.
+  /// Additional bits in [replacement] are ignored.
   ///
   /// Both [left] and [right] must be in range.
-  {{NAME}} bitReplace(int value, int left, [int? right]) {
+  {{NAME}} bitReplace(int left, int? right, int replacement) {
     RangeError.checkValidRange(0, left, width - 1, 'left');
     if (right != null) {
       RangeError.checkValidRange(left, right, width - 1, 'right');
     }
-    return uncheckedBitReplace(value, left, right);
+    return uncheckedBitReplace(left, right, replacement);
   }
 
   /// Returns a new instance with bits [left] to [right], inclusive, replaced
-  /// with the same number of bits from [value].
+  /// with the same number of bits from [replacement].
   ///
-  /// Additional bits in [value] are ignored.
+  /// Additional bits in [replacement] are ignored.
   ///
   /// If either [left] or [right] is out of range, the behavior is undefined.
-  {{NAME}} uncheckedBitReplace(int value, int left, [int? right]) {
-    return _descriptor.uncheckedBitReplace(_, value, left, right);
+  {{NAME}} uncheckedBitReplace(int left, int? right, int replacement) {
+    return _descriptor.uncheckedBitReplace(_, left, right, replacement);
   }
 
   /// Rotates the bits in `this` to the left by [n] positions.
@@ -1328,11 +1330,7 @@ extension type const {{NAME}}._(int _) implements Comparable<num> {
   }
 
   /// Returns `this` as a binary string.
-  String toStringBinary({bool padded = true}) {
-    final result = _.toRadixString(2);
-    if (padded) {
-      return result.padLeft(width, '0');
-    }
-    return result;
+  String toBinaryString({bool padded = true}) {
+    return _descriptor.toBinaryString(_, padded: padded);
   }
 }
