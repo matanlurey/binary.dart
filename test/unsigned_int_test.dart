@@ -316,6 +316,95 @@ void main() {
       final s1 = Uint8(i1).bitReplace(4, null, i2).toBinaryString();
       check(s1).equals('10101111');
     });
+
+    test('rotate bits to the right by 1', () {
+      final i1 = int.parse('01111111', radix: 2);
+      //                    ^0111111
+      final s1 = Uint8(i1).rotateRight(1).toBinaryString();
+      check(s1).equals('10111111');
+    });
+
+    test('rotate bits to the right by 4', () {
+      final i1 = int.parse('01111111', radix: 2);
+      //                    ^0111
+      final s1 = Uint8(i1).rotateRight(4).toBinaryString();
+      check(s1).equals('11110111');
+    });
+
+    test('rotate bits to the left by 1', () {
+      final i1 = int.parse('01111111', radix: 2);
+      //                    0111111^
+      final s1 = Uint8(i1).rotateLeft(1).toBinaryString();
+      check(s1).equals('11111110');
+    });
+
+    test('rotate bits to the left by 4', () {
+      final i1 = int.parse('01111111', radix: 2);
+      //                    0111^111
+      final s1 = Uint8(i1).rotateLeft(4).toBinaryString();
+      check(s1).equals('11110111');
+    });
+  });
+
+  test('isMin', () {
+    check(Uint8(0).isMin).isTrue();
+    check(Uint8(1).isMin).isFalse();
+  });
+
+  test('isMax', () {
+    check(Uint8(255).isMax).isTrue();
+    check(Uint8(254).isMax).isFalse();
+  });
+
+  test('bitLength', () {
+    check(Uint8(0).bitLength).equals(0);
+    check(Uint8(1).bitLength).equals(1);
+    check(Uint8(255).bitLength).equals(8);
+  });
+
+  test('isEven', () {
+    check(Uint8(0).isEven).isTrue();
+    check(Uint8(1).isEven).isFalse();
+    check(Uint8(2).isEven).isTrue();
+  });
+
+  test('isOdd', () {
+    check(Uint8(0).isOdd).isFalse();
+    check(Uint8(1).isOdd).isTrue();
+    check(Uint8(2).isOdd).isFalse();
+  });
+
+  test('isZero', () {
+    check(Uint8(0).isZero).isTrue();
+    check(Uint8(1).isZero).isFalse();
+  });
+
+  test('isPositive', () {
+    check(Uint8(0).isPositive).isFalse();
+    check(Uint8(1).isPositive).isTrue();
+  });
+  test('clamp', () {
+    check(Uint8(0).clamp(Uint8(1), Uint8(3))).equals(Uint8(1));
+    check(Uint8(2).clamp(Uint8(1), Uint8(3))).equals(Uint8(2));
+    check(Uint8(4).clamp(Uint8(1), Uint8(3))).equals(Uint8(3));
+  });
+
+  test('remainder', () {
+    check(Uint8(5).remainder(Uint8(3))).equals(Uint8(2));
+    check(Uint8(5).remainder(Uint8(5))).equals(Uint8(0));
+    check(Uint8(5).remainder(Uint8(6))).equals(Uint8(5));
+  });
+
+  test('toDouble', () {
+    check(Uint8(0).toDouble()).equals(0.0);
+    check(Uint8(1).toDouble()).equals(1.0);
+    check(Uint8(255).toDouble()).equals(255.0);
+  });
+
+  test('operator %', () {
+    check(Uint8(5) % Uint8(3)).equals(Uint8(2));
+    check(Uint8(5) % Uint8(5)).equals(Uint8(0));
+    check(Uint8(5) % Uint8(6)).equals(Uint8(5));
   });
 }
 

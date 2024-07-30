@@ -57,6 +57,7 @@ extension type const Uint16._(int _) implements Comparable<num> {
   static const _descriptor = IntDescriptor<Uint16>.unsigned(
     Uint16.fromUnchecked,
     width: width,
+    max: 65535,
   );
 
   /// The minimum value that this type can represent.
@@ -68,26 +69,29 @@ extension type const Uint16._(int _) implements Comparable<num> {
   /// The number of bits used to represent values of this type.
   static const width = 16;
 
-  /// Defines [v] as an unsigned 16-bit integer, wrapping if necessary.
+  /// Defines [v] as An unsigned 16-bit integer, wrapping if necessary.
   ///
   /// In debug mode, an assertion is made that [v] is in a valid range.
   factory Uint16(int v) => _descriptor.fit(v);
 
-  /// Defines [v] as an unsigned 16-bit integer.
+  /// Defines [v] as An unsigned 16-bit integer.
   ///
   /// Behavior is undefined if [v] is not in a valid range.
   const Uint16.fromUnchecked(
     int v,
   )   : _ = v,
         assert(
-          !debugCheckUncheckedInRange || v >= 0 && v <= 65535,
+          // Dart2JS crashes if the boolean is first in this expression, but have
+          // not been able to reproduce it in a minimal example yet, so this is a
+          // workaround.
+          v >= 0 && v <= 65535 || !debugCheckUncheckedInRange,
           'Value out of range: $v.\n\n'
           'This should never happen, and is likely a bug. To intentionally '
           'overflow, even in debug mode, set '
           '"-DdebugCheckUncheckedInRange=false" when running your program.',
         );
 
-  /// Defines [v] as an unsigned 16-bit integer.
+  /// Defines [v] as An unsigned 16-bit integer.
   ///
   /// Returns `null` if [v] is out of range.
   ///
@@ -99,7 +103,7 @@ extension type const Uint16._(int _) implements Comparable<num> {
   /// ```
   static Uint16? tryFrom(int v) => _descriptor.fitChecked(v);
 
-  /// Defines [v] as an unsigned 16-bit integer.
+  /// Defines [v] as An unsigned 16-bit integer.
   ///
   /// If [v] is out of range, it is _wrapped_ to fit, similar to modular
   /// arithmetic:
@@ -116,7 +120,7 @@ extension type const Uint16._(int _) implements Comparable<num> {
   @pragma('vm:prefer-inline')
   factory Uint16.fromWrapped(int v) => _descriptor.fitWrapped(v);
 
-  /// Defines [v] as an unsigned 16-bit integer.
+  /// Defines [v] as An unsigned 16-bit integer.
   ///
   /// If [v] is out of range, it is _clamped_ to fit:
   /// - If [v] is less than [min], the result is [min].
@@ -656,6 +660,12 @@ extension type const Uint16._(int _) implements Comparable<num> {
   /// Uint16(2).bitLength(); // 2
   /// ```
   int get bitLength => _.bitLength;
+
+  /// Whether this integer is the minimum value representable by this type.
+  bool get isMin => identical(_, min);
+
+  /// Whether this integer is the maximum value representable by this type.
+  bool get isMax => identical(_, max);
 
   /// Returns true if and only if this integer is even.
   ///

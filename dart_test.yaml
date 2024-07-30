@@ -5,9 +5,8 @@ presets:
   coverage:
     reporter: github
 
-platforms:
-  # - chrome
-  # - node
+platforms:  
+  - node
   - vm
 
 fold_stack_frames:

@@ -347,6 +347,160 @@ void main() {
       final s1 = Int8(i1).rotateRight(1).toBinaryString();
       check(s1).equals('10111111');
     });
+
+    test('rotate bits to the right by 4', () {
+      final i1 = int.parse('01111111', radix: 2);
+      //                    ^0111
+      final s1 = Int8(i1).rotateRight(4).toBinaryString();
+      check(s1).equals('11110111');
+    });
+
+    test('rotate bits to the left by 1', () {
+      final i1 = int.parse('01111111', radix: 2);
+      //                    0111111^
+      final s1 = Int8(i1).rotateLeft(1).toBinaryString();
+      check(s1).equals('11111110');
+    });
+
+    test('rotate bits to the left by 4', () {
+      final i1 = int.parse('01111111', radix: 2);
+      //                    0111^111
+      final s1 = Int8(i1).rotateLeft(4).toBinaryString();
+      check(s1).equals('11110111');
+    });
+  });
+
+  group('abs', () {
+    test('should return the absolute value', () {
+      check(Int8(-1).abs()).equals(Int8(1));
+      check(Int8(1).abs()).equals(Int8(1));
+    });
+
+    test('should catch overflows', () {
+      check(Int8.min).checkAbs(
+        const _Int8Result.fails(
+          expectedClamp: 127,
+          expectedWrap: -128,
+        ),
+      );
+
+      check(Int8.max).checkAbs(
+        const _Int8Result.all(127),
+      );
+    });
+  });
+
+  test('isMin', () {
+    check(Int8.min).has((p) => p.isMin, 'isMin').isTrue();
+    check(Int8.max).has((p) => p.isMin, 'isMin').isFalse();
+  });
+
+  test('isMax', () {
+    check(Int8.min).has((p) => p.isMax, 'isMax').isFalse();
+    check(Int8.max).has((p) => p.isMax, 'isMax').isTrue();
+  });
+
+  test('bitLength', () {
+    check(Int8(0)).has((p) => p.bitLength, 'bitLength').equals(0);
+    check(Int8(1)).has((p) => p.bitLength, 'bitLength').equals(1);
+    check(Int8(2)).has((p) => p.bitLength, 'bitLength').equals(2);
+    check(Int8.max).has((p) => p.bitLength, 'bitLength').equals(7);
+    check(Int8.min).has((p) => p.bitLength, 'bitLength').equals(7);
+  });
+
+  test('isEven', () {
+    check(Int8(0)).has((p) => p.isEven, 'isEven').isTrue();
+    check(Int8(1)).has((p) => p.isEven, 'isEven').isFalse();
+    check(Int8(2)).has((p) => p.isEven, 'isEven').isTrue();
+    check(Int8(-1)).has((p) => p.isEven, 'isEven').isFalse();
+    check(Int8(-2)).has((p) => p.isEven, 'isEven').isTrue();
+  });
+
+  test('isOdd', () {
+    check(Int8(0)).has((p) => p.isOdd, 'isOdd').isFalse();
+    check(Int8(1)).has((p) => p.isOdd, 'isOdd').isTrue();
+    check(Int8(2)).has((p) => p.isOdd, 'isOdd').isFalse();
+    check(Int8(-1)).has((p) => p.isOdd, 'isOdd').isTrue();
+    check(Int8(-2)).has((p) => p.isOdd, 'isOdd').isFalse();
+  });
+
+  test('sign', () {
+    check(Int8(0)).has((p) => p.sign, 'sign').equals(Int8(0));
+    check(Int8(1)).has((p) => p.sign, 'sign').equals(Int8(1));
+    check(Int8(-1)).has((p) => p.sign, 'sign').equals(Int8(-1));
+  });
+
+  test('isZero', () {
+    check(Int8(0)).has((p) => p.isZero, 'isZero').isTrue();
+    check(Int8(1)).has((p) => p.isZero, 'isZero').isFalse();
+    check(Int8(-1)).has((p) => p.isZero, 'isZero').isFalse();
+  });
+
+  test('isNegative', () {
+    check(Int8(0)).has((p) => p.isNegative, 'isNegative').isFalse();
+    check(Int8(1)).has((p) => p.isNegative, 'isNegative').isFalse();
+    check(Int8(-1)).has((p) => p.isNegative, 'isNegative').isTrue();
+  });
+
+  test('isPositive', () {
+    check(Int8(0)).has((p) => p.isPositive, 'isPositive').isFalse();
+    check(Int8(1)).has((p) => p.isPositive, 'isPositive').isTrue();
+    check(Int8(-1)).has((p) => p.isPositive, 'isPositive').isFalse();
+  });
+
+  test('clamp', () {
+    check(Int8(0))
+        .has((p) => p.clamp(Int8(1), Int8(2)), 'clamp')
+        .equals(Int8(1));
+    check(Int8(1))
+        .has((p) => p.clamp(Int8(1), Int8(2)), 'clamp')
+        .equals(Int8(1));
+    check(Int8(2))
+        .has((p) => p.clamp(Int8(1), Int8(2)), 'clamp')
+        .equals(Int8(2));
+    check(Int8(3))
+        .has((p) => p.clamp(Int8(1), Int8(2)), 'clamp')
+        .equals(Int8(2));
+  });
+
+  test('remainder', () {
+    check(Int8(0))
+        .has((p) => p.remainder(Int8(1)), 'remainder')
+        .equals(Int8(0));
+    check(Int8(1))
+        .has((p) => p.remainder(Int8(1)), 'remainder')
+        .equals(Int8(0));
+    check(Int8(2))
+        .has((p) => p.remainder(Int8(1)), 'remainder')
+        .equals(Int8(0));
+    check(Int8(3))
+        .has((p) => p.remainder(Int8(1)), 'remainder')
+        .equals(Int8(0));
+
+    // Try some negative numbers.
+    check(Int8(-1))
+        .has((p) => p.remainder(Int8(1)), 'remainder')
+        .equals(Int8(0));
+    check(Int8(-2))
+        .has((p) => p.remainder(Int8(1)), 'remainder')
+        .equals(Int8(0));
+  });
+
+  test('toDouble', () {
+    check(Int8(0)).has((p) => p.toDouble(), 'toDouble').equals(0.0);
+    check(Int8(1)).has((p) => p.toDouble(), 'toDouble').equals(1.0);
+    check(Int8(-1)).has((p) => p.toDouble(), 'toDouble').equals(-1.0);
+  });
+
+  test('operator %', () {
+    check(Int8(0)).has((p) => p % Int8(1), 'operator %').equals(Int8(0));
+    check(Int8(1)).has((p) => p % Int8(1), 'operator %').equals(Int8(0));
+    check(Int8(2)).has((p) => p % Int8(1), 'operator %').equals(Int8(0));
+    check(Int8(3)).has((p) => p % Int8(1), 'operator %').equals(Int8(0));
+
+    // Try some negative numbers.
+    check(Int8(-1)).has((p) => p % Int8(1), 'operator %').equals(Int8(0));
+    check(Int8(-2)).has((p) => p % Int8(1), 'operator %').equals(Int8(0));
   });
 }
 
@@ -442,5 +596,23 @@ extension on Subject<Int8> {
       (p) => p.wrappedNextMultipleOf(multiple),
       'wrappedNextMultipleOf($multiple)',
     ).equals(result.expectedWrap as Int8);
+  }
+
+  void checkAbs(_Int8Result result) {
+    if (result.expected != null) {
+      has((p) => p.abs(), 'abs()').equals(result.expected as Int8);
+    } else {
+      has((p) => () => p.abs(), 'abs()').throws<Error>();
+    }
+
+    has((p) => p.tryAbs(), 'tryAbs()').equals(result.expected as Int8?);
+
+    has((p) => p.clampedAbs(), 'clampedAbs()').equals(
+      result.expectedClamp as Int8,
+    );
+
+    has((p) => p.wrappedAbs(), 'wrappedAbs()').equals(
+      result.expectedWrap as Int8,
+    );
   }
 }

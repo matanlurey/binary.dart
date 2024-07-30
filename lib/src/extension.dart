@@ -115,7 +115,10 @@ extension IntExtension on int {
   /// ```
   @pragma('dart2js:tryInline')
   @pragma('vm:prefer-inline')
-  int midpoint(int other) => (this + other) >> 1;
+  int midpoint(int other) {
+    // Uses ~/ to ensure that the operation is the same in the VM and JS.
+    return (this + other) ~/ 2;
+  }
 
   /// Returns `true` iff `value == 2^n` for some integer `n`.
   ///

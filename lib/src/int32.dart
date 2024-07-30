@@ -4,7 +4,7 @@ import 'package:binary/src/descriptor.dart';
 import 'package:binary/src/extension.dart';
 import 'package:meta/meta.dart';
 
-/// An signed 32-bit integer.
+/// A signed 32-bit integer.
 ///
 /// This type is _not_ explicitly boxed, and uses [extension types][]; that
 /// means that _any_ [int] value _can_ be used as an Int32, but only values
@@ -57,6 +57,7 @@ extension type const Int32._(int _) implements Comparable<num> {
   static const _descriptor = IntDescriptor<Int32>.signed(
     Int32.fromUnchecked,
     width: width,
+    max: 2147483647,
   );
 
   /// The minimum value that this type can represent.
@@ -68,26 +69,29 @@ extension type const Int32._(int _) implements Comparable<num> {
   /// The number of bits used to represent values of this type.
   static const width = 32;
 
-  /// Defines [v] as an signed 32-bit integer, wrapping if necessary.
+  /// Defines [v] as A signed 32-bit integer, wrapping if necessary.
   ///
   /// In debug mode, an assertion is made that [v] is in a valid range.
   factory Int32(int v) => _descriptor.fit(v);
 
-  /// Defines [v] as an signed 32-bit integer.
+  /// Defines [v] as A signed 32-bit integer.
   ///
   /// Behavior is undefined if [v] is not in a valid range.
   const Int32.fromUnchecked(
     int v,
   )   : _ = v,
         assert(
-          !debugCheckUncheckedInRange || v >= -2147483648 && v <= 2147483647,
+          // Dart2JS crashes if the boolean is first in this expression, but have
+          // not been able to reproduce it in a minimal example yet, so this is a
+          // workaround.
+          v >= -2147483648 && v <= 2147483647 || !debugCheckUncheckedInRange,
           'Value out of range: $v.\n\n'
           'This should never happen, and is likely a bug. To intentionally '
           'overflow, even in debug mode, set '
           '"-DdebugCheckUncheckedInRange=false" when running your program.',
         );
 
-  /// Defines [v] as an signed 32-bit integer.
+  /// Defines [v] as A signed 32-bit integer.
   ///
   /// Returns `null` if [v] is out of range.
   ///
@@ -99,7 +103,7 @@ extension type const Int32._(int _) implements Comparable<num> {
   /// ```
   static Int32? tryFrom(int v) => _descriptor.fitChecked(v);
 
-  /// Defines [v] as an signed 32-bit integer.
+  /// Defines [v] as A signed 32-bit integer.
   ///
   /// If [v] is out of range, it is _wrapped_ to fit, similar to modular
   /// arithmetic:
@@ -116,7 +120,7 @@ extension type const Int32._(int _) implements Comparable<num> {
   @pragma('vm:prefer-inline')
   factory Int32.fromWrapped(int v) => _descriptor.fitWrapped(v);
 
-  /// Defines [v] as an signed 32-bit integer.
+  /// Defines [v] as A signed 32-bit integer.
   ///
   /// If [v] is out of range, it is _clamped_ to fit:
   /// - If [v] is less than [min], the result is [min].
@@ -717,6 +721,12 @@ extension type const Int32._(int _) implements Comparable<num> {
   /// Int32(2).bitLength(); // 2
   /// ```
   int get bitLength => _.bitLength;
+
+  /// Whether this integer is the minimum value representable by this type.
+  bool get isMin => identical(_, min);
+
+  /// Whether this integer is the maximum value representable by this type.
+  bool get isMax => identical(_, max);
 
   /// Returns true if and only if this integer is even.
   ///

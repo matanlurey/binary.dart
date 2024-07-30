@@ -24,7 +24,7 @@ const debugCheckUncheckedInRange = bool.fromEnvironment(
   defaultValue: true,
 );
 
-/// A descriptor for a fixed-width integer of type [T].
+/// A descriptor for a fixed-width integer type [T].
 ///
 /// An integer descriptor is used to describe the properties of a fixed-width
 /// integer type, such as the width of the integer in bits, whether it is signed
@@ -33,7 +33,9 @@ const debugCheckUncheckedInRange = bool.fromEnvironment(
 ///
 /// Default implementations of most of the methods that are exposed with the
 /// underlying type [T] are provided, reducing the amount of boilerplate code
-/// that needs to be written when working with fixed-width integers.
+/// that needs to be written when working with fixed-width integers. In most
+/// cases, the [T] type will be used directly in place of the descriptor,
+/// but the descriptor can be used to create custom sized integers.
 ///
 /// ## Example
 ///
@@ -48,9 +50,9 @@ final class IntDescriptor<T> {
   const IntDescriptor.signed(
     this._assertCast, {
     required this.width,
+    required this.max,
   })  : signed = true,
-        min = -1 << (width - 1),
-        max = (1 << (width - 1)) - 1;
+        min = -max - 1;
   // coverage:ignore-end
 
   /// Creates a new descriptor for a fixed-width unsigned integer of type [T].
@@ -59,9 +61,9 @@ final class IntDescriptor<T> {
   const IntDescriptor.unsigned(
     this._assertCast, {
     required this.width,
+    required this.max,
   })  : signed = false,
-        min = 0,
-        max = (1 << width) - 1;
+        min = 0;
   // coverage:ignore-end
 
   final T Function(int) _assertCast;
@@ -152,7 +154,7 @@ final class IntDescriptor<T> {
   T fit(int v) {
     assert(
       !debugCheckFixedWithInRange || v >= min && v <= max,
-      '$v is out of range ($min <> $max)',
+      '$v is out of range: $min <= $v <= $max',
     );
     return fitWrapped(v);
   }
@@ -328,8 +330,14 @@ final class IntDescriptor<T> {
   @pragma('dart2js:tryInline')
   @pragma('vm:prefer-inline')
   T rotateLeft(int v, int n) {
+    if (signed) {
+      v = v.toUnsigned(width);
+    }
     n %= width;
-    final result = (v << n | v >> (width - n)) & ((1 << width) - 1);
+    var result = (v << n | v >> (width - n)) & ((1 << width) - 1);
+    if (signed) {
+      result = result.toSigned(width);
+    }
     return _uncheckedCast(result);
   }
 

@@ -20,7 +20,7 @@ void main() {
     p.join('lib', 'src', 'uint8.dart'): {
       'NAME': 'Uint8',
       'CONSTRUCTOR': 'unsigned',
-      'DESCRIPTION': 'unsigned 8-bit integer',
+      'DESCRIPTION': 'An unsigned 8-bit integer',
       'WIDTH': '8',
       'MIN': '0',
       'MAX': '255',
@@ -28,7 +28,7 @@ void main() {
     p.join('lib', 'src', 'uint16.dart'): {
       'NAME': 'Uint16',
       'CONSTRUCTOR': 'unsigned',
-      'DESCRIPTION': 'unsigned 16-bit integer',
+      'DESCRIPTION': 'An unsigned 16-bit integer',
       'WIDTH': '16',
       'MIN': '0',
       'MAX': '65535',
@@ -37,7 +37,7 @@ void main() {
     p.join('lib', 'src', 'uint32.dart'): {
       'NAME': 'Uint32',
       'CONSTRUCTOR': 'unsigned',
-      'DESCRIPTION': 'unsigned 32-bit integer',
+      'DESCRIPTION': 'An unsigned 32-bit integer',
       'WIDTH': '32',
       'MIN': '0',
       'MAX': '4294967295',
@@ -46,7 +46,7 @@ void main() {
     p.join('lib', 'src', 'int8.dart'): {
       'NAME': 'Int8',
       'CONSTRUCTOR': 'signed',
-      'DESCRIPTION': 'signed 8-bit integer',
+      'DESCRIPTION': 'A signed 8-bit integer',
       'WIDTH': '8',
       'MIN': '-128',
       'MAX': '127',
@@ -54,7 +54,7 @@ void main() {
     p.join('lib', 'src', 'int16.dart'): {
       'NAME': 'Int16',
       'CONSTRUCTOR': 'signed',
-      'DESCRIPTION': 'signed 16-bit integer',
+      'DESCRIPTION': 'A signed 16-bit integer',
       'WIDTH': '16',
       'MIN': '-32768',
       'MAX': '32767',
@@ -63,7 +63,7 @@ void main() {
     p.join('lib', 'src', 'int32.dart'): {
       'NAME': 'Int32',
       'CONSTRUCTOR': 'signed',
-      'DESCRIPTION': 'signed 32-bit integer',
+      'DESCRIPTION': 'A signed 32-bit integer',
       'WIDTH': '32',
       'MIN': '-2147483648',
       'MAX': '2147483647',

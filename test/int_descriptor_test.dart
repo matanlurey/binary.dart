@@ -3,7 +3,11 @@ import 'package:binary/binary.dart';
 import 'src/prelude.dart';
 
 void main() {
-  final uint8 = IntDescriptor<int>.unsigned((i) => i, width: 8);
+  final uint8 = IntDescriptor<int>.unsigned(
+    (i) => i,
+    width: 8,
+    max: 255,
+  );
   _test(uint8);
 }
 

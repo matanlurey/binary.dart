@@ -2,7 +2,7 @@ import 'package:binary/src/descriptor.dart';
 import 'package:binary/src/extension.dart';
 import 'package:meta/meta.dart';
 
-/// An {{DESCRIPTION}}.
+/// {{DESCRIPTION}}.
 /// 
 /// This type is _not_ explicitly boxed, and uses [extension types][]; that
 /// means that _any_ [int] value _can_ be used as an {{NAME}}, but only values
@@ -55,6 +55,7 @@ extension type const {{NAME}}._(int _) implements Comparable<num> {
   static const _descriptor = IntDescriptor<{{NAME}}>.{{CONSTRUCTOR}}(
     {{NAME}}.fromUnchecked,
     width: width,
+    max: {{MAX}},
   );
 
   /// The minimum value that this type can represent.
@@ -66,26 +67,29 @@ extension type const {{NAME}}._(int _) implements Comparable<num> {
   /// The number of bits used to represent values of this type.
   static const width = {{WIDTH}};
 
-  /// Defines [v] as an {{DESCRIPTION}}, wrapping if necessary.
+  /// Defines [v] as {{DESCRIPTION}}, wrapping if necessary.
   ///
   /// In debug mode, an assertion is made that [v] is in a valid range.
   factory {{NAME}}(int v) => _descriptor.fit(v);
 
-  /// Defines [v] as an {{DESCRIPTION}}.
+  /// Defines [v] as {{DESCRIPTION}}.
   ///
   /// Behavior is undefined if [v] is not in a valid range.
   const {{NAME}}.fromUnchecked(
     int v,
   ) : _ = v,
       assert(
-        !debugCheckUncheckedInRange || v >= {{MIN}} && v <= {{MAX}}, 
+        // Dart2JS crashes if the boolean is first in this expression, but have
+        // not been able to reproduce it in a minimal example yet, so this is a
+        // workaround.
+        v >= {{MIN}} && v <= {{MAX}} || !debugCheckUncheckedInRange , 
         'Value out of range: $v.\n\n'
         'This should never happen, and is likely a bug. To intentionally '
         'overflow, even in debug mode, set '
         '"-DdebugCheckUncheckedInRange=false" when running your program.',
       );
 
-  /// Defines [v] as an {{DESCRIPTION}}.
+  /// Defines [v] as {{DESCRIPTION}}.
   ///
   /// Returns `null` if [v] is out of range.
   ///
@@ -97,7 +101,7 @@ extension type const {{NAME}}._(int _) implements Comparable<num> {
   /// ```
   static {{NAME}}? tryFrom(int v) => _descriptor.fitChecked(v);
 
-  /// Defines [v] as an {{DESCRIPTION}}.
+  /// Defines [v] as {{DESCRIPTION}}.
   ///
   /// If [v] is out of range, it is _wrapped_ to fit, similar to modular
   /// arithmetic:
@@ -114,7 +118,7 @@ extension type const {{NAME}}._(int _) implements Comparable<num> {
   @pragma('vm:prefer-inline')
   factory {{NAME}}.fromWrapped(int v) => _descriptor.fitWrapped(v);
 
-  /// Defines [v] as an {{DESCRIPTION}}.
+  /// Defines [v] as {{DESCRIPTION}}.
   ///
   /// If [v] is out of range, it is _clamped_ to fit:
   /// - If [v] is less than [min], the result is [min].
@@ -728,6 +732,12 @@ extension type const {{NAME}}._(int _) implements Comparable<num> {
   /// {{NAME}}(2).bitLength(); // 2
   /// ```
   int get bitLength => _.bitLength;
+
+  /// Whether this integer is the minimum value representable by this type.
+  bool get isMin => identical(_, min);
+
+  /// Whether this integer is the maximum value representable by this type.
+  bool get isMax => identical(_, max);
 
   /// Returns true if and only if this integer is even.
   /// 

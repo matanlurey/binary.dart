@@ -8,9 +8,14 @@ Utilities for accessing binary data and bit manipulation in Dart and Flutter.
 [![Dartdocs][doc_img]][doc_url]
 [![Style guide][sty_img]][sty_url]
 
-## Getting started
+> [!IMPORTANT]
+> Version 4.0.0 has a _large_ set of breaking changes, including removing the
+> vast majority of extension methods and boxed classes, in favor of using the
+> newer _extension types_ feature in Dart. I would be opening to adding back
+> some deprecated methods, or a `lib/compat.dart` file if there is demand;
+> please [file an issue][] if you need this.
 
-Using `package:binary` is easy, we have almost no dependencies. Use `pub add`:
+## Getting started
 
 ```bash
 dart pub add binary
@@ -20,8 +25,6 @@ Then, import the package and start using it:
 
 ```dart
 import 'package:binary/binary.dart';
-
-// Start using package:binary.
 ```
 
 If you are not familiar with [extension methods][] and [extension types][], it
@@ -33,71 +36,39 @@ something like:
 void main() {
   // Old API in version <= 0.1.3:
   print(toBinaryPadded(0x0C, 8)); // 00001100
-}
-```
 
-You now use `toBinaryPadded` (and other methods) as an _extension_ method:
-
-```dart
-void main() {
-  // New API.
+  // Old API in version < 4.0.0:
   print(0x0C.toBinaryPadded(8)); // 00001100
 }
 ```
 
+You now use `toBinaryString` (and other methods) on an _extension type_:
+
+```dart
+void main() {
+  // New API.
+  print(Uint8(0x0C).toBinaryString()); // 00001100
+}
+```
+
+Notice that the width is no longer required, as the type itself knows its width.
+
 ## Usage
 
-This package provides a few sets of APIs extension methods and boxed classes.
+This package provides a few sets of APIs extension types and methods.
 
-> See the [API docs](https://www.dartdocs.org/documentation/binary/latest) for
-> complete documentation.
-
-Most users will use the extension methods on `int` or `String`:
+Most users will use one of the fixed-width integer types, such as `Uint8`:
 
 ```dart
-// Uses "parseBits" (on String) and "shiftRight" (on int).
-void main() {
-  test('shiftRight should work identical to >>> in JavaScript', () {
-    expect(
-      '0111' '1111'.bits.shiftRight(5, 8),
-      '0000' '0011'.bits,
-    );
-  });
-}
+// Parse and reprsent a binary integer:
+final rawInt = int.parse('0111' '1111', radix: 2);
+final fixInt = Uint8(rawInt);
+print(fixInt); // 127
+
+// Works identically to the >>> operator in JavaScript:
+final shifted = fixInt.signedRightShift(5);
+print(shifted.toBinaryString()); // 00000011
 ```
-
-For convenience, extension methods are also present on `List<int>`:
-
-```dart
-// Uses "rotateRight" (on List<int>).
-void main() {
-  test('rotateRight should work similarly to int.rotateRight', () {
-    final list = ['0110' '0000'.bits];
-    expect(
-      list.rotateRight(0, 1).toBinaryPadded(8),
-      '0011' '0000',
-    );
-  });
-}
-```
-
-There are also some specialized extension methods on the `typed_data` types:
-
-- `Uint8List`, `Int8List`
-- `Uint16List`, `Int16List`
-- `Uint32List`, `Int32List`
-
-### Boxed Types
-
-It is possible to sacrifice performance in order to get more type safety and
-range checking. For apps or libraries where this is a suitable tradeoff, we
-provide these boxed types/classes:
-
-- `Bit`
-- `Int4` and `Uint4`
-- `Int8` and `Uint8`
-- `Int16` and `Uint16`
-- `Int32` and `Uint32`
 
 ### Bit Patterns
 
@@ -129,7 +100,8 @@ Dart VM, Flutter, and web builds of Dart and Flutter (both in DDC and Dart2JS).
 As a result, there are no built-in ways to access integers > 32-bit provided (as
 web integers are limited).
 
-Feel free to [file an issue][] if you'd like limited support for 64 and 128-bit.
+Feel free to [file an issue][] if you'd like limited support for 64 and 128-bit
+integers.
 
 [pub_url]: https://pub.dartlang.org/packages/binary
 [pub_img]: https://img.shields.io/pub/v/binary.svg

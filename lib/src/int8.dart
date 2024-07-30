@@ -2,7 +2,7 @@ import 'package:binary/src/descriptor.dart';
 import 'package:binary/src/extension.dart';
 import 'package:meta/meta.dart';
 
-/// An signed 8-bit integer.
+/// A signed 8-bit integer.
 ///
 /// This type is _not_ explicitly boxed, and uses [extension types][]; that
 /// means that _any_ [int] value _can_ be used as an Int8, but only values
@@ -55,6 +55,7 @@ extension type const Int8._(int _) implements Comparable<num> {
   static const _descriptor = IntDescriptor<Int8>.signed(
     Int8.fromUnchecked,
     width: width,
+    max: 127,
   );
 
   /// The minimum value that this type can represent.
@@ -66,26 +67,29 @@ extension type const Int8._(int _) implements Comparable<num> {
   /// The number of bits used to represent values of this type.
   static const width = 8;
 
-  /// Defines [v] as an signed 8-bit integer, wrapping if necessary.
+  /// Defines [v] as A signed 8-bit integer, wrapping if necessary.
   ///
   /// In debug mode, an assertion is made that [v] is in a valid range.
   factory Int8(int v) => _descriptor.fit(v);
 
-  /// Defines [v] as an signed 8-bit integer.
+  /// Defines [v] as A signed 8-bit integer.
   ///
   /// Behavior is undefined if [v] is not in a valid range.
   const Int8.fromUnchecked(
     int v,
   )   : _ = v,
         assert(
-          !debugCheckUncheckedInRange || v >= -128 && v <= 127,
+          // Dart2JS crashes if the boolean is first in this expression, but have
+          // not been able to reproduce it in a minimal example yet, so this is a
+          // workaround.
+          v >= -128 && v <= 127 || !debugCheckUncheckedInRange,
           'Value out of range: $v.\n\n'
           'This should never happen, and is likely a bug. To intentionally '
           'overflow, even in debug mode, set '
           '"-DdebugCheckUncheckedInRange=false" when running your program.',
         );
 
-  /// Defines [v] as an signed 8-bit integer.
+  /// Defines [v] as A signed 8-bit integer.
   ///
   /// Returns `null` if [v] is out of range.
   ///
@@ -97,7 +101,7 @@ extension type const Int8._(int _) implements Comparable<num> {
   /// ```
   static Int8? tryFrom(int v) => _descriptor.fitChecked(v);
 
-  /// Defines [v] as an signed 8-bit integer.
+  /// Defines [v] as A signed 8-bit integer.
   ///
   /// If [v] is out of range, it is _wrapped_ to fit, similar to modular
   /// arithmetic:
@@ -114,7 +118,7 @@ extension type const Int8._(int _) implements Comparable<num> {
   @pragma('vm:prefer-inline')
   factory Int8.fromWrapped(int v) => _descriptor.fitWrapped(v);
 
-  /// Defines [v] as an signed 8-bit integer.
+  /// Defines [v] as A signed 8-bit integer.
   ///
   /// If [v] is out of range, it is _clamped_ to fit:
   /// - If [v] is less than [min], the result is [min].
@@ -715,6 +719,12 @@ extension type const Int8._(int _) implements Comparable<num> {
   /// Int8(2).bitLength(); // 2
   /// ```
   int get bitLength => _.bitLength;
+
+  /// Whether this integer is the minimum value representable by this type.
+  bool get isMin => identical(_, min);
+
+  /// Whether this integer is the maximum value representable by this type.
+  bool get isMax => identical(_, max);
 
   /// Returns true if and only if this integer is even.
   ///
