@@ -1,7 +1,6 @@
 # Binary
 
-Utilities for accessing binary data and bit manipulation in Dart, Flutter, and
-Dart->JS runtimes.
+Utilities for accessing binary data and bit manipulation in Dart and Flutter.
 
 [![Binary on pub.dev][pub_img]][pub_url]
 [![Code coverage][cov_img]][cov_url]
@@ -96,10 +95,14 @@ void main() {
 
 ## Compatibility
 
-This package is intended to work identically and well in both the standalone
-Dart VM, Flutter, and web builds of Dart and Flutter (both in DDC and Dart2JS).
+This package is intended to work identically and well in:
+
+- The Dart VM, in both JIT and AOT modes.
+- Flutter, in both JIT and AOT modes.
+- The web, in both DDC, Dart2JS modes and compiled to WASM.
+
 As a result, there are no built-in ways to access integers > 32-bit provided (as
-web integers are limited).
+JS integers are limited).
 
 Feel free to [file an issue][] if you'd like limited support for 64 and 128-bit
 integers.
