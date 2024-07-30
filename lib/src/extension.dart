@@ -184,7 +184,7 @@ extension IntExtension on int {
   @useResult
   int toggleNthBit(int n) => this ^ (1 << n);
 
-  /// Returns the smallest power of two greater than or qual to `this`.
+  /// Returns the smallest power of two greater than or equal to `this`.
   ///
   /// If `this` is already a power of two, it is returned.
   ///
@@ -217,7 +217,7 @@ extension IntExtension on int {
     return ((this + n - 1) ~/ RangeError.checkNotNegative(n)) * n;
   }
 
-  /// The number of `1`s in the binary representation of `this`.
+  /// Returns the number of `1`s in the binary representation of `this`.
   ///
   /// ## Example
   ///

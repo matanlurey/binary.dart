@@ -35,7 +35,9 @@ void main() {
   });
 
   test('Uint8.fromUnchecked allows invalid values', () {
-    check(Uint8.fromUnchecked(256)).has((a) => a.value, 'value').equals(256);
+    check(Uint8.fromUnchecked(256))
+        .has((a) => a.toInt(), 'toInt()')
+        .equals(256);
   });
 
   test('Uint8.tryFrom returns null when out of range', () {

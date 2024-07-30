@@ -19,6 +19,7 @@ void main() {
   ({
     p.join('lib', 'src', 'uint8.dart'): {
       'NAME': 'Uint8',
+      'CONSTRUCTOR': 'unsigned',
       'DESCRIPTION': 'unsigned 8-bit integer',
       'WIDTH': '8',
       'MIN': '0',
@@ -26,6 +27,7 @@ void main() {
     },
     p.join('lib', 'src', 'uint16.dart'): {
       'NAME': 'Uint16',
+      'CONSTRUCTOR': 'unsigned',
       'DESCRIPTION': 'unsigned 16-bit integer',
       'WIDTH': '16',
       'MIN': '0',
@@ -33,6 +35,7 @@ void main() {
     },
     p.join('lib', 'src', 'uint32.dart'): {
       'NAME': 'Uint32',
+      'CONSTRUCTOR': 'unsigned',
       'DESCRIPTION': 'unsigned 32-bit integer',
       'WIDTH': '32',
       'MIN': '0',
@@ -40,6 +43,7 @@ void main() {
     },
     p.join('lib', 'src', 'int8.dart'): {
       'NAME': 'Int8',
+      'CONSTRUCTOR': 'signed',
       'DESCRIPTION': 'signed 8-bit integer',
       'WIDTH': '8',
       'MIN': '-128',
@@ -47,6 +51,7 @@ void main() {
     },
     p.join('lib', 'src', 'int16.dart'): {
       'NAME': 'Int16',
+      'CONSTRUCTOR': 'signed',
       'DESCRIPTION': 'signed 16-bit integer',
       'WIDTH': '16',
       'MIN': '-32768',
@@ -54,6 +59,7 @@ void main() {
     },
     p.join('lib', 'src', 'int32.dart'): {
       'NAME': 'Int32',
+      'CONSTRUCTOR': 'signed',
       'DESCRIPTION': 'signed 32-bit integer',
       'WIDTH': '32',
       'MIN': '-2147483648',
@@ -65,8 +71,39 @@ void main() {
     data.forEach((key, value) {
       output = output.replaceAll('{{$key}}', value);
     });
+
+    // If the 'CONSTRUCTOR' key is not 'signed', remove region blocks
+    // that are specific to signed integers - from {{#SIGNED}} to {{/SIGNED}}.
+    if (data['CONSTRUCTOR'] != 'signed') {
+      output = output.replaceAll(
+        RegExp(
+          '{{#SIGNED}}.*?{{/SIGNED}}',
+          dotAll: true,
+          multiLine: true,
+        ),
+        '',
+      );
+    } else {
+      // Just remove each line that contains the above region blocks.
+      output = output.split('\n').where((line) {
+        return !line.contains('{{#SIGNED}}') && !line.contains('{{/SIGNED}}');
+      }).join('\n');
+    }
+
     io.File(path).writeAsStringSync(output);
   });
+
+  // Run dartfmt on the generated files.
+  io.stderr.writeln('Running dartfmt...');
+  final result = io.Process.runSync('dart', [
+    'format',
+    'lib/src',
+  ]);
+  if (result.exitCode != 0) {
+    io.stderr.writeln(result.stderr);
+    io.exitCode = 1;
+    return;
+  }
 
   io.stderr.writeln('Done!');
 }
