@@ -21,7 +21,7 @@ jobs:
       - run: dart format --output none --set-exit-if-changed .
       - run: dart analyze
       - run: dart test
-      - run: ./chore coverage
+      - run: ./chore coverage -- -P coverage
       - name: Upload coverage
         uses: coverallsapp/github-action@v2.2.3
         with:

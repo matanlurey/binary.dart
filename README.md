@@ -132,7 +132,7 @@ dart test
 To check code coverage locally, run:
 
 ```shell
-./chore coverage
+./chore coverage -- -P coverage
 ```
 
 To preview `dartdoc` output locally, run:

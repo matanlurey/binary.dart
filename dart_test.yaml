@@ -4,6 +4,10 @@ presets:
   # Runs VM-specific tests and captures coverage.
   coverage:
     reporter: github
+    platforms:
+      - vm
+    compilers:
+      - kernel
 
 platforms:  
   - chrome
