@@ -18,7 +18,7 @@ jobs:
       - run: dart pub get
       - run: dart format --output none --set-exit-if-changed .
       - run: dart analyze
-      - run: dart test example/example.dart
+      - run: dart test
       - run: ./chore coverage
       - name: Upload coverage
         uses: coverallsapp/github-action@v2.2.3

@@ -30,11 +30,19 @@ void main() {
     });
 
     test('throws on underflow', () {
-      check(() => Uint8(-1)).throws<Error>();
+      if (assertionsEnabled) {
+        check(() => Uint8(-1)).throws<Error>();
+      } else {
+        check(Uint8(-1)).equals(Uint8(255));
+      }
     });
 
     test('throws on overflow', () {
-      check(() => Uint8(256)).throws<Error>();
+      if (assertionsEnabled) {
+        check(() => Uint8(256)).throws<Error>();
+      } else {
+        check(Uint8(256)).equals(Uint8(0));
+      }
     });
 
     test('wraps on underflow', () {
@@ -434,8 +442,12 @@ extension on Subject<Uint8> {
       has((p) => p.pow(exponent), 'pow($exponent)').equals(
         expected as Uint8,
       );
-    } else {
+    } else if (assertionsEnabled) {
       has((p) => () => p.pow(exponent), 'pow($exponent)').throws<Error>();
+    } else {
+      has((p) => p.pow(exponent), 'pow($exponent)').equals(
+        result.expectedWrap as Uint8,
+      );
     }
 
     has((p) => p.tryPow(exponent), 'tryPow($exponent)').equals(
@@ -456,8 +468,12 @@ extension on Subject<Uint8> {
       has((p) => p.nextPowerOf2(), 'nextPowerOf2()').equals(
         result.expected as Uint8,
       );
-    } else {
+    } else if (assertionsEnabled) {
       has((p) => () => p.nextPowerOf2(), 'nextPowerOf2()').throws<Error>();
+    } else {
+      has((p) => p.nextPowerOf2(), 'nextPowerOf2()').equals(
+        result.expectedWrap as Uint8,
+      );
     }
 
     has((p) => p.tryNextPowerOf2(), 'tryNextPowerOf2()').equals(
@@ -479,11 +495,16 @@ extension on Subject<Uint8> {
         (p) => p.nextMultipleOf(multiple),
         'nextMultipleOf($multiple)',
       ).equals(result.expected as Uint8);
-    } else {
+    } else if (assertionsEnabled) {
       has(
         (p) => () => p.nextMultipleOf(multiple),
         'nextMultipleOf($multiple)',
       ).throws<Error>();
+    } else {
+      has(
+        (p) => p.nextMultipleOf(multiple),
+        'nextMultipleOf($multiple)',
+      ).equals(result.expectedWrap as Uint8);
     }
 
     has(

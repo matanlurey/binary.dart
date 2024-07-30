@@ -6,8 +6,15 @@ presets:
     reporter: github
 
 platforms:  
+  - chrome
   - node
   - vm
+
+compilers:
+  - exe
+  - kernel
+  - dart2js
+  - dart2wasm
 
 fold_stack_frames:
   except:

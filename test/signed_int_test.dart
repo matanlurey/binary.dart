@@ -34,11 +34,19 @@ void main() {
     });
 
     test('throws on underflow', () {
-      check(() => Int8(-129)).throws<Error>();
+      if (assertionsEnabled) {
+        check(() => Int8(-129)).throws<Error>();
+      } else {
+        check(() => Int8(-129)).returnsNormally().equals(Int8(127));
+      }
     });
 
     test('throws on overflow', () {
-      check(() => Int8(128)).throws<Error>();
+      if (assertionsEnabled) {
+        check(() => Int8(128)).throws<Error>();
+      } else {
+        check(() => Int8(128)).returnsNormally().equals(Int8(-128));
+      }
     });
 
     test('wraps on underflow', () {
@@ -530,8 +538,12 @@ extension on Subject<Int8> {
       has((p) => p.pow(exponent), 'pow($exponent)').equals(
         expected as Int8,
       );
-    } else {
+    } else if (assertionsEnabled) {
       has((p) => () => p.pow(exponent), 'pow($exponent)').throws<Error>();
+    } else {
+      has((p) => p.pow(exponent), 'pow($exponent)').equals(
+        result.expectedWrap as Int8,
+      );
     }
 
     has((p) => p.tryPow(exponent), 'tryPow($exponent)').equals(
@@ -552,8 +564,12 @@ extension on Subject<Int8> {
       has((p) => p.nextPowerOf2(), 'nextPowerOf2()').equals(
         result.expected as Int8,
       );
-    } else {
+    } else if (assertionsEnabled) {
       has((p) => () => p.nextPowerOf2(), 'nextPowerOf2()').throws<Error>();
+    } else {
+      has((p) => p.nextPowerOf2(), 'nextPowerOf2()').equals(
+        result.expectedWrap as Int8,
+      );
     }
 
     has((p) => p.tryNextPowerOf2(), 'tryNextPowerOf2()').equals(
@@ -575,11 +591,16 @@ extension on Subject<Int8> {
         (p) => p.nextMultipleOf(multiple),
         'nextMultipleOf($multiple)',
       ).equals(result.expected as Int8);
-    } else {
+    } else if (assertionsEnabled) {
       has(
         (p) => () => p.nextMultipleOf(multiple),
         'nextMultipleOf($multiple)',
       ).throws<Error>();
+    } else {
+      has(
+        (p) => p.nextMultipleOf(multiple),
+        'nextMultipleOf($multiple)',
+      ).equals(result.expectedWrap as Int8);
     }
 
     has(
@@ -601,8 +622,10 @@ extension on Subject<Int8> {
   void checkAbs(_Int8Result result) {
     if (result.expected != null) {
       has((p) => p.abs(), 'abs()').equals(result.expected as Int8);
-    } else {
+    } else if (assertionsEnabled) {
       has((p) => () => p.abs(), 'abs()').throws<Error>();
+    } else {
+      has((p) => p.abs(), 'abs()').equals(result.expectedWrap as Int8);
     }
 
     has((p) => p.tryAbs(), 'tryAbs()').equals(result.expected as Int8?);
