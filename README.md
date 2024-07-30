@@ -1,6 +1,7 @@
 # Binary
 
-Utilities for accessing binary data and bit manipulation in Dart and Flutter.
+Utilities for accessing binary data and bit manipulation in Dart, Flutter, and
+Dart->JS runtimes.
 
 [![Binary on pub.dev][pub_img]][pub_url]
 [![Code coverage][cov_img]][cov_url]
@@ -116,3 +117,23 @@ integers.
 [extension methods]: https://dart.dev/guides/language/extension-methods
 [extension types]: https://dart.dev/guides/language/extension-types
 [file an issue]: https://github.com/matanlurey/binary.dart/issues
+
+## Contributing
+
+To run the tests, run:
+
+```shell
+dart test
+```
+
+To check code coverage locally, run:
+
+```shell
+./chore coverage
+```
+
+To preview `dartdoc` output locally, run:
+
+```shell
+./chore dartdoc
+```
