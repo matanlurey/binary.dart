@@ -8,6 +8,13 @@ presets:
       - vm
     compilers:
       - kernel
+  
+  # Runs the tests only in the standalone VM in JIT mode.
+  fast:
+    platforms:
+      - vm
+    compilers:
+      - kernel
 
 platforms:  
   - chrome
