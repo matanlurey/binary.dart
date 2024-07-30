@@ -118,6 +118,16 @@ extension type const {{NAME}}._(int _) implements Comparable<num> {
   @pragma('vm:prefer-inline')
   factory {{NAME}}.fromClamped(int v) => _descriptor.fitClamping(v);
 
+  /// Creates a [{{NAME}}] using two integers as high and low bits.
+  /// 
+  /// Each integer should be in the range of `0` to `2^({{WIDTH}} / 2) - 1`;
+  /// extra bits are ignored.
+  @pragma('dart2js:tryInline')
+  @pragma('vm:prefer-inline')
+  factory {{NAME}}.fromHiLo(int hi, int lo) {
+    return _descriptor.fromHiLo(hi, lo);
+  }
+
   /// Returns the exponention of this integer with the given [exponent].
   /// 
   /// If the result is out of range, it asserts in debug mode, and wraps in
@@ -813,6 +823,13 @@ extension type const {{NAME}}._(int _) implements Comparable<num> {
   /// it is provided as a method to discourage casting.
   int toInt() => _;
 
+  /// Returns this integer split into two parts: high and low bits.
+  /// 
+  /// The high bits are the most significant bits, and the low bits are the
+  /// least significant bits. This is the inverse of [{{NAME}}.fromHiLo], and
+  /// is useful for operations that require splitting an integer into two parts.
+  (int hi, int lo) get hiLo => _descriptor.hiLo(_);
+
   /// Euclidean modulo of this number by other.
   /// 
   /// The sign of the returned value is always positive.
@@ -1285,4 +1302,20 @@ extension type const {{NAME}}._(int _) implements Comparable<num> {
   /// 
   /// See [int.operator ~] for more details.
   {{NAME}} operator ~() => {{NAME}}.fromUnchecked(~_);
+
+  /// Returns `this` sign-extended to the full width, from the [startWidth].
+  /// 
+  /// All bits to the left (inclusive of [startWidth]) are replaced as a result.
+  {{NAME}} signExtend(int startWidth) {
+    return {{NAME}}.fromUnchecked(_.signExtend(startWidth));
+  }
+
+  /// Returns `this` as a binary string.
+  String toStringBinary({bool padded = true}) {
+    final result = _.toRadixString(2);
+    if (padded) {
+      return result.padLeft(width, '0');
+    }
+    return result;
+  }
 }

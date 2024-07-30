@@ -294,6 +294,27 @@ final class IntDescriptor<T> {
   (int, int) hiLo(int v) {
     return (v >> (width ~/ 2), v & ((1 << (width ~/ 2)) - 1));
   }
+
+  /// Returns a [T] with the provided high and low bits.
+  ///
+  /// Bits out of range are ignored.
+  T fromHiLo(int hi, int lo) {
+    return (hi << (width ~/ 2) | lo) as T;
+  }
+
+  /// Returns [v] sign-extended to the full width, from the [startWidth].
+  ///
+  /// All bits to the left (inclusive of [startWidth]) are replaced as a result.
+  T signExtend(int v, int startWidth) {
+    if (startWidth >= width) {
+      return v as T;
+    }
+    final mask = 1 << (startWidth - 1);
+    if (v & mask == 0) {
+      return v as T;
+    }
+    return v | ~((1 << startWidth) - 1) as T;
+  }
 }
 
 final class _BitIterable extends Iterable<bool> {

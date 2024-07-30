@@ -118,6 +118,16 @@ extension type const Int32._(int _) implements Comparable<num> {
   @pragma('vm:prefer-inline')
   factory Int32.fromClamped(int v) => _descriptor.fitClamping(v);
 
+  /// Creates a [Int32] using two integers as high and low bits.
+  ///
+  /// Each integer should be in the range of `0` to `2^(32 / 2) - 1`;
+  /// extra bits are ignored.
+  @pragma('dart2js:tryInline')
+  @pragma('vm:prefer-inline')
+  factory Int32.fromHiLo(int hi, int lo) {
+    return _descriptor.fromHiLo(hi, lo);
+  }
+
   /// Returns the exponention of this integer with the given [exponent].
   ///
   /// If the result is out of range, it asserts in debug mode, and wraps in
@@ -808,6 +818,13 @@ extension type const Int32._(int _) implements Comparable<num> {
   /// effectively an identity function, but for consistency and completeness,
   /// it is provided as a method to discourage casting.
   int toInt() => _;
+
+  /// Returns this integer split into two parts: high and low bits.
+  ///
+  /// The high bits are the most significant bits, and the low bits are the
+  /// least significant bits. This is the inverse of [Int32.fromHiLo], and
+  /// is useful for operations that require splitting an integer into two parts.
+  (int hi, int lo) get hiLo => _descriptor.hiLo(_);
 
   /// Euclidean modulo of this number by other.
   ///
