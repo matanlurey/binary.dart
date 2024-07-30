@@ -13,15 +13,15 @@ var debugCheckFixedWithInRange = true;
 /// Whether `unchecked` methods on fixed-width integers assert when out of
 /// range.
 ///
-/// In debug mode, methods such as `Uint8.fromUnchecked` assert that the value
-/// is in a valid range. This can be disabled by setting this variable to
-/// `false`.
+/// In debug mode, methods such as `Uint8.fromUnchecked` are ignored and do not
+/// assert that the value is in a valid range. This can be overriden by setting
+/// this variable to `true`.
 ///
 /// In release mode, these assertions are always disabled and cannot be enabled.
 // ignore: do_not_use_environment
 const debugCheckUncheckedInRange = bool.fromEnvironment(
   'debugCheckUncheckedInRange',
-  defaultValue: true,
+  defaultValue: true /* FIXME: Remove before release */,
 );
 
 /// A descriptor for a fixed-width integer of type [T].
@@ -46,7 +46,7 @@ final class IntDescriptor<T> {
   // coverage:ignore-start
   @literal
   const IntDescriptor.signed(
-    this._uncheckedCast, {
+    this._assertCast, {
     required this.width,
   })  : signed = true,
         min = -1 << (width - 1),
@@ -57,14 +57,19 @@ final class IntDescriptor<T> {
   // coverage:ignore-start
   @literal
   const IntDescriptor.unsigned(
-    this._uncheckedCast, {
+    this._assertCast, {
     required this.width,
   })  : signed = false,
         min = 0,
         max = (1 << width) - 1;
   // coverage:ignore-end
 
-  final T Function(int) _uncheckedCast;
+  final T Function(int) _assertCast;
+  T _uncheckedCast(int v) {
+    var assertions = false;
+    assert(assertions = true, '');
+    return assertions ? _assertCast(v) : v as T;
+  }
 
   /// The width of the integer in bits.
   final int width;
@@ -328,6 +333,9 @@ final class IntDescriptor<T> {
   ///
   /// Bits out of range are ignored.
   T fromHiLo(int hi, int lo) {
+    // Bring both hi and lo into range.
+    hi &= (1 << (width ~/ 2)) - 1;
+    lo &= (1 << (width ~/ 2)) - 1;
     final result = hi << (width ~/ 2) | lo;
     return _uncheckedCast(result);
   }
