@@ -1,4 +1,18 @@
+# https://github.com/dart-lang/test/blob/master/pkgs/test/doc/configuration.md
+
+presets:
+  # Runs VM-specific tests and captures coverage.
+  coverage:
+    reporter: github
+
 platforms:
-  - chrome
-  - node
+  # - chrome
+  # - node
   - vm
+
+fold_stack_frames:
+  except:
+    - checks
+    - test
+    - test_api
+    - stream_channel

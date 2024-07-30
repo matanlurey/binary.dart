@@ -24,9 +24,10 @@ import 'package:binary/binary.dart';
 // Start using package:binary.
 ```
 
-If you are not familiar with [extension methods in Dart][], it is worth reading
-the documentation before using this package, which has heavy use of extensions
-for most functionality. A small primer is instead of writing something like:
+If you are not familiar with [extension methods][] and [extension types][], it
+is worth reading the documentation before using this package, which has heavy
+use of extensions for most functionality. A small primer is instead of writing
+something like:
 
 ```dart
 void main() {
@@ -138,7 +139,8 @@ Feel free to [file an issue][] if you'd like limited support for 64 and 128-bit.
 [cov_img]: https://codecov.io/gh/matanlurey/binary.dart/branch/main/graph/badge.svg
 [doc_url]: https://www.dartdocs.org/documentation/binary/latest
 [doc_img]: https://img.shields.io/badge/Documentation-binary-blue.svg
-[sty_url]: https://pub.dev/packages/matan
-[sty_img]: https://img.shields.io/badge/style-matan-9cf.svg
-[extension methods in dart]: https://dart.dev/guides/language/extension-methods
+[sty_url]: https://pub.dev/packages/oath
+[sty_img]: https://img.shields.io/badge/style-oath-9cf.svg
+[extension methods]: https://dart.dev/guides/language/extension-methods
+[extension types]: https://dart.dev/guides/language/extension-types
 [file an issue]: https://github.com/matanlurey/binary.dart/issues

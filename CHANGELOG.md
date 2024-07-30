@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 4.0.0
+
+TODO: Add a description of the changes in this version.
+
 ## 3.0.1
 
 - Downgrade [meta](https://pub.dev/packages/meta) version to [v1.7.0](https://pub.dev/packages/meta/versions/1.7.0) for Flutter compatibility.

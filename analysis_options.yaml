@@ -1,1 +1,3 @@
-include: package:matan/strict.yaml
+# Format: https://dart.dev/tools/pub/pubspec
+
+include: package:oath/strict.yaml
