@@ -32,7 +32,7 @@ import 'package:meta/meta.dart';
 /// ## Operations
 /// 
 /// In most cases, every method available on [int] is also available on an
-/// {{NAME}}; for example, [{{NAME}}.abs], [{{NAME}}.remainder], and so on.
+/// {{NAME}}.
 /// 
 /// Some methods that only make sense for unsigned integers are not available
 /// for signed integers, and vice versa, and some methods that are typically
@@ -52,7 +52,10 @@ import 'package:meta/meta.dart';
 /// 
 /// This also applies to methods such as [List.cast] or [Iterable.whereType].
 extension type const {{NAME}}._(int _) implements Comparable<num> {
-  static const _descriptor = IntDescriptor<{{NAME}}>.{{CONSTRUCTOR}}(width: width);
+  static const _descriptor = IntDescriptor<{{NAME}}>.{{CONSTRUCTOR}}(
+    {{NAME}}.fromUnchecked,
+    width: width,
+  );
 
   /// The minimum value that this type can represent.
   static const min = {{NAME}}.fromUnchecked({{MIN}});
@@ -71,7 +74,16 @@ extension type const {{NAME}}._(int _) implements Comparable<num> {
   /// Defines [v] as an {{DESCRIPTION}}.
   ///
   /// Behavior is undefined if [v] is not in a valid range.
-  const factory {{NAME}}.fromUnchecked(int v) = {{NAME}}._;
+  const {{NAME}}.fromUnchecked(
+    int v,
+  ) : _ = v,
+      assert(
+        !debugCheckUncheckedInRange || v >= {{MIN}} && v <= {{MAX}}, 
+        'Value out of range: $v.\n\n'
+        'This should never happen, and is likely a bug. To intentionally '
+        'overflow, even in debug mode, set '
+        '"-DdebugCheckUncheckedInRange=false" when running your program.',
+      );
 
   /// Defines [v] as an {{DESCRIPTION}}.
   ///
@@ -282,7 +294,7 @@ extension type const {{NAME}}._(int _) implements Comparable<num> {
   @useResult
   // ignore: avoid_positional_boolean_parameters
   {{NAME}} setNthBit(int n, [bool value = true]) {
-    RangeError.checkValidRange(n, 0, width - 1, 'n');
+    RangeError.checkValidRange(0, n, width - 1, 'n');
     return uncheckedSetNthBit(n, value);
   }
 
@@ -298,7 +310,7 @@ extension type const {{NAME}}._(int _) implements Comparable<num> {
   /// 
   /// [n] must be in the range of `0` to `width - 1`.
   {{NAME}} toggleNthBit(int n) {
-    RangeError.checkValidRange(n, 0, width - 1, 'n');
+    RangeError.checkValidRange(0, n, width - 1, 'n');
     return uncheckedToggleNthBit(n);
   }
 
@@ -556,11 +568,11 @@ extension type const {{NAME}}._(int _) implements Comparable<num> {
   /// 
   /// Both [left] and [size] must be in range.
   {{NAME}} bitChunk(int left, [int? size]) {
-    RangeError.checkValidRange(left, 0, width - 1, 'left');
+    RangeError.checkValidRange(0, left, width - 1, 'left');
     if (size != null) {
-      RangeError.checkValidRange(size, 0, width - left, 'size');
+      RangeError.checkValidRange(0, size, width - left, 'size');
     }
-    return _descriptor.uncheckedBitChunk(_, left, size);
+    return uncheckedBitChunk(left, size);
   }
 
   /// Returns a new [{{NAME}}] with bits in [left] to [size].
@@ -578,11 +590,11 @@ extension type const {{NAME}}._(int _) implements Comparable<num> {
   /// 
   /// Both [left] and [right] must be in range.
   {{NAME}} bitSlice(int left, [int? right]) {
-    RangeError.checkValidRange(left, 0, width - 1, 'left');
+    RangeError.checkValidRange(0, left, width - 1, 'left');
     if (right != null) {
-      RangeError.checkValidRange(right, left, width - 1, 'right');
+      RangeError.checkValidRange(left, right, width - 1, 'right');
     }
-    return _descriptor.uncheckedBitSlice(_, left, right);
+    return uncheckedBitSlice(left, right);
   }
 
   /// Returns a new instance with bits [left] to [right], inclusive.
@@ -601,11 +613,11 @@ extension type const {{NAME}}._(int _) implements Comparable<num> {
   ///
   /// Both [left] and [right] must be in range.
   {{NAME}} bitReplace(int value, int left, [int? right]) {
-    RangeError.checkValidRange(left, 0, width - 1, 'left');
+    RangeError.checkValidRange(0, left, width - 1, 'left');
     if (right != null) {
-      RangeError.checkValidRange(right, left, width - 1, 'right');
+      RangeError.checkValidRange(left, right, width - 1, 'right');
     }
-    return _descriptor.uncheckedBitReplace(_, value, left, right);
+    return uncheckedBitReplace(value, left, right);
   }
 
   /// Returns a new instance with bits [left] to [right], inclusive, replaced
@@ -630,6 +642,7 @@ extension type const {{NAME}}._(int _) implements Comparable<num> {
   /// other side.
   {{NAME}} rotateRight(int n) => _descriptor.rotateRight(_, n);
 
+  {{#SIGNED}}
   /// Returns the absolute value of this integer.
   /// 
   /// If the result is out of range, it asserts in debug mode, and wraps in
@@ -699,6 +712,7 @@ extension type const {{NAME}}._(int _) implements Comparable<num> {
   /// {{NAME}}(-3).clampedAbs(); // 3
   /// ```
   {{NAME}} clampedAbs() => {{NAME}}.fromClamped(_.abs());
+  {{/SIGNED}}
 
   /// Returns the _minimum_ number of bits required to store this integer.
   /// 
@@ -1170,7 +1184,7 @@ extension type const {{NAME}}._(int _) implements Comparable<num> {
   /// ```dart
   /// {{NAME}}(10) ~/ {{NAME}}(3); // 3
   /// ```
-  {{NAME}} operator ~/(int other) => {{NAME}}.fromUnchecked(_ ~/ other);
+  {{NAME}} operator ~/({{NAME}} other) => {{NAME}}.fromUnchecked(_ ~/ other._);
 
   /// Bit-wise and operator.
   /// 
@@ -1298,16 +1312,19 @@ extension type const {{NAME}}._(int _) implements Comparable<num> {
   /// See [int.operator ^] for more details.
   {{NAME}} operator ^({{NAME}} other) => {{NAME}}.fromUnchecked(_ ^ other._);
 
+  {{#SIGNED}}
   /// The bit-wise negate operator.
   /// 
-  /// See [int.operator ~] for more details.
-  {{NAME}} operator ~() => {{NAME}}.fromUnchecked(~_);
+  /// The bitwise compliment of an unsigned integer is its two's complement,
+  /// or the number inverted.
+  {{NAME}} operator ~() => {{NAME}}(~_);
+  {{/SIGNED}}
 
   /// Returns `this` sign-extended to the full width, from the [startWidth].
   /// 
   /// All bits to the left (inclusive of [startWidth]) are replaced as a result.
   {{NAME}} signExtend(int startWidth) {
-    return {{NAME}}.fromUnchecked(_.signExtend(startWidth));
+    return _descriptor.signExtend(_, startWidth);
   }
 
   /// Returns `this` as a binary string.

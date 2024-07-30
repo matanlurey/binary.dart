@@ -32,6 +32,7 @@ void main() {
       'WIDTH': '16',
       'MIN': '0',
       'MAX': '65535',
+      'IGNORE_COVERAGE': 'true',
     },
     p.join('lib', 'src', 'uint32.dart'): {
       'NAME': 'Uint32',
@@ -40,6 +41,7 @@ void main() {
       'WIDTH': '32',
       'MIN': '0',
       'MAX': '4294967295',
+      'IGNORE_COVERAGE': 'true',
     },
     p.join('lib', 'src', 'int8.dart'): {
       'NAME': 'Int8',
@@ -56,6 +58,7 @@ void main() {
       'WIDTH': '16',
       'MIN': '-32768',
       'MAX': '32767',
+      'IGNORE_COVERAGE': 'true',
     },
     p.join('lib', 'src', 'int32.dart'): {
       'NAME': 'Int32',
@@ -64,6 +67,7 @@ void main() {
       'WIDTH': '32',
       'MIN': '-2147483648',
       'MAX': '2147483647',
+      'IGNORE_COVERAGE': 'true',
     },
   }).forEach((path, data) {
     io.stderr.writeln('Generating $path...');
@@ -88,6 +92,10 @@ void main() {
       output = output.split('\n').where((line) {
         return !line.contains('{{#SIGNED}}') && !line.contains('{{/SIGNED}}');
       }).join('\n');
+    }
+
+    if (data['IGNORE_COVERAGE'] == 'true') {
+      output = '// coverage:ignore-file\n\n$output';
     }
 
     io.File(path).writeAsStringSync(output);

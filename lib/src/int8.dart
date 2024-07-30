@@ -32,7 +32,7 @@ import 'package:meta/meta.dart';
 /// ## Operations
 ///
 /// In most cases, every method available on [int] is also available on an
-/// Int8; for example, [Int8.abs], [Int8.remainder], and so on.
+/// Int8.
 ///
 /// Some methods that only make sense for unsigned integers are not available
 /// for signed integers, and vice versa, and some methods that are typically
@@ -52,7 +52,10 @@ import 'package:meta/meta.dart';
 ///
 /// This also applies to methods such as [List.cast] or [Iterable.whereType].
 extension type const Int8._(int _) implements Comparable<num> {
-  static const _descriptor = IntDescriptor<Int8>.signed(width: width);
+  static const _descriptor = IntDescriptor<Int8>.signed(
+    Int8.fromUnchecked,
+    width: width,
+  );
 
   /// The minimum value that this type can represent.
   static const min = Int8.fromUnchecked(-128);
@@ -71,7 +74,16 @@ extension type const Int8._(int _) implements Comparable<num> {
   /// Defines [v] as an signed 8-bit integer.
   ///
   /// Behavior is undefined if [v] is not in a valid range.
-  const factory Int8.fromUnchecked(int v) = Int8._;
+  const Int8.fromUnchecked(
+    int v,
+  )   : _ = v,
+        assert(
+          !debugCheckUncheckedInRange || v >= -128 && v <= 127,
+          'Value out of range: $v.\n\n'
+          'This should never happen, and is likely a bug. To intentionally '
+          'overflow, even in debug mode, set '
+          '"-DdebugCheckUncheckedInRange=false" when running your program.',
+        );
 
   /// Defines [v] as an signed 8-bit integer.
   ///
@@ -282,7 +294,7 @@ extension type const Int8._(int _) implements Comparable<num> {
   @useResult
   // ignore: avoid_positional_boolean_parameters
   Int8 setNthBit(int n, [bool value = true]) {
-    RangeError.checkValidRange(n, 0, width - 1, 'n');
+    RangeError.checkValidRange(0, n, width - 1, 'n');
     return uncheckedSetNthBit(n, value);
   }
 
@@ -298,7 +310,7 @@ extension type const Int8._(int _) implements Comparable<num> {
   ///
   /// [n] must be in the range of `0` to `width - 1`.
   Int8 toggleNthBit(int n) {
-    RangeError.checkValidRange(n, 0, width - 1, 'n');
+    RangeError.checkValidRange(0, n, width - 1, 'n');
     return uncheckedToggleNthBit(n);
   }
 
@@ -556,11 +568,11 @@ extension type const Int8._(int _) implements Comparable<num> {
   ///
   /// Both [left] and [size] must be in range.
   Int8 bitChunk(int left, [int? size]) {
-    RangeError.checkValidRange(left, 0, width - 1, 'left');
+    RangeError.checkValidRange(0, left, width - 1, 'left');
     if (size != null) {
-      RangeError.checkValidRange(size, 0, width - left, 'size');
+      RangeError.checkValidRange(0, size, width - left, 'size');
     }
-    return _descriptor.uncheckedBitChunk(_, left, size);
+    return uncheckedBitChunk(left, size);
   }
 
   /// Returns a new [Int8] with bits in [left] to [size].
@@ -578,11 +590,11 @@ extension type const Int8._(int _) implements Comparable<num> {
   ///
   /// Both [left] and [right] must be in range.
   Int8 bitSlice(int left, [int? right]) {
-    RangeError.checkValidRange(left, 0, width - 1, 'left');
+    RangeError.checkValidRange(0, left, width - 1, 'left');
     if (right != null) {
-      RangeError.checkValidRange(right, left, width - 1, 'right');
+      RangeError.checkValidRange(left, right, width - 1, 'right');
     }
-    return _descriptor.uncheckedBitSlice(_, left, right);
+    return uncheckedBitSlice(left, right);
   }
 
   /// Returns a new instance with bits [left] to [right], inclusive.
@@ -601,11 +613,11 @@ extension type const Int8._(int _) implements Comparable<num> {
   ///
   /// Both [left] and [right] must be in range.
   Int8 bitReplace(int value, int left, [int? right]) {
-    RangeError.checkValidRange(left, 0, width - 1, 'left');
+    RangeError.checkValidRange(0, left, width - 1, 'left');
     if (right != null) {
-      RangeError.checkValidRange(right, left, width - 1, 'right');
+      RangeError.checkValidRange(left, right, width - 1, 'right');
     }
-    return _descriptor.uncheckedBitReplace(_, value, left, right);
+    return uncheckedBitReplace(value, left, right);
   }
 
   /// Returns a new instance with bits [left] to [right], inclusive, replaced
@@ -1164,7 +1176,7 @@ extension type const Int8._(int _) implements Comparable<num> {
   /// ```dart
   /// Int8(10) ~/ Int8(3); // 3
   /// ```
-  Int8 operator ~/(int other) => Int8.fromUnchecked(_ ~/ other);
+  Int8 operator ~/(Int8 other) => Int8.fromUnchecked(_ ~/ other._);
 
   /// Bit-wise and operator.
   ///
@@ -1294,6 +1306,23 @@ extension type const Int8._(int _) implements Comparable<num> {
 
   /// The bit-wise negate operator.
   ///
-  /// See [int.operator ~] for more details.
-  Int8 operator ~() => Int8.fromUnchecked(~_);
+  /// The bitwise compliment of an unsigned integer is its two's complement,
+  /// or the number inverted.
+  Int8 operator ~() => Int8(~_);
+
+  /// Returns `this` sign-extended to the full width, from the [startWidth].
+  ///
+  /// All bits to the left (inclusive of [startWidth]) are replaced as a result.
+  Int8 signExtend(int startWidth) {
+    return _descriptor.signExtend(_, startWidth);
+  }
+
+  /// Returns `this` as a binary string.
+  String toStringBinary({bool padded = true}) {
+    final result = _.toRadixString(2);
+    if (padded) {
+      return result.padLeft(width, '0');
+    }
+    return result;
+  }
 }

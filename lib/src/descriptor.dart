@@ -10,6 +10,20 @@ import 'package:meta/meta.dart';
 /// In release mode, these assertions are always disabled and cannot be enabled.
 var debugCheckFixedWithInRange = true;
 
+/// Whether `unchecked` methods on fixed-width integers assert when out of
+/// range.
+///
+/// In debug mode, methods such as `Uint8.fromUnchecked` assert that the value
+/// is in a valid range. This can be disabled by setting this variable to
+/// `false`.
+///
+/// In release mode, these assertions are always disabled and cannot be enabled.
+// ignore: do_not_use_environment
+const debugCheckUncheckedInRange = bool.fromEnvironment(
+  'debugCheckUncheckedInRange',
+  defaultValue: true,
+);
+
 /// A descriptor for a fixed-width integer of type [T].
 ///
 /// An integer descriptor is used to describe the properties of a fixed-width
@@ -31,7 +45,8 @@ final class IntDescriptor<T> {
   /// Creates a new descriptor for a fixed-width signed integer of type [T].
   // coverage:ignore-start
   @literal
-  const IntDescriptor.signed({
+  const IntDescriptor.signed(
+    this._uncheckedCast, {
     required this.width,
   })  : signed = true,
         min = -1 << (width - 1),
@@ -41,12 +56,15 @@ final class IntDescriptor<T> {
   /// Creates a new descriptor for a fixed-width unsigned integer of type [T].
   // coverage:ignore-start
   @literal
-  const IntDescriptor.unsigned({
+  const IntDescriptor.unsigned(
+    this._uncheckedCast, {
     required this.width,
   })  : signed = false,
         min = 0,
         max = (1 << width) - 1;
   // coverage:ignore-end
+
+  final T Function(int) _uncheckedCast;
 
   /// The width of the integer in bits.
   final int width;
@@ -90,7 +108,13 @@ final class IntDescriptor<T> {
   /// - If [v] is greater than [max], the result is `v % (max + 1)`.
   @pragma('dart2js:tryInline')
   @pragma('vm:prefer-inline')
-  T fitWrapped(int v) => v & ((1 << width) - 1) as T;
+  T fitWrapped(int v) {
+    if (signed) {
+      return _uncheckedCast((v - min) % (max - min + 1) + min);
+    } else {
+      return _uncheckedCast(v & ((1 << width) - 1));
+    }
+  }
 
   /// Clamps [v] to fit within the range of the integer descriptor.
   ///
@@ -99,7 +123,9 @@ final class IntDescriptor<T> {
   /// - If [v] is greater than [max], the result is [max].
   @pragma('dart2js:tryInline')
   @pragma('vm:prefer-inline')
-  T fitClamping(int v) => v.clamp(min, max) as T;
+  T fitClamping(int v) {
+    return _uncheckedCast(v.clamp(min, max));
+  }
 
   /// Checks if [v] fits within the range of the integer descriptor.
   ///
@@ -110,7 +136,7 @@ final class IntDescriptor<T> {
     if (v < min || v > max) {
       return null;
     }
-    return v as T;
+    return _uncheckedCast(v);
   }
 
   /// Asserts that [v] fits within the range of the integer descriptor.
@@ -121,7 +147,7 @@ final class IntDescriptor<T> {
   T fit(int v) {
     assert(
       !debugCheckFixedWithInRange || v >= min && v <= max,
-      '$v is out of range',
+      '$v is out of range ($min <> $max)',
     );
     return fitWrapped(v);
   }
@@ -217,7 +243,7 @@ final class IntDescriptor<T> {
         result |= 1 << i;
       }
     }
-    return result as T;
+    return _uncheckedCast(result);
   }
 
   /// Returns a new instance with bits [left] to [right], inclusive.
@@ -247,7 +273,7 @@ final class IntDescriptor<T> {
     for (var i = left; i <= right; i++) {
       mask |= 1 << i;
     }
-    return (target & ~mask | source << left) as T;
+    return _uncheckedCast(target & ~mask | source << left);
   }
 
   /// Rotates the bits in [v] to the left by [n] positions.
@@ -258,7 +284,8 @@ final class IntDescriptor<T> {
   @pragma('vm:prefer-inline')
   T rotateLeft(int v, int n) {
     n %= width;
-    return (v << n | v >> (width - n)) & ((1 << width) - 1) as T;
+    final result = (v << n | v >> (width - n)) & ((1 << width) - 1);
+    return _uncheckedCast(result);
   }
 
   /// Rotates the bits in [v] to the right by [n] positions.
@@ -269,7 +296,8 @@ final class IntDescriptor<T> {
   @pragma('vm:prefer-inline')
   T rotateRight(int v, int n) {
     n %= width;
-    return (v >> n | v << (width - n)) & ((1 << width) - 1) as T;
+    final result = (v >> n | v << (width - n)) & ((1 << width) - 1);
+    return _uncheckedCast(result);
   }
 
   /// Returns [v] arithmetically right-shifted by [n] bits.
@@ -282,9 +310,10 @@ final class IntDescriptor<T> {
   @pragma('vm:prefer-inline')
   T signedRightShift(int v, int n) {
     if (v >= 0) {
-      return v >> n as T;
+      return _uncheckedCast(v >> n);
     }
-    return (v >> n) | ((1 << (width - n)) - 1) as T;
+    final result = (v >> n) | ((1 << (width - n)) - 1);
+    return _uncheckedCast(result);
   }
 
   /// Returns the [v] split into two parts: the high and low bits.
@@ -299,7 +328,8 @@ final class IntDescriptor<T> {
   ///
   /// Bits out of range are ignored.
   T fromHiLo(int hi, int lo) {
-    return (hi << (width ~/ 2) | lo) as T;
+    final result = hi << (width ~/ 2) | lo;
+    return _uncheckedCast(result);
   }
 
   /// Returns [v] sign-extended to the full width, from the [startWidth].
@@ -307,13 +337,14 @@ final class IntDescriptor<T> {
   /// All bits to the left (inclusive of [startWidth]) are replaced as a result.
   T signExtend(int v, int startWidth) {
     if (startWidth >= width) {
-      return v as T;
+      return _uncheckedCast(v);
     }
     final mask = 1 << (startWidth - 1);
     if (v & mask == 0) {
-      return v as T;
+      return _uncheckedCast(v);
     }
-    return v | ~((1 << startWidth) - 1) as T;
+    final result = v | ~((1 << startWidth) - 1);
+    return _uncheckedCast(result);
   }
 }
 

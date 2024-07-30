@@ -1,3 +1,5 @@
+// coverage:ignore-file
+
 import 'package:binary/src/descriptor.dart';
 import 'package:binary/src/extension.dart';
 import 'package:meta/meta.dart';
@@ -32,7 +34,7 @@ import 'package:meta/meta.dart';
 /// ## Operations
 ///
 /// In most cases, every method available on [int] is also available on an
-/// Int16; for example, [Int16.abs], [Int16.remainder], and so on.
+/// Int16.
 ///
 /// Some methods that only make sense for unsigned integers are not available
 /// for signed integers, and vice versa, and some methods that are typically
@@ -52,7 +54,10 @@ import 'package:meta/meta.dart';
 ///
 /// This also applies to methods such as [List.cast] or [Iterable.whereType].
 extension type const Int16._(int _) implements Comparable<num> {
-  static const _descriptor = IntDescriptor<Int16>.signed(width: width);
+  static const _descriptor = IntDescriptor<Int16>.signed(
+    Int16.fromUnchecked,
+    width: width,
+  );
 
   /// The minimum value that this type can represent.
   static const min = Int16.fromUnchecked(-32768);
@@ -71,7 +76,16 @@ extension type const Int16._(int _) implements Comparable<num> {
   /// Defines [v] as an signed 16-bit integer.
   ///
   /// Behavior is undefined if [v] is not in a valid range.
-  const factory Int16.fromUnchecked(int v) = Int16._;
+  const Int16.fromUnchecked(
+    int v,
+  )   : _ = v,
+        assert(
+          !debugCheckUncheckedInRange || v >= -32768 && v <= 32767,
+          'Value out of range: $v.\n\n'
+          'This should never happen, and is likely a bug. To intentionally '
+          'overflow, even in debug mode, set '
+          '"-DdebugCheckUncheckedInRange=false" when running your program.',
+        );
 
   /// Defines [v] as an signed 16-bit integer.
   ///
@@ -282,7 +296,7 @@ extension type const Int16._(int _) implements Comparable<num> {
   @useResult
   // ignore: avoid_positional_boolean_parameters
   Int16 setNthBit(int n, [bool value = true]) {
-    RangeError.checkValidRange(n, 0, width - 1, 'n');
+    RangeError.checkValidRange(0, n, width - 1, 'n');
     return uncheckedSetNthBit(n, value);
   }
 
@@ -298,7 +312,7 @@ extension type const Int16._(int _) implements Comparable<num> {
   ///
   /// [n] must be in the range of `0` to `width - 1`.
   Int16 toggleNthBit(int n) {
-    RangeError.checkValidRange(n, 0, width - 1, 'n');
+    RangeError.checkValidRange(0, n, width - 1, 'n');
     return uncheckedToggleNthBit(n);
   }
 
@@ -556,11 +570,11 @@ extension type const Int16._(int _) implements Comparable<num> {
   ///
   /// Both [left] and [size] must be in range.
   Int16 bitChunk(int left, [int? size]) {
-    RangeError.checkValidRange(left, 0, width - 1, 'left');
+    RangeError.checkValidRange(0, left, width - 1, 'left');
     if (size != null) {
-      RangeError.checkValidRange(size, 0, width - left, 'size');
+      RangeError.checkValidRange(0, size, width - left, 'size');
     }
-    return _descriptor.uncheckedBitChunk(_, left, size);
+    return uncheckedBitChunk(left, size);
   }
 
   /// Returns a new [Int16] with bits in [left] to [size].
@@ -578,11 +592,11 @@ extension type const Int16._(int _) implements Comparable<num> {
   ///
   /// Both [left] and [right] must be in range.
   Int16 bitSlice(int left, [int? right]) {
-    RangeError.checkValidRange(left, 0, width - 1, 'left');
+    RangeError.checkValidRange(0, left, width - 1, 'left');
     if (right != null) {
-      RangeError.checkValidRange(right, left, width - 1, 'right');
+      RangeError.checkValidRange(left, right, width - 1, 'right');
     }
-    return _descriptor.uncheckedBitSlice(_, left, right);
+    return uncheckedBitSlice(left, right);
   }
 
   /// Returns a new instance with bits [left] to [right], inclusive.
@@ -601,11 +615,11 @@ extension type const Int16._(int _) implements Comparable<num> {
   ///
   /// Both [left] and [right] must be in range.
   Int16 bitReplace(int value, int left, [int? right]) {
-    RangeError.checkValidRange(left, 0, width - 1, 'left');
+    RangeError.checkValidRange(0, left, width - 1, 'left');
     if (right != null) {
-      RangeError.checkValidRange(right, left, width - 1, 'right');
+      RangeError.checkValidRange(left, right, width - 1, 'right');
     }
-    return _descriptor.uncheckedBitReplace(_, value, left, right);
+    return uncheckedBitReplace(value, left, right);
   }
 
   /// Returns a new instance with bits [left] to [right], inclusive, replaced
@@ -1164,7 +1178,7 @@ extension type const Int16._(int _) implements Comparable<num> {
   /// ```dart
   /// Int16(10) ~/ Int16(3); // 3
   /// ```
-  Int16 operator ~/(int other) => Int16.fromUnchecked(_ ~/ other);
+  Int16 operator ~/(Int16 other) => Int16.fromUnchecked(_ ~/ other._);
 
   /// Bit-wise and operator.
   ///
@@ -1294,6 +1308,23 @@ extension type const Int16._(int _) implements Comparable<num> {
 
   /// The bit-wise negate operator.
   ///
-  /// See [int.operator ~] for more details.
-  Int16 operator ~() => Int16.fromUnchecked(~_);
+  /// The bitwise compliment of an unsigned integer is its two's complement,
+  /// or the number inverted.
+  Int16 operator ~() => Int16(~_);
+
+  /// Returns `this` sign-extended to the full width, from the [startWidth].
+  ///
+  /// All bits to the left (inclusive of [startWidth]) are replaced as a result.
+  Int16 signExtend(int startWidth) {
+    return _descriptor.signExtend(_, startWidth);
+  }
+
+  /// Returns `this` as a binary string.
+  String toStringBinary({bool padded = true}) {
+    final result = _.toRadixString(2);
+    if (padded) {
+      return result.padLeft(width, '0');
+    }
+    return result;
+  }
 }
