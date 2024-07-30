@@ -337,7 +337,7 @@ final class IntDescriptor<T> {
     hi &= (1 << (width ~/ 2)) - 1;
     lo &= (1 << (width ~/ 2)) - 1;
     final result = hi << (width ~/ 2) | lo;
-    return _uncheckedCast(result);
+    return _uncheckedCast(signed ? result.toSigned(width) : result);
   }
 
   /// Returns [v] sign-extended to the full width, from the [startWidth].
