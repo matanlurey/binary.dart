@@ -70,6 +70,38 @@ final shifted = fixInt.signedRightShift(5);
 print(shifted.toBinaryString()); // 00000011
 ```
 
+### Overflows
+
+Fixed with integers do not overflow unexpectedly, unlike the core Dart types.
+
+By default, any operation that _can_ overflow throws an assertion error in debug
+mode, and wraps around in release mode. For example:
+
+```dart
+// An error in debug mode, or 0 in release mode.
+Uint8(255) + Uint8(1);
+```
+
+To disable assertions, and always wrap, even in debug mode:
+
+```dart
+debugCheckFixedWithInRange = false;
+```
+
+Finer-grained control is available by using variants of the operators that
+explicitly handle overflow:
+
+```dart
+// Returns null if the operation would overflow.
+Uint8(255).tryAdd(Uint8(1));
+
+// Wraps around if the operation would overflow.
+Uint8(255).wrappedAdd(Uint8(1));
+
+// Clamps the result to the min/max value if the operation would overflow.
+Uint8(255).clampedAdd(Uint8(1));
+```
+
 ### Bit Patterns
 
 There is also builder-type API for generating patterns to match against bits.

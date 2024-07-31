@@ -84,6 +84,7 @@ extension type const {{NAME}}._(int _) implements Comparable<num> {
   /// Defines [v] as {{DESCRIPTION}}.
   ///
   /// Behavior is undefined if [v] is not in a valid range.
+  @literal
   const {{NAME}}.fromUnchecked(
     int v,
   ) : _ = v,

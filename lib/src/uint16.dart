@@ -86,6 +86,7 @@ extension type const Uint16._(int _) implements Comparable<num> {
   /// Defines [v] as An unsigned 16-bit integer.
   ///
   /// Behavior is undefined if [v] is not in a valid range.
+  @literal
   const Uint16.fromUnchecked(
     int v,
   )   : _ = v,

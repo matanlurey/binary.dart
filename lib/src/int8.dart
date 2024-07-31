@@ -84,6 +84,7 @@ extension type const Int8._(int _) implements Comparable<num> {
   /// Defines [v] as A signed 8-bit integer.
   ///
   /// Behavior is undefined if [v] is not in a valid range.
+  @literal
   const Int8.fromUnchecked(
     int v,
   )   : _ = v,
