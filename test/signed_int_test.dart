@@ -1,7 +1,6 @@
 import 'dart:math' as math;
 
-import 'package:binary/binary.dart'
-    show Int8, IntExtension, debugCheckFixedWithInRange;
+import 'package:binary/binary.dart' show Int8, debugCheckFixedWithInRange;
 import 'package:test/test.dart';
 
 import 'src/prelude.dart';
