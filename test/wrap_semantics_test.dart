@@ -1,4 +1,4 @@
-import 'package:binary/binary.dart' show Uint32, Uint8;
+import 'package:binary/binary.dart' show Int32, Uint32, Uint8;
 
 import 'src/prelude.dart';
 
@@ -29,11 +29,11 @@ void main() {
   });
 
   test('-1 >> 0 does not overflow unexpectedly', () {
-    check(Uint32(-1).wrappedUnsignedShiftRight(0)).equals(Uint32(-1));
+    check(Int32(-1).wrappedUnsignedShiftRight(0)).equals(Int32(-1));
   });
 
   test('-1 ^ 2 does not overflow unexpectedly', () {
-    check(Uint32(-1) ^ Uint32(2)).equals(Uint32(-1));
+    check(Int32(-1) ^ Int32(2)).equals(Int32(-3));
   });
 
   test('2.pow(32) does not overflow unexpectedly', () {

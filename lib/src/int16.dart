@@ -1211,7 +1211,9 @@ extension type const Int16._(int _) implements Comparable<num> {
   /// `pow(2, shiftAmount)`.
   ///
   /// [shiftAmount] must be non-negative.
-  Int16 operator >>(int shiftAmount) => Int16.fromUnchecked(_ >> shiftAmount);
+  Int16 operator >>(int shiftAmount) {
+    return _descriptor.uncheckedShiftRight(_, shiftAmount);
+  }
 
   /// Shifts the bits of this integer to the left by [shiftAmount].
   ///
@@ -1343,7 +1345,9 @@ extension type const Int16._(int _) implements Comparable<num> {
   ///
   /// If the result is out of range, the behavior is undefined.
   Int16 uncheckedUnsignedShiftRight(int shiftAmount) {
-    return Int16.fromUnchecked(_ >>> shiftAmount);
+    return Int16.fromUnchecked(
+      _descriptor.overflowingUnsignedShiftRight(_, shiftAmount),
+    );
   }
 
   /// Bitwise unsigned right shift by [shiftAmount] bits.
@@ -1363,7 +1367,7 @@ extension type const Int16._(int _) implements Comparable<num> {
   /// - [clampedUnsignedShiftRight], which clamps the result if it is out of
   ///   range.
   Int16? tryUnsignedShiftRight(int shiftAmount) {
-    return tryFrom(_ >>> shiftAmount);
+    return tryFrom(_descriptor.overflowingUnsignedShiftRight(_, shiftAmount));
   }
 
   /// Bitwise unsigned right shift by [shiftAmount] bits.
@@ -1383,7 +1387,9 @@ extension type const Int16._(int _) implements Comparable<num> {
   /// - [clampedUnsignedShiftRight], which clamps the result if it is out of
   ///   range.
   Int16 wrappedUnsignedShiftRight(int shiftAmount) {
-    return Int16.fromWrapped(_ >>> shiftAmount);
+    return Int16.fromWrapped(
+      _descriptor.overflowingUnsignedShiftRight(_, shiftAmount),
+    );
   }
 
   /// Bitwise unsigned right shift by [shiftAmount] bits.
@@ -1403,7 +1409,9 @@ extension type const Int16._(int _) implements Comparable<num> {
   /// - [wrappedUnsignedShiftRight], which wraps the result if it is out of
   ///   range.
   Int16 clampedUnsignedShiftRight(int shiftAmount) {
-    return Int16.fromClamped(_ >>> shiftAmount);
+    return Int16.fromClamped(
+      _descriptor.overflowingUnsignedShiftRight(_, shiftAmount),
+    );
   }
 
   /// Bit-wise exclusive-or operator.

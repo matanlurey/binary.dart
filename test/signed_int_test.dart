@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
-import 'package:binary/binary.dart' show Int8, debugCheckFixedWithInRange;
+import 'package:binary/binary.dart'
+    show Int8, IntExtension, debugCheckFixedWithInRange;
 import 'package:test/test.dart';
 
 import 'src/prelude.dart';
@@ -1074,7 +1075,7 @@ void main() {
       if (assertionsEnabled) {
         check(() => Int8(-9) >>> 2).throws<Error>();
       } else {
-        check(() => Int8(-9) >>> 2).returnsNormally().equals(Int8(62));
+        check(() => Int8(-9) >>> 2).returnsNormally().equals(Int8(-3));
       }
     });
   });

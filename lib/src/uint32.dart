@@ -1054,7 +1054,9 @@ extension type const Uint32._(int _) implements Comparable<num> {
   /// `pow(2, shiftAmount)`.
   ///
   /// [shiftAmount] must be non-negative.
-  Uint32 operator >>(int shiftAmount) => Uint32.fromUnchecked(_ >> shiftAmount);
+  Uint32 operator >>(int shiftAmount) {
+    return _descriptor.uncheckedShiftRight(_, shiftAmount);
+  }
 
   /// Shifts the bits of this integer to the left by [shiftAmount].
   ///
@@ -1186,7 +1188,9 @@ extension type const Uint32._(int _) implements Comparable<num> {
   ///
   /// If the result is out of range, the behavior is undefined.
   Uint32 uncheckedUnsignedShiftRight(int shiftAmount) {
-    return Uint32.fromUnchecked(_ >>> shiftAmount);
+    return Uint32.fromUnchecked(
+      _descriptor.overflowingUnsignedShiftRight(_, shiftAmount),
+    );
   }
 
   /// Bitwise unsigned right shift by [shiftAmount] bits.
@@ -1206,7 +1210,7 @@ extension type const Uint32._(int _) implements Comparable<num> {
   /// - [clampedUnsignedShiftRight], which clamps the result if it is out of
   ///   range.
   Uint32? tryUnsignedShiftRight(int shiftAmount) {
-    return tryFrom(_ >>> shiftAmount);
+    return tryFrom(_descriptor.overflowingUnsignedShiftRight(_, shiftAmount));
   }
 
   /// Bitwise unsigned right shift by [shiftAmount] bits.
@@ -1226,7 +1230,9 @@ extension type const Uint32._(int _) implements Comparable<num> {
   /// - [clampedUnsignedShiftRight], which clamps the result if it is out of
   ///   range.
   Uint32 wrappedUnsignedShiftRight(int shiftAmount) {
-    return Uint32.fromWrapped(_ >>> shiftAmount);
+    return Uint32.fromWrapped(
+      _descriptor.overflowingUnsignedShiftRight(_, shiftAmount),
+    );
   }
 
   /// Bitwise unsigned right shift by [shiftAmount] bits.
@@ -1246,7 +1252,9 @@ extension type const Uint32._(int _) implements Comparable<num> {
   /// - [wrappedUnsignedShiftRight], which wraps the result if it is out of
   ///   range.
   Uint32 clampedUnsignedShiftRight(int shiftAmount) {
-    return Uint32.fromClamped(_ >>> shiftAmount);
+    return Uint32.fromClamped(
+      _descriptor.overflowingUnsignedShiftRight(_, shiftAmount),
+    );
   }
 
   /// Bit-wise exclusive-or operator.

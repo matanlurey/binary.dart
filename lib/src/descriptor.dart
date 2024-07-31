@@ -481,12 +481,12 @@ final class IntDescriptor<T> {
   /// See <https://dart.dev/guides/language/numbers#bitwise-operations>.
   @pragma('dart2js:tryInline')
   @pragma('vm:prefer-inline')
-  T uncheckedhiftRight(int v, int n) {
-    if (!_isJsNumerics || unsigned) {
+  T uncheckedShiftRight(int v, int n) {
+    if (!_isJsNumerics || v >= 0) {
       return _uncheckedCast(v >> n);
     }
-    final result = v.toUnsigned(width) >> n;
-    return _uncheckedCast(result.toSigned(width));
+    final result = v / 2.pow(n);
+    return _uncheckedCast(result.floor());
   }
 
   /// Similar to [int.operator <<], but consistent across platforms.
@@ -497,11 +497,24 @@ final class IntDescriptor<T> {
   @pragma('dart2js:tryInline')
   @pragma('vm:prefer-inline')
   int overflowingShiftLeft(int v, int n) {
-    if (!_isJsNumerics || unsigned) {
+    if (!_isJsNumerics || v >= 0) {
       return v << n;
     }
-    final result = v.toUnsigned(width) << n;
-    return result.toSigned(width);
+    final result = v * 2.pow(n);
+    return result;
+  }
+
+  /// Similar to [int.operator >>], but consistent across platforms.
+  ///
+  /// See <https://dart.dev/guides/language/numbers#bitwise-operations>.
+  ///
+  /// The result may have overflowed the integer width and should be fitted.
+  int overflowingUnsignedShiftRight(int v, int n) {
+    if (!_isJsNumerics) {
+      return v.toUnsigned(width) >> n;
+    }
+    final result = v.toUnsigned(width) / 2.pow(n);
+    return result.floor();
   }
 
   /// Returns [v] as a binary string.
