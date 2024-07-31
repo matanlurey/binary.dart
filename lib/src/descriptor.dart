@@ -504,19 +504,6 @@ final class IntDescriptor<T> {
     return result;
   }
 
-  /// Similar to [int.operator >>], but consistent across platforms.
-  ///
-  /// See <https://dart.dev/guides/language/numbers#bitwise-operations>.
-  ///
-  /// The result may have overflowed the integer width and should be fitted.
-  int overflowingUnsignedShiftRight(int v, int n) {
-    if (!_isJsNumerics) {
-      return v.toUnsigned(width) >> n;
-    }
-    final result = v.toUnsigned(width) / 2.pow(n);
-    return result.floor();
-  }
-
   /// Returns [v] as a binary string.
   String toBinaryString(int v, {bool padded = true}) {
     var result = v.toUnsigned(width).toRadixString(2);

@@ -1068,6 +1068,9 @@ void main() {
     test('in range', () {
       // Use the standard operator:
       check(Int8(0x55) >>> 3).equals(Int8(10));
+      check(Int8(0x55).uncheckedUnsignedShiftRight(3)).equals(Int8(10));
+      check(Int8(0x55).tryUnsignedShiftRight(3)).equals(Int8(10));
+      check(Int8(0x55).wrappedUnsignedShiftRight(3)).equals(Int8(10));
     });
 
     test('overflows', () {
@@ -1076,6 +1079,10 @@ void main() {
       } else {
         check(() => Int8(-9) >>> 2).returnsNormally().equals(Int8(-3));
       }
+
+      check(Int8(-9).tryUnsignedShiftRight(2)).isNull();
+      check(Int8(-9).wrappedUnsignedShiftRight(2)).equals(Int8(-3));
+      check(Int8(-9).clampedUnsignedShiftRight(2)).equals(Int8(127));
     });
   });
 }

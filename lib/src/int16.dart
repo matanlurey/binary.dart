@@ -1346,9 +1346,7 @@ extension type const Int16._(int _) implements Comparable<num> {
   ///
   /// If the result is out of range, the behavior is undefined.
   Int16 uncheckedUnsignedShiftRight(int shiftAmount) {
-    return Int16.fromUnchecked(
-      _descriptor.overflowingUnsignedShiftRight(_, shiftAmount),
-    );
+    return Int16.fromUnchecked(_ >>> shiftAmount);
   }
 
   /// Bitwise unsigned right shift by [shiftAmount] bits.
@@ -1368,7 +1366,7 @@ extension type const Int16._(int _) implements Comparable<num> {
   /// - [clampedUnsignedShiftRight], which clamps the result if it is out of
   ///   range.
   Int16? tryUnsignedShiftRight(int shiftAmount) {
-    return tryFrom(_descriptor.overflowingUnsignedShiftRight(_, shiftAmount));
+    return tryFrom(_ >>> shiftAmount);
   }
 
   /// Bitwise unsigned right shift by [shiftAmount] bits.
@@ -1388,9 +1386,7 @@ extension type const Int16._(int _) implements Comparable<num> {
   /// - [clampedUnsignedShiftRight], which clamps the result if it is out of
   ///   range.
   Int16 wrappedUnsignedShiftRight(int shiftAmount) {
-    return Int16.fromWrapped(
-      _descriptor.overflowingUnsignedShiftRight(_, shiftAmount),
-    );
+    return Int16.fromWrapped(_ >>> shiftAmount);
   }
 
   /// Bitwise unsigned right shift by [shiftAmount] bits.
@@ -1410,9 +1406,7 @@ extension type const Int16._(int _) implements Comparable<num> {
   /// - [wrappedUnsignedShiftRight], which wraps the result if it is out of
   ///   range.
   Int16 clampedUnsignedShiftRight(int shiftAmount) {
-    return Int16.fromClamped(
-      _descriptor.overflowingUnsignedShiftRight(_, shiftAmount),
-    );
+    return Int16.fromClamped(_ >>> shiftAmount);
   }
 
   /// Bit-wise exclusive-or operator.
