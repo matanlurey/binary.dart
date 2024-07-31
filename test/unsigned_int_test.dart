@@ -457,4 +457,56 @@ void main() {
       check($200.wrappedMultiply($3)).equals(Uint8(88));
     });
   });
+
+  group('operator +', () {
+    test('in range', () {
+      final $5 = Uint8(5);
+      final $20 = Uint8(20);
+      check($5 + $20).equals(Uint8(25));
+      check($5.tryAdd($20)).equals(Uint8(25));
+      check($5.clampedAdd($20)).equals(Uint8(25));
+      check($5.wrappedAdd($20)).equals(Uint8(25));
+    });
+
+    test('overflows', () {
+      final $200 = Uint8(200);
+      final $100 = Uint8(100);
+
+      if (assertionsEnabled) {
+        check(() => $200 + $100).throws<Error>();
+      } else {
+        check($200 + $100).equals(Uint8(44));
+      }
+
+      check($200.tryAdd($100)).isNull();
+      check($200.clampedAdd($100)).equals(Uint8(255));
+      check($200.wrappedAdd($100)).equals(Uint8(44));
+    });
+  });
+
+  group('operator -', () {
+    test('in range', () {
+      final $20 = Uint8(20);
+      final $5 = Uint8(5);
+      check($20 - $5).equals(Uint8(15));
+      check($20.trySubtract($5)).equals(Uint8(15));
+      check($20.clampedSubtract($5)).equals(Uint8(15));
+      check($20.wrappedSubtract($5)).equals(Uint8(15));
+    });
+
+    test('underflows', () {
+      final $100 = Uint8(100);
+      final $200 = Uint8(200);
+
+      if (assertionsEnabled) {
+        check(() => $100 - $200).throws<Error>();
+      } else {
+        check($100 - $200).equals(Uint8(156));
+      }
+
+      check($100.trySubtract($200)).isNull();
+      check($100.clampedSubtract($200)).equals(Uint8(0));
+      check($100.wrappedSubtract($200)).equals(Uint8(156));
+    });
+  });
 }

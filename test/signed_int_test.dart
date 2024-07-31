@@ -575,21 +575,21 @@ void main() {
     });
 
     test('in range, two negative numbers', () {
-      final $2 = Int8(-2);
-      final $3 = Int8(-3);
-      check($2 * $3).equals(Int8(6));
-      check($2.tryMultiply($3)).equals(Int8(6));
-      check($2.clampedMultiply($3)).equals(Int8(6));
-      check($2.wrappedMultiply($3)).equals(Int8(6));
+      final $n2 = Int8(-2);
+      final $n3 = Int8(-3);
+      check($n2 * $n3).equals(Int8(6));
+      check($n2.tryMultiply($n3)).equals(Int8(6));
+      check($n2.clampedMultiply($n3)).equals(Int8(6));
+      check($n2.wrappedMultiply($n3)).equals(Int8(6));
     });
 
     test('in range, one positive and one negative number', () {
       final $2 = Int8(2);
-      final $3 = Int8(-3);
-      check($2 * $3).equals(Int8(-6));
-      check($2.tryMultiply($3)).equals(Int8(-6));
-      check($2.clampedMultiply($3)).equals(Int8(-6));
-      check($2.wrappedMultiply($3)).equals(Int8(-6));
+      final $n3 = Int8(-3);
+      check($2 * $n3).equals(Int8(-6));
+      check($2.tryMultiply($n3)).equals(Int8(-6));
+      check($2.clampedMultiply($n3)).equals(Int8(-6));
+      check($2.wrappedMultiply($n3)).equals(Int8(-6));
     });
 
     test('overflows, two positive numbers', () {
@@ -608,33 +608,179 @@ void main() {
     });
 
     test('overflows, two negative numbers', () {
-      final $64 = Int8(-64);
-      final $2 = Int8(-2);
+      final $n64 = Int8(-64);
+      final $n2 = Int8(-2);
 
       if (assertionsEnabled) {
-        check(() => $64 * $2).throws<Error>();
+        check(() => $n64 * $n2).throws<Error>();
       } else {
-        check(() => $64 * $2).returnsNormally().equals(Int8(-128));
+        check(() => $n64 * $n2).returnsNormally().equals(Int8(-128));
       }
 
-      check($64.tryMultiply($2)).isNull();
-      check($64.clampedMultiply($2)).equals(Int8(127));
-      check($64.wrappedMultiply($2)).equals(Int8(-128));
+      check($n64.tryMultiply($n2)).isNull();
+      check($n64.clampedMultiply($n2)).equals(Int8(127));
+      check($n64.wrappedMultiply($n2)).equals(Int8(-128));
     });
 
     test('overflows, one positive and one negative number', () {
       final $64 = Int8(64);
-      final $3 = Int8(-3);
+      final $n3 = Int8(-3);
 
       if (assertionsEnabled) {
-        check(() => $64 * $3).throws<Error>();
+        check(() => $64 * $n3).throws<Error>();
       } else {
-        check(() => $64 * $3).returnsNormally().equals(Int8(64));
+        check(() => $64 * $n3).returnsNormally().equals(Int8(64));
       }
 
-      check($64.tryMultiply($3)).isNull();
-      check($64.clampedMultiply($3)).equals(Int8(-128));
-      check($64.wrappedMultiply($3)).equals(Int8(64));
+      check($64.tryMultiply($n3)).isNull();
+      check($64.clampedMultiply($n3)).equals(Int8(-128));
+      check($64.wrappedMultiply($n3)).equals(Int8(64));
+    });
+  });
+
+  group('operator +', () {
+    test('in range, two positive numbers', () {
+      final $2 = Int8(2);
+      final $3 = Int8(3);
+      check($2 + $3).equals(Int8(5));
+      check($2.tryAdd($3)).equals(Int8(5));
+      check($2.clampedAdd($3)).equals(Int8(5));
+      check($2.wrappedAdd($3)).equals(Int8(5));
+    });
+
+    test('in range, two negative numbers', () {
+      final $n2 = Int8(-2);
+      final $n3 = Int8(-3);
+      check($n2 + $n3).equals(Int8(-5));
+      check($n2.tryAdd($n3)).equals(Int8(-5));
+      check($n2.clampedAdd($n3)).equals(Int8(-5));
+      check($n2.wrappedAdd($n3)).equals(Int8(-5));
+    });
+
+    test('in range, one positive and one negative number', () {
+      final $2 = Int8(2);
+      final $n3 = Int8(-3);
+      check($2 + $n3).equals(Int8(-1));
+      check($2.tryAdd($n3)).equals(Int8(-1));
+      check($2.clampedAdd($n3)).equals(Int8(-1));
+      check($2.wrappedAdd($n3)).equals(Int8(-1));
+    });
+
+    test('overflows, two positive numbers', () {
+      final $127 = Int8(127);
+      final $1 = Int8(1);
+
+      if (assertionsEnabled) {
+        check(() => $127 + $1).throws<Error>();
+      } else {
+        check(() => $127 + $1).returnsNormally().equals(Int8(-128));
+      }
+
+      check($127.tryAdd($1)).isNull();
+      check($127.clampedAdd($1)).equals(Int8(127));
+      check($127.wrappedAdd($1)).equals(Int8(-128));
+    });
+
+    test('overflows, two negative numbers', () {
+      final $128 = Int8(-128);
+      final $n1 = Int8(-1);
+
+      if (assertionsEnabled) {
+        check(() => $128 + $n1).throws<Error>();
+      } else {
+        check(() => $128 + $n1).returnsNormally().equals(Int8(127));
+      }
+
+      check($128.tryAdd($n1)).isNull();
+      check($128.clampedAdd($n1)).equals(Int8(-128));
+      check($128.wrappedAdd($n1)).equals(Int8(127));
+    });
+
+    test('overflows, one positive and one negative number', () {
+      final $n2 = Int8(-2);
+
+      if (assertionsEnabled) {
+        check(() => Int8.min + $n2).throws<Error>();
+      } else {
+        check(() => Int8.min + $n2).returnsNormally().equals(Int8(126));
+      }
+
+      check(Int8.min.tryAdd($n2)).isNull();
+      check(Int8.min.clampedAdd($n2)).equals(Int8.min);
+      check(Int8.min.wrappedAdd($n2)).equals(Int8(126));
+    });
+  });
+
+  group('operator -', () {
+    test('in range, two positive numbers', () {
+      final $2 = Int8(2);
+      final $3 = Int8(3);
+      check($2 - $3).equals(Int8(-1));
+      check($2.trySubtract($3)).equals(Int8(-1));
+      check($2.clampedSubtract($3)).equals(Int8(-1));
+      check($2.wrappedSubtract($3)).equals(Int8(-1));
+    });
+
+    test('in range, two negative numbers', () {
+      final $n2 = Int8(-2);
+      final $n3 = Int8(-3);
+      check($n2 - $n3).equals(Int8(1));
+      check($n2.trySubtract($n3)).equals(Int8(1));
+      check($n2.clampedSubtract($n3)).equals(Int8(1));
+      check($n2.wrappedSubtract($n3)).equals(Int8(1));
+    });
+
+    test('in range, one positive and one negative number', () {
+      final $2 = Int8(2);
+      final $n3 = Int8(-3);
+      check($2 - $n3).equals(Int8(5));
+      check($2.trySubtract($n3)).equals(Int8(5));
+      check($2.clampedSubtract($n3)).equals(Int8(5));
+      check($2.wrappedSubtract($n3)).equals(Int8(5));
+    });
+
+    test('overflows, two positive numbers', () {
+      final $n128 = Int8(-128);
+      final $1 = Int8(1);
+
+      if (assertionsEnabled) {
+        check(() => $n128 - $1).throws<Error>();
+      } else {
+        check(() => $n128 - $1).returnsNormally().equals(Int8(127));
+      }
+
+      check($n128.trySubtract($1)).isNull();
+      check($n128.clampedSubtract($1)).equals(Int8(-128));
+      check($n128.wrappedSubtract($1)).equals(Int8(127));
+    });
+
+    test('overflows, two negative numbers', () {
+      final $127 = Int8(127);
+      final $n1 = Int8(-1);
+
+      if (assertionsEnabled) {
+        check(() => $127 - $n1).throws<Error>();
+      } else {
+        check(() => $127 - $n1).returnsNormally().equals(Int8(-128));
+      }
+
+      check($127.trySubtract($n1)).isNull();
+      check($127.clampedSubtract($n1)).equals(Int8(127));
+      check($127.wrappedSubtract($n1)).equals(Int8(-128));
+    });
+
+    test('overflows, one positive and one negative number', () {
+      final $2 = Int8(2);
+
+      if (assertionsEnabled) {
+        check(() => Int8.min - $2).throws<Error>();
+      } else {
+        check(() => Int8.min - $2).returnsNormally().equals(Int8(126));
+      }
+
+      check(Int8.min.trySubtract($2)).isNull();
+      check(Int8.min.clampedSubtract($2)).equals(Int8(-128));
+      check(Int8.min.wrappedSubtract($2)).equals(Int8(126));
     });
   });
 }
