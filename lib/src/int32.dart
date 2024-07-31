@@ -1193,12 +1193,16 @@ extension type const Int32._(int _) implements Comparable<num> {
   /// Bit-wise and operator.
   ///
   /// See [int.operator &] for more details.
-  Int32 operator &(Int32 other) => Int32.fromUnchecked(_ & other._);
+  Int32 operator &(Int32 other) {
+    return _descriptor.uncheckedBinaryAnd(_, other._);
+  }
 
   /// Bit-wise or operator.
   ///
   /// See [int.operator |] for more details.
-  Int32 operator |(Int32 other) => Int32.fromUnchecked(_ | other._);
+  Int32 operator |(Int32 other) {
+    return _descriptor.uncheckedBinaryOr(_, other._);
+  }
 
   /// Shifts the bits of this integer to the right by [shiftAmount].
   ///
@@ -1227,13 +1231,17 @@ extension type const Int32._(int _) implements Comparable<num> {
   /// ```dart
   /// Int32(3) << 2; // 12
   /// ```
-  Int32 operator <<(int shiftAmount) => Int32(_ << shiftAmount);
+  Int32 operator <<(int shiftAmount) {
+    return Int32(_descriptor.overflowingShiftLeft(_, shiftAmount));
+  }
 
   /// Shifts the bits of this integer to the left by [shiftAmount].
   ///
   /// If the result is out of range, the behavior is undefined.
   Int32 uncheckedShiftLeft(int shiftAmount) {
-    return Int32.fromUnchecked(_ << shiftAmount);
+    return Int32.fromUnchecked(
+      _descriptor.overflowingShiftLeft(_, shiftAmount),
+    );
   }
 
   /// Shifts the bits of this integer to the left by [shiftAmount].
@@ -1250,7 +1258,9 @@ extension type const Int32._(int _) implements Comparable<num> {
   /// ```dart
   /// Int32(3).tryShiftLeft(2); // 12
   /// ```
-  Int32? tryShiftLeft(int shiftAmount) => tryFrom(_ << shiftAmount);
+  Int32? tryShiftLeft(int shiftAmount) {
+    return tryFrom(_descriptor.overflowingShiftLeft(_, shiftAmount));
+  }
 
   /// Shifts the bits of this integer to the left by [shiftAmount].
   ///
@@ -1267,7 +1277,7 @@ extension type const Int32._(int _) implements Comparable<num> {
   /// Int32(3).wrappedShiftLeft(2); // 12
   /// ```
   Int32 wrappedShiftLeft(int shiftAmount) {
-    return Int32.fromWrapped(_ << shiftAmount);
+    return Int32.fromWrapped(_descriptor.overflowingShiftLeft(_, shiftAmount));
   }
 
   /// Shifts the bits of this integer to the left by [shiftAmount].
@@ -1286,7 +1296,7 @@ extension type const Int32._(int _) implements Comparable<num> {
   /// Int32(3).clampedShiftLeft(2); // 12
   /// ```
   Int32 clampedShiftLeft(int shiftAmount) {
-    return Int32.fromClamped(_ << shiftAmount);
+    return Int32.fromClamped(_descriptor.overflowingShiftLeft(_, shiftAmount));
   }
 
   /// Bitwise signed right shift by [shiftAmount] bits.
@@ -1399,13 +1409,17 @@ extension type const Int32._(int _) implements Comparable<num> {
   /// Bit-wise exclusive-or operator.
   ///
   /// See [int.operator ^] for more details.
-  Int32 operator ^(Int32 other) => Int32.fromUnchecked(_ ^ other._);
+  Int32 operator ^(Int32 other) {
+    return _descriptor.uncheckedBinaryXor(_, other._);
+  }
 
   /// The bit-wise negate operator.
   ///
   /// The bitwise compliment of an unsigned integer is its two's complement,
   /// or the number inverted.
-  Int32 operator ~() => Int32(~_);
+  Int32 operator ~() {
+    return _descriptor.uncheckedBinaryNot(_);
+  }
 
   /// Returns `this` sign-extended to the full width, from the [startWidth].
   ///

@@ -27,4 +27,30 @@ void main() {
     final q = n.wrappedMultiply(Uint32(2));
     check(q).has((a) => a.toInt(), 'toInt()').equals(4294967294);
   });
+
+  test('-1 >> 0 does not overflow unexpectedly', () {
+    check(Uint32(-1).wrappedUnsignedShiftRight(0)).equals(Uint32(-1));
+  });
+
+  test('-1 ^ 2 does not overflow unexpectedly', () {
+    check(Uint32(-1) ^ Uint32(2)).equals(Uint32(-1));
+  });
+
+  test('2.pow(32) does not overflow unexpectedly', () {
+    check(Uint32(2).wrappedPow(32)).equals(Uint32(0));
+  });
+
+  test('2.pow(32) >> 1 does not overflow unexpectedly', () {
+    check(Uint32(2).wrappedPow(32).wrappedUnsignedShiftRight(1))
+        .equals(Uint32(0));
+  });
+
+  test('2.pow(32) - 1 >> 1 does not overflow unexpectedly', () {
+    check(
+      Uint32(2)
+          .wrappedPow(32)
+          .wrappedSubtract(Uint32(1))
+          .wrappedUnsignedShiftRight(1),
+    ).equals(Uint32(2147483647));
+  });
 }

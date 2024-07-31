@@ -24,6 +24,9 @@ const debugCheckUncheckedInRange = bool.fromEnvironment(
   defaultValue: true,
 );
 
+/// Whether the platform is JavaScript.
+const _isJsNumerics = identical(1, 1.0);
+
 /// A descriptor for a fixed-width integer type [T].
 ///
 /// An integer descriptor is used to describe the properties of a fixed-width
@@ -364,12 +367,17 @@ final class IntDescriptor<T> {
   /// The sign bit is preserved, and the result is rounded towards negative
   /// infinity.
   ///
-  /// This is intended to be roughly equivalent to JavaScript's `>>` operator.
+  /// This is intended to be equivalent to JavaScript's `>>` operator.
   @pragma('dart2js:tryInline')
   @pragma('vm:prefer-inline')
   T signedRightShift(int v, int n) {
     if (v >= 0) {
       return _uncheckedCast(v >> n);
+    }
+    if (_isJsNumerics) {
+      final mask = -1 << (width - n);
+      final result = (v.toUnsigned(width) >> n) | mask;
+      return _uncheckedCast(result.toSigned(width));
     }
     final mask = -1 << (width - n);
     final result = (v >> n) | mask;
@@ -380,6 +388,8 @@ final class IntDescriptor<T> {
   ///
   /// The high bits are the most significant bits, and the low bits are the
   /// least significant bits.
+  @pragma('dart2js:tryInline')
+  @pragma('vm:prefer-inline')
   (int, int) hiLo(int v) {
     return (v >> (width ~/ 2), v & ((1 << (width ~/ 2)) - 1));
   }
@@ -387,6 +397,8 @@ final class IntDescriptor<T> {
   /// Returns a [T] with the provided high and low bits.
   ///
   /// Bits out of range are ignored.
+  @pragma('dart2js:tryInline')
+  @pragma('vm:prefer-inline')
   T fromHiLo(int hi, int lo) {
     // Bring both hi and lo into range.
     hi &= (1 << (width ~/ 2)) - 1;
@@ -398,6 +410,8 @@ final class IntDescriptor<T> {
   /// Returns [v] sign-extended to the full width, from the [startWidth].
   ///
   /// All bits to the left (inclusive of [startWidth]) are replaced as a result.
+  @pragma('dart2js:tryInline')
+  @pragma('vm:prefer-inline')
   T signExtend(int v, int startWidth) {
     if (startWidth >= width) {
       return _uncheckedCast(v);
@@ -408,6 +422,86 @@ final class IntDescriptor<T> {
     }
     final result = v | ~((1 << startWidth) - 1);
     return _uncheckedCast(result);
+  }
+
+  /// Similar to [int.operator &], but consistent across platforms.
+  ///
+  /// See <https://dart.dev/guides/language/numbers#bitwise-operations>.
+  @pragma('dart2js:tryInline')
+  @pragma('vm:prefer-inline')
+  T uncheckedBinaryAnd(int a, int b) {
+    if (!_isJsNumerics || unsigned) {
+      return _uncheckedCast(a & b);
+    }
+    final result = a.toUnsigned(width) & b.toUnsigned(width);
+    return _uncheckedCast(result.toSigned(width));
+  }
+
+  /// Similar to [int.operator |], but consistent across platforms.
+  ///
+  /// See <https://dart.dev/guides/language/numbers#bitwise-operations>.
+  @pragma('dart2js:tryInline')
+  @pragma('vm:prefer-inline')
+  T uncheckedBinaryOr(int a, int b) {
+    if (!_isJsNumerics || unsigned) {
+      return _uncheckedCast(a | b);
+    }
+    final result = a.toUnsigned(width) | b.toUnsigned(width);
+    return _uncheckedCast(result.toSigned(width));
+  }
+
+  /// Similar to [int.operator ^], but consistent across platforms.
+  ///
+  /// See <https://dart.dev/guides/language/numbers#bitwise-operations>.
+  @pragma('dart2js:tryInline')
+  @pragma('vm:prefer-inline')
+  T uncheckedBinaryXor(int a, int b) {
+    if (!_isJsNumerics || unsigned) {
+      return _uncheckedCast(a ^ b);
+    }
+    final result = a.toUnsigned(width) ^ b.toUnsigned(width);
+    return _uncheckedCast(result.toSigned(width));
+  }
+
+  /// Similar to [int.operator ~], but consistent across platforms.
+  ///
+  /// See <https://dart.dev/guides/language/numbers#bitwise-operations>.
+  @pragma('dart2js:tryInline')
+  @pragma('vm:prefer-inline')
+  T uncheckedBinaryNot(int v) {
+    if (!_isJsNumerics || unsigned) {
+      return _uncheckedCast(~v);
+    }
+    final result = ~v.toUnsigned(width);
+    return _uncheckedCast(result.toSigned(width));
+  }
+
+  /// Similar to [int.operator >>], but consistent across platforms.
+  ///
+  /// See <https://dart.dev/guides/language/numbers#bitwise-operations>.
+  @pragma('dart2js:tryInline')
+  @pragma('vm:prefer-inline')
+  T uncheckedhiftRight(int v, int n) {
+    if (!_isJsNumerics || unsigned) {
+      return _uncheckedCast(v >> n);
+    }
+    final result = v.toUnsigned(width) >> n;
+    return _uncheckedCast(result.toSigned(width));
+  }
+
+  /// Similar to [int.operator <<], but consistent across platforms.
+  ///
+  /// See <https://dart.dev/guides/language/numbers#bitwise-operations>.
+  ///
+  /// The result may have overflowed the integer width and should be fitted.
+  @pragma('dart2js:tryInline')
+  @pragma('vm:prefer-inline')
+  int overflowingShiftLeft(int v, int n) {
+    if (!_isJsNumerics || unsigned) {
+      return v << n;
+    }
+    final result = v.toUnsigned(width) << n;
+    return result.toSigned(width);
   }
 
   /// Returns [v] as a binary string.

@@ -1191,12 +1191,16 @@ extension type const Int8._(int _) implements Comparable<num> {
   /// Bit-wise and operator.
   ///
   /// See [int.operator &] for more details.
-  Int8 operator &(Int8 other) => Int8.fromUnchecked(_ & other._);
+  Int8 operator &(Int8 other) {
+    return _descriptor.uncheckedBinaryAnd(_, other._);
+  }
 
   /// Bit-wise or operator.
   ///
   /// See [int.operator |] for more details.
-  Int8 operator |(Int8 other) => Int8.fromUnchecked(_ | other._);
+  Int8 operator |(Int8 other) {
+    return _descriptor.uncheckedBinaryOr(_, other._);
+  }
 
   /// Shifts the bits of this integer to the right by [shiftAmount].
   ///
@@ -1225,13 +1229,17 @@ extension type const Int8._(int _) implements Comparable<num> {
   /// ```dart
   /// Int8(3) << 2; // 12
   /// ```
-  Int8 operator <<(int shiftAmount) => Int8(_ << shiftAmount);
+  Int8 operator <<(int shiftAmount) {
+    return Int8(_descriptor.overflowingShiftLeft(_, shiftAmount));
+  }
 
   /// Shifts the bits of this integer to the left by [shiftAmount].
   ///
   /// If the result is out of range, the behavior is undefined.
   Int8 uncheckedShiftLeft(int shiftAmount) {
-    return Int8.fromUnchecked(_ << shiftAmount);
+    return Int8.fromUnchecked(
+      _descriptor.overflowingShiftLeft(_, shiftAmount),
+    );
   }
 
   /// Shifts the bits of this integer to the left by [shiftAmount].
@@ -1248,7 +1256,9 @@ extension type const Int8._(int _) implements Comparable<num> {
   /// ```dart
   /// Int8(3).tryShiftLeft(2); // 12
   /// ```
-  Int8? tryShiftLeft(int shiftAmount) => tryFrom(_ << shiftAmount);
+  Int8? tryShiftLeft(int shiftAmount) {
+    return tryFrom(_descriptor.overflowingShiftLeft(_, shiftAmount));
+  }
 
   /// Shifts the bits of this integer to the left by [shiftAmount].
   ///
@@ -1265,7 +1275,7 @@ extension type const Int8._(int _) implements Comparable<num> {
   /// Int8(3).wrappedShiftLeft(2); // 12
   /// ```
   Int8 wrappedShiftLeft(int shiftAmount) {
-    return Int8.fromWrapped(_ << shiftAmount);
+    return Int8.fromWrapped(_descriptor.overflowingShiftLeft(_, shiftAmount));
   }
 
   /// Shifts the bits of this integer to the left by [shiftAmount].
@@ -1284,7 +1294,7 @@ extension type const Int8._(int _) implements Comparable<num> {
   /// Int8(3).clampedShiftLeft(2); // 12
   /// ```
   Int8 clampedShiftLeft(int shiftAmount) {
-    return Int8.fromClamped(_ << shiftAmount);
+    return Int8.fromClamped(_descriptor.overflowingShiftLeft(_, shiftAmount));
   }
 
   /// Bitwise signed right shift by [shiftAmount] bits.
@@ -1397,13 +1407,17 @@ extension type const Int8._(int _) implements Comparable<num> {
   /// Bit-wise exclusive-or operator.
   ///
   /// See [int.operator ^] for more details.
-  Int8 operator ^(Int8 other) => Int8.fromUnchecked(_ ^ other._);
+  Int8 operator ^(Int8 other) {
+    return _descriptor.uncheckedBinaryXor(_, other._);
+  }
 
   /// The bit-wise negate operator.
   ///
   /// The bitwise compliment of an unsigned integer is its two's complement,
   /// or the number inverted.
-  Int8 operator ~() => Int8(~_);
+  Int8 operator ~() {
+    return _descriptor.uncheckedBinaryNot(_);
+  }
 
   /// Returns `this` sign-extended to the full width, from the [startWidth].
   ///
