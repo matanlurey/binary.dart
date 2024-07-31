@@ -371,7 +371,8 @@ final class IntDescriptor<T> {
     if (v >= 0) {
       return _uncheckedCast(v >> n);
     }
-    final result = (v >> n) | ((1 << (width - n)) - 1);
+    final mask = -1 << (width - n);
+    final result = (v >> n) | mask;
     return _uncheckedCast(result);
   }
 

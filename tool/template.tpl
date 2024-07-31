@@ -1326,7 +1326,92 @@ extension type const {{NAME}}._(int _) implements Comparable<num> {
   /// significant bits.
   ///
   /// The shiftAmount must be non-negative.
-  {{NAME}} operator >>>(int shiftAmount) => {{NAME}}.fromUnchecked(_ >>> shiftAmount);
+  /// 
+  /// If the result is out of range, it asserts in debug mode, and wraps in
+  /// release mode.
+  /// 
+  /// See also:
+  /// 
+  /// - [tryUnsignedShiftRight], which returns `null` if the result is out of
+  ///   range.
+  /// - [wrappedUnsignedShiftRight], which wraps the result if it is out o
+  ///   range.
+  /// - [clampedUnsignedShiftRight], which clamps the result if it is out of
+  ///   range.
+  {{NAME}} operator >>>(int shiftAmount) {
+    return {{NAME}}(_ >>> shiftAmount);
+  }
+
+  /// Bitwise unsigned right shift by [shiftAmount] bits.
+  /// 
+  /// The least significant shiftAmount bits are dropped, the remaining bits (if
+  /// any) are shifted down, and zero-bits are shifted in as the new most
+  /// significant bits.
+  /// 
+  /// If the result is out of range, the behavior is undefined.
+  {{NAME}} uncheckedUnsignedShiftRight(int shiftAmount) {
+    return {{NAME}}.fromUnchecked(_ >>> shiftAmount);
+  }
+
+  /// Bitwise unsigned right shift by [shiftAmount] bits.
+  /// 
+  /// The least significant shiftAmount bits are dropped, the remaining bits (if
+  /// any) are shifted down, and zero-bits are shifted in as the new most
+  /// significant bits.
+  /// 
+  /// If the result is out of range, it returns `null`.
+  /// 
+  /// See also:
+  /// 
+  /// - [operator >>>], which asserts in debug mode, and wraps in releas
+  ///   mode.
+  /// - [wrappedUnsignedShiftRight], which wraps the result if it is out of
+  ///   range.
+  /// - [clampedUnsignedShiftRight], which clamps the result if it is out of
+  ///   range.
+  {{NAME}}? tryUnsignedShiftRight(int shiftAmount) {
+    return tryFrom(_ >>> shiftAmount);
+  }
+
+  /// Bitwise unsigned right shift by [shiftAmount] bits.
+  /// 
+  /// The least significant shiftAmount bits are dropped, the remaining bits (if
+  /// any) are shifted down, and zero-bits are shifted in as the new most
+  /// significant bits.
+  /// 
+  /// If the result is out of range, it wraps the result.
+  /// 
+  /// See also:
+  /// 
+  /// - [operator >>>], which asserts in debug mode, and wraps in release
+  ///   mode.
+  /// - [tryUnsignedShiftRight], which returns `null` if the result is out of
+  ///   range.
+  /// - [clampedUnsignedShiftRight], which clamps the result if it is out of
+  ///   range.
+  {{NAME}} wrappedUnsignedShiftRight(int shiftAmount) {
+    return {{NAME}}.fromWrapped(_ >>> shiftAmount);
+  }
+
+  /// Bitwise unsigned right shift by [shiftAmount] bits.
+  /// 
+  /// The least significant shiftAmount bits are dropped, the remaining bits (if
+  /// any) are shifted down, and zero-bits are shifted in as the new most
+  /// significant bits.
+  /// 
+  /// If the result is out of range, it clamps the result.
+  /// 
+  /// See also:
+  /// 
+  /// - [operator >>>], which asserts in debug mode, and wraps in release
+  ///   mode.
+  /// - [tryUnsignedShiftRight], which returns `null` if the result is out of
+  ///   range.
+  /// - [wrappedUnsignedShiftRight], which wraps the result if it is out of
+  ///   range.
+  {{NAME}} clampedUnsignedShiftRight(int shiftAmount) {
+    return {{NAME}}.fromClamped(_ >>> shiftAmount);
+  }
 
   /// Bit-wise exclusive-or operator.
   /// 

@@ -101,6 +101,7 @@ void main() {
     final $n2 = Int8(-2);
 
     check($n2.pow(4)).equals(Int8(16));
+    check($n2.uncheckedPow(4)).equals(Int8(16));
     check($n2.tryPow(4)).equals(Int8(16));
     check($n2.clampedPow(4)).equals(Int8(16));
     check($n2.wrappedPow(4)).equals(Int8(16));
@@ -161,6 +162,21 @@ void main() {
   });
 
   group('individual bit operations', () {
+    test('bits iterator', () {
+      final i = int.parse('10101010', radix: 2).toSigned(8);
+      final bits = Int8(i).bits;
+      check(bits).deepEquals([
+        false,
+        true,
+        false,
+        true,
+        false,
+        true,
+        false,
+        true,
+      ]);
+    });
+
     test('msb is true for negative numbers', () {
       for (var i = Int8.min; i < Int8(0); i += Int8(1)) {
         check(i).has((p) => p.msb, 'msb').isTrue();
@@ -221,6 +237,16 @@ void main() {
     check($2).has((p) => p.nextPowerOf2(), 'nextPowerOf2').equals($2);
     check($63).has((p) => p.nextPowerOf2(), 'nextPowerOf2').equals($64);
 
+    check($1)
+        .has((p) => p.uncheckedNextPowerOf2(), 'uncheckedNextPowerOf2')
+        .equals($1);
+    check($2)
+        .has((p) => p.uncheckedNextPowerOf2(), 'uncheckedNextPowerOf2')
+        .equals($2);
+    check($63)
+        .has((p) => p.uncheckedNextPowerOf2(), 'uncheckedNextPowerOf2')
+        .equals($64);
+
     check($1).has((p) => p.tryNextPowerOf2(), 'nextPowerOf2').equals($1);
     check($2).has((p) => p.tryNextPowerOf2(), 'nextPowerOf2').equals($2);
     check($63).has((p) => p.tryNextPowerOf2(), 'nextPowerOf2').equals($64);
@@ -263,6 +289,16 @@ void main() {
     check($1).has((p) => p.nextMultipleOf($1), 'nextMultipleOf').equals($1);
     check($2).has((p) => p.nextMultipleOf($2), 'nextMultipleOf').equals($2);
     check($63).has((p) => p.nextMultipleOf($64), 'nextMultipleOf').equals($64);
+
+    check($1)
+        .has((p) => p.uncheckedNextMultipleOf($1), 'uncheckedNextMultipleOf')
+        .equals($1);
+    check($2)
+        .has((p) => p.uncheckedNextMultipleOf($2), 'uncheckedNextMultipleOf')
+        .equals($2);
+    check($63)
+        .has((p) => p.uncheckedNextMultipleOf($64), 'uncheckedNextMultipleOf')
+        .equals($64);
 
     check($1).has((p) => p.tryNextMultipleOf($1), 'nextMultipleOf').equals($1);
     check($2).has((p) => p.tryNextMultipleOf($2), 'nextMultipleOf').equals($2);
@@ -569,6 +605,7 @@ void main() {
       final $2 = Int8(2);
       final $3 = Int8(3);
       check($2 * $3).equals(Int8(6));
+      check($2.uncheckedMultiply($3)).equals(Int8(6));
       check($2.tryMultiply($3)).equals(Int8(6));
       check($2.clampedMultiply($3)).equals(Int8(6));
       check($2.wrappedMultiply($3)).equals(Int8(6));
@@ -643,6 +680,7 @@ void main() {
       final $2 = Int8(2);
       final $3 = Int8(3);
       check($2 + $3).equals(Int8(5));
+      check($2.uncheckedAdd($3)).equals(Int8(5));
       check($2.tryAdd($3)).equals(Int8(5));
       check($2.clampedAdd($3)).equals(Int8(5));
       check($2.wrappedAdd($3)).equals(Int8(5));
@@ -716,6 +754,7 @@ void main() {
       final $2 = Int8(2);
       final $3 = Int8(3);
       check($2 - $3).equals(Int8(-1));
+      check($2.uncheckedSubtract($3)).equals(Int8(-1));
       check($2.trySubtract($3)).equals(Int8(-1));
       check($2.clampedSubtract($3)).equals(Int8(-1));
       check($2.wrappedSubtract($3)).equals(Int8(-1));
@@ -781,6 +820,262 @@ void main() {
       check(Int8.min.trySubtract($2)).isNull();
       check(Int8.min.clampedSubtract($2)).equals(Int8(-128));
       check(Int8.min.wrappedSubtract($2)).equals(Int8(126));
+    });
+  });
+
+  test('operator >', () {
+    check(Int8(0)).has((p) => p > Int8(0), 'operator >').isFalse();
+    check(Int8(0)).has((p) => p > Int8(-1), 'operator >').isTrue();
+    check(Int8(0)).has((p) => p > Int8(1), 'operator >').isFalse();
+
+    check(Int8(1)).has((p) => p > Int8(0), 'operator >').isTrue();
+    check(Int8(1)).has((p) => p > Int8(-1), 'operator >').isTrue();
+    check(Int8(1)).has((p) => p > Int8(1), 'operator >').isFalse();
+
+    check(Int8(-1)).has((p) => p > Int8(0), 'operator >').isFalse();
+    check(Int8(-1)).has((p) => p > Int8(-1), 'operator >').isFalse();
+    check(Int8(-1)).has((p) => p > Int8(1), 'operator >').isFalse();
+  });
+
+  test('operator >=', () {
+    check(Int8(0)).has((p) => p >= Int8(0), 'operator >=').isTrue();
+    check(Int8(0)).has((p) => p >= Int8(-1), 'operator >=').isTrue();
+    check(Int8(0)).has((p) => p >= Int8(1), 'operator >=').isFalse();
+
+    check(Int8(1)).has((p) => p >= Int8(0), 'operator >=').isTrue();
+    check(Int8(1)).has((p) => p >= Int8(-1), 'operator >=').isTrue();
+    check(Int8(1)).has((p) => p >= Int8(1), 'operator >=').isTrue();
+
+    check(Int8(-1)).has((p) => p >= Int8(0), 'operator >=').isFalse();
+    check(Int8(-1)).has((p) => p >= Int8(-1), 'operator >=').isTrue();
+    check(Int8(-1)).has((p) => p >= Int8(1), 'operator >=').isFalse();
+  });
+
+  test('operator <', () {
+    check(Int8(0)).has((p) => p < Int8(0), 'operator <').isFalse();
+    check(Int8(0)).has((p) => p < Int8(-1), 'operator <').isFalse();
+    check(Int8(0)).has((p) => p < Int8(1), 'operator <').isTrue();
+
+    check(Int8(1)).has((p) => p < Int8(0), 'operator <').isFalse();
+    check(Int8(1)).has((p) => p < Int8(-1), 'operator <').isFalse();
+    check(Int8(1)).has((p) => p < Int8(1), 'operator <').isFalse();
+
+    check(Int8(-1)).has((p) => p < Int8(0), 'operator <').isTrue();
+    check(Int8(-1)).has((p) => p < Int8(-1), 'operator <').isFalse();
+    check(Int8(-1)).has((p) => p < Int8(1), 'operator <').isTrue();
+  });
+
+  test('operator <=', () {
+    check(Int8(0)).has((p) => p <= Int8(0), 'operator <=').isTrue();
+    check(Int8(0)).has((p) => p <= Int8(-1), 'operator <=').isFalse();
+    check(Int8(0)).has((p) => p <= Int8(1), 'operator <=').isTrue();
+
+    check(Int8(1)).has((p) => p <= Int8(0), 'operator <=').isFalse();
+    check(Int8(1)).has((p) => p <= Int8(-1), 'operator <=').isFalse();
+    check(Int8(1)).has((p) => p <= Int8(1), 'operator <=').isTrue();
+
+    check(Int8(-1)).has((p) => p <= Int8(0), 'operator <=').isTrue();
+    check(Int8(-1)).has((p) => p <= Int8(-1), 'operator <=').isTrue();
+    check(Int8(-1)).has((p) => p <= Int8(1), 'operator <=').isTrue();
+  });
+
+  group('negate', () {
+    test('should negate the value', () {
+      check(-Int8(0)).equals(Int8(0));
+      check(Int8(0).tryNegate()).equals(Int8(0));
+      check(Int8(0).clampedNegate()).equals(Int8(0));
+      check(Int8(0).wrappedNegate()).equals(Int8(0));
+
+      check(-Int8(1)).equals(Int8(-1));
+      check(Int8(1).tryNegate()).equals(Int8(-1));
+      check(Int8(1).clampedNegate()).equals(Int8(-1));
+      check(Int8(1).wrappedNegate()).equals(Int8(-1));
+
+      check(-Int8(-1)).equals(Int8(1));
+      check(Int8(-1).tryNegate()).equals(Int8(1));
+      check(Int8(-1).clampedNegate()).equals(Int8(1));
+      check(Int8(-1).wrappedNegate()).equals(Int8(1));
+    });
+
+    test('should catch overflows', () {
+      if (assertionsEnabled) {
+        check(() => -Int8.min).throws<Error>();
+      } else {
+        check(() => -Int8.min).returnsNormally().equals(Int8.min);
+      }
+
+      check(Int8.min.tryNegate()).isNull();
+      check(Int8.min.clampedNegate()).equals(Int8.max);
+      check(Int8.min.wrappedNegate()).equals(Int8.min);
+    });
+  });
+
+  test('opreator ~/', () {
+    check(Int8(0)).has((p) => p ~/ Int8(1), 'opreator ~/').equals(Int8(0));
+    check(Int8(1)).has((p) => p ~/ Int8(1), 'opreator ~/').equals(Int8(1));
+    check(Int8(2)).has((p) => p ~/ Int8(1), 'opreator ~/').equals(Int8(2));
+    check(Int8(3)).has((p) => p ~/ Int8(1), 'opreator ~/').equals(Int8(3));
+
+    check(Int8(-1)).has((p) => p ~/ Int8(1), 'opreator ~/').equals(Int8(-1));
+    check(Int8(-2)).has((p) => p ~/ Int8(1), 'opreator ~/').equals(Int8(-2));
+  });
+
+  test('operator &', () {
+    check(Int8(0) & Int8(0)).equals(Int8(0));
+    check(Int8(0) & Int8(1)).equals(Int8(0));
+    check(Int8(1) & Int8(0)).equals(Int8(0));
+    check(Int8(1) & Int8(1)).equals(Int8(1));
+
+    check(Int8(0) & Int8(2)).equals(Int8(0));
+    check(Int8(2) & Int8(0)).equals(Int8(0));
+    check(Int8(2) & Int8(2)).equals(Int8(2));
+
+    check(Int8(0) & Int8(-1)).equals(Int8(0));
+    check(Int8(-1) & Int8(0)).equals(Int8(0));
+    check(Int8(-1) & Int8(-1)).equals(Int8(-1));
+  });
+
+  test('operator |', () {
+    check(Int8(0) | Int8(0)).equals(Int8(0));
+    check(Int8(0) | Int8(1)).equals(Int8(1));
+    check(Int8(1) | Int8(0)).equals(Int8(1));
+    check(Int8(1) | Int8(1)).equals(Int8(1));
+
+    check(Int8(0) | Int8(2)).equals(Int8(2));
+    check(Int8(2) | Int8(0)).equals(Int8(2));
+    check(Int8(2) | Int8(2)).equals(Int8(2));
+
+    check(Int8(0) | Int8(-1)).equals(Int8(-1));
+    check(Int8(-1) | Int8(0)).equals(Int8(-1));
+    check(Int8(-1) | Int8(-1)).equals(Int8(-1));
+  });
+
+  test('operator >>', () {
+    check(Int8(0) >> 0).equals(Int8(0));
+    check(Int8(1) >> 0).equals(Int8(1));
+    check(Int8(2) >> 0).equals(Int8(2));
+    check(Int8(3) >> 0).equals(Int8(3));
+
+    check(Int8(0) >> 1).equals(Int8(0));
+    check(Int8(1) >> 1).equals(Int8(0));
+    check(Int8(2) >> 1).equals(Int8(1));
+    check(Int8(3) >> 1).equals(Int8(1));
+
+    check(Int8(0) >> 2).equals(Int8(0));
+    check(Int8(1) >> 2).equals(Int8(0));
+    check(Int8(2) >> 2).equals(Int8(0));
+    check(Int8(3) >> 2).equals(Int8(0));
+
+    check(Int8(0) >> 7).equals(Int8(0));
+    check(Int8(1) >> 7).equals(Int8(0));
+    check(Int8(2) >> 7).equals(Int8(0));
+    check(Int8(3) >> 7).equals(Int8(0));
+
+    check(Int8(0) >> 8).equals(Int8(0));
+    check(Int8(1) >> 8).equals(Int8(0));
+    check(Int8(2) >> 8).equals(Int8(0));
+    check(Int8(3) >> 8).equals(Int8(0));
+
+    // Try some negative values:
+    check(Int8(-1) >> 3).equals(Int8(-1));
+    check(Int8(-2) >> 3).equals(Int8(-1));
+    check(Int8(-3) >> 3).equals(Int8(-1));
+  });
+
+  group('operator <<', () {
+    test('should shift the bits to the left', () {
+      check(Int8(0) << 0).equals(Int8(0));
+      check(Int8(1) << 0).equals(Int8(1));
+      check(Int8(2) << 0).equals(Int8(2));
+      check(Int8(3) << 0).equals(Int8(3));
+
+      check(Int8(0) << 1).equals(Int8(0));
+      check(Int8(1) << 1).equals(Int8(2));
+      check(Int8(2) << 1).equals(Int8(4));
+      check(Int8(3) << 1).equals(Int8(6));
+
+      check(Int8(0) << 2).equals(Int8(0));
+      check(Int8(1) << 2).equals(Int8(4));
+      check(Int8(2) << 2).equals(Int8(8));
+      check(Int8(3) << 2).equals(Int8(12));
+
+      // Try some negative values:
+      check(Int8(-1) << 3).equals(Int8(-8));
+      check(Int8(-2) << 3).equals(Int8(-16));
+      check(Int8(-3) << 3).equals(Int8(-24));
+
+      // Use unchecked version but stay in range:
+      check(Int8(-2).uncheckedShiftLeft(3)).equals(Int8(-16));
+    });
+
+    test('should catch overflows', () {
+      if (assertionsEnabled) {
+        check(() => Int8(1) << 9).throws<Error>();
+      } else {
+        check(() => Int8(1) << 9).returnsNormally().equals(Int8(0));
+      }
+
+      check(Int8(1).tryShiftLeft(9)).isNull();
+      check(Int8(1).wrappedShiftLeft(9)).equals(Int8(0));
+      check(Int8(1).clampedShiftLeft(9)).equals(Int8.max);
+
+      // Try some negative values:
+      if (assertionsEnabled) {
+        check(() => Int8(-1) << 9).throws<Error>();
+      } else {
+        check(() => Int8(-1) << 9).returnsNormally().equals(Int8(0));
+      }
+
+      check(Int8(-1).tryShiftLeft(9)).isNull();
+      check(Int8(-1).wrappedShiftLeft(9)).equals(Int8(0));
+      check(Int8(-1).clampedShiftLeft(9)).equals(Int8.min);
+    });
+  });
+
+  test('signedRightShift', () {
+    check(Int8(0).signedRightShift(0)).equals(Int8(0));
+    check(Int8(1).signedRightShift(0)).equals(Int8(1));
+    check(Int8(2).signedRightShift(0)).equals(Int8(2));
+    check(Int8(3).signedRightShift(0)).equals(Int8(3));
+
+    check(Int8(0).signedRightShift(1)).equals(Int8(0));
+    check(Int8(1).signedRightShift(1)).equals(Int8(0));
+    check(Int8(2).signedRightShift(1)).equals(Int8(1));
+    check(Int8(3).signedRightShift(1)).equals(Int8(1));
+
+    check(Int8(0).signedRightShift(2)).equals(Int8(0));
+    check(Int8(1).signedRightShift(2)).equals(Int8(0));
+    check(Int8(2).signedRightShift(2)).equals(Int8(0));
+    check(Int8(3).signedRightShift(2)).equals(Int8(0));
+
+    check(Int8(0).signedRightShift(7)).equals(Int8(0));
+    check(Int8(1).signedRightShift(7)).equals(Int8(0));
+    check(Int8(2).signedRightShift(7)).equals(Int8(0));
+    check(Int8(3).signedRightShift(7)).equals(Int8(0));
+
+    check(Int8(0).signedRightShift(8)).equals(Int8(0));
+    check(Int8(1).signedRightShift(8)).equals(Int8(0));
+    check(Int8(2).signedRightShift(8)).equals(Int8(0));
+    check(Int8(3).signedRightShift(8)).equals(Int8(0));
+
+    // Try some larger negative values (i.e. lots of bits):
+    check(Int8(-100).signedRightShift(3)).equals(Int8(-13));
+    check(Int8(-100).signedRightShift(7)).equals(Int8(-1));
+    check(Int8(-100).signedRightShift(8)).equals(Int8(-1));
+  });
+
+  group('operator >>>', () {
+    test('in range', () {
+      // Use the standard operator:
+      check(Int8(0x55) >>> 3).equals(Int8(10));
+    });
+
+    test('overflows', () {
+      if (assertionsEnabled) {
+        check(() => Int8(-9) >>> 2).throws<Error>();
+      } else {
+        check(() => Int8(-9) >>> 2).returnsNormally().equals(Int8(62));
+      }
     });
   });
 }

@@ -96,6 +96,7 @@ void main() {
   test('pow that is in range', () {
     final $2 = Uint8(2);
     check($2.pow(4)).equals(Uint8(16));
+    check($2.uncheckedPow(4)).equals(Uint8(16));
     check($2.tryPow(4)).equals(Uint8(16));
     check($2.clampedPow(4)).equals(Uint8(16));
     check($2.wrappedPow(4)).equals(Uint8(16));
@@ -148,6 +149,21 @@ void main() {
   });
 
   group('individual bit operations', () {
+    test('bits iterator', () {
+      final i = int.parse('10101010', radix: 2);
+      final bits = Uint8(i).bits;
+      check(bits).deepEquals([
+        false,
+        true,
+        false,
+        true,
+        false,
+        true,
+        false,
+        true,
+      ]);
+    });
+
     test('msb is true numbers that are >= 128', () {
       for (var i = 0; i < 128; i++) {
         check(Uint8(i).msb).isFalse();
@@ -187,6 +203,7 @@ void main() {
     final $63 = Uint8(63);
 
     check($1.nextPowerOf2()).equals($1);
+    check($1.uncheckedNextPowerOf2()).equals($1);
     check($2.nextPowerOf2()).equals($2);
     check($63.nextPowerOf2()).equals(Uint8(64));
   });
@@ -210,6 +227,7 @@ void main() {
     final $10 = Uint8(10);
 
     check($5.nextMultipleOf($10)).equals($10);
+    check($5.uncheckedNextMultipleOf($10)).equals($10);
     check($5.tryNextMultipleOf($10)).equals($10);
     check($5.clampedNextMultipleOf($10)).equals($10);
     check($5.wrappedNextMultipleOf($10)).equals($10);
@@ -437,6 +455,7 @@ void main() {
       final $5 = Uint8(5);
       final $20 = Uint8(20);
       check($5 * $20).equals(Uint8(100));
+      check($5.uncheckedMultiply($20)).equals(Uint8(100));
       check($5.tryMultiply($20)).equals(Uint8(100));
       check($5.clampedMultiply($20)).equals(Uint8(100));
       check($5.wrappedMultiply($20)).equals(Uint8(100));
@@ -463,6 +482,7 @@ void main() {
       final $5 = Uint8(5);
       final $20 = Uint8(20);
       check($5 + $20).equals(Uint8(25));
+      check($5.uncheckedAdd($20)).equals(Uint8(25));
       check($5.tryAdd($20)).equals(Uint8(25));
       check($5.clampedAdd($20)).equals(Uint8(25));
       check($5.wrappedAdd($20)).equals(Uint8(25));
@@ -489,6 +509,7 @@ void main() {
       final $20 = Uint8(20);
       final $5 = Uint8(5);
       check($20 - $5).equals(Uint8(15));
+      check($20.uncheckedSubtract($5)).equals(Uint8(15));
       check($20.trySubtract($5)).equals(Uint8(15));
       check($20.clampedSubtract($5)).equals(Uint8(15));
       check($20.wrappedSubtract($5)).equals(Uint8(15));
@@ -507,6 +528,87 @@ void main() {
       check($100.trySubtract($200)).isNull();
       check($100.clampedSubtract($200)).equals(Uint8(0));
       check($100.wrappedSubtract($200)).equals(Uint8(156));
+    });
+  });
+
+  test('operator >', () {
+    check(Uint8(0) > Uint8(0)).isFalse();
+    check(Uint8(0) > Uint8(1)).isFalse();
+    check(Uint8(1) > Uint8(0)).isTrue();
+    check(Uint8(1) > Uint8(1)).isFalse();
+  });
+
+  test('operator >=', () {
+    check(Uint8(0) >= Uint8(0)).isTrue();
+    check(Uint8(0) >= Uint8(1)).isFalse();
+    check(Uint8(1) >= Uint8(0)).isTrue();
+    check(Uint8(1) >= Uint8(1)).isTrue();
+  });
+
+  test('operator <', () {
+    check(Uint8(0) < Uint8(0)).isFalse();
+    check(Uint8(0) < Uint8(1)).isTrue();
+    check(Uint8(1) < Uint8(0)).isFalse();
+    check(Uint8(1) < Uint8(1)).isFalse();
+  });
+
+  test('operator <=', () {
+    check(Uint8(0) <= Uint8(0)).isTrue();
+    check(Uint8(0) <= Uint8(1)).isTrue();
+    check(Uint8(1) <= Uint8(0)).isFalse();
+    check(Uint8(1) <= Uint8(1)).isTrue();
+  });
+
+  test('operator ~/', () {
+    check(Uint8(5) ~/ Uint8(3)).equals(Uint8(1));
+    check(Uint8(5) ~/ Uint8(5)).equals(Uint8(1));
+    check(Uint8(5) ~/ Uint8(6)).equals(Uint8(0));
+  });
+
+  test('operator &', () {
+    check(Uint8(0x55) & Uint8(0x33)).equals(Uint8(0x11));
+  });
+
+  test('operator |', () {
+    check(Uint8(0x55) | Uint8(0x33)).equals(Uint8(0x77));
+  });
+
+  test('operator >>', () {
+    check(Uint8(0x55) >> 1).equals(Uint8(0x2A));
+  });
+
+  group('operator <<', () {
+    test('in range', () {
+      check(Uint8(0x55) << 1).equals(Uint8(0xAA));
+      check(Uint8(0x55).uncheckedShiftLeft(1)).equals(Uint8(0xAA));
+      check(Uint8(0x55).tryShiftLeft(1)).equals(Uint8(0xAA));
+      check(Uint8(0x55).clampedShiftLeft(1)).equals(Uint8(0xAA));
+      check(Uint8(0x55).wrappedShiftLeft(1)).equals(Uint8(0xAA));
+    });
+
+    test('overflows', () {
+      final $200 = Uint8(200);
+
+      if (assertionsEnabled) {
+        check(() => $200 << 1).throws<Error>();
+      } else {
+        check($200 << 1).equals(Uint8(144));
+      }
+
+      check($200.tryShiftLeft(1)).isNull();
+      check($200.clampedShiftLeft(1)).equals(Uint8(255));
+      check($200.wrappedShiftLeft(1)).equals(Uint8(144));
+    });
+  });
+
+  test('signedRightShift', () {
+    check(Uint8(0x55).signedRightShift(1)).equals(Uint8(0x2A));
+  });
+
+  group('operator >>>', () {
+    test('in range', () {
+      // Use the standard operator:
+      check(Uint8(0x55) >>> 1).equals(Uint8(0x2A));
     });
   });
 }
