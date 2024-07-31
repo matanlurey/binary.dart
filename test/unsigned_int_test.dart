@@ -94,16 +94,20 @@ void main() {
   });
 
   test('pow that is in range', () {
-    const result = _Uint8Result.all(16);
-    check(Uint8(2)).checkPow(4, result);
+    final $2 = Uint8(2);
+    final $4 = Uint8(4);
+    check($2.pow(4)).equals(Uint8(16));
+    check($2.tryPow(4)).equals(Uint8(16));
+    check($2.clampedPow(4)).equals(Uint8(16));
+    check($2.wrappedPow(4)).equals(Uint8(16));
   });
 
   test('pow that overflows', () {
-    const result = _Uint8Result.fails(
-      expectedClamp: 255,
-      expectedWrap: 0,
-    );
-    check(Uint8(2)).checkPow(8, result);
+    final $2 = Uint8(2);
+    check(() => $2.pow(12)).throws<Error>();
+    check($2.tryPow(12)).isNull();
+    check($2.clampedPow(12)).equals(Uint8(255));
+    check($2.wrappedPow(12)).equals(Uint8(0));
   });
 
   test('sqrt', () {
@@ -173,49 +177,46 @@ void main() {
   });
 
   test('nextPowerOf2 in range', () {
-    check(Uint8(1)).checkNextPowerOf2(
-      const _Uint8Result.all(1),
-    );
-    check(Uint8(2)).checkNextPowerOf2(
-      const _Uint8Result.all(2),
-    );
-    check(Uint8(63)).checkNextPowerOf2(
-      const _Uint8Result.all(64),
-    );
+    final $1 = Uint8(1);
+    final $2 = Uint8(2);
+    final $63 = Uint8(63);
+
+    check($1.nextPowerOf2()).equals($1);
+    check($2.nextPowerOf2()).equals($2);
+    check($63.nextPowerOf2()).equals(Uint8(64));
   });
 
   test('nextPowerOf2 overflows', () {
-    check(Uint8(245)).checkNextPowerOf2(
-      const _Uint8Result.fails(
-        expectedClamp: 255,
-        expectedWrap: 0,
-      ),
-    );
+    final $245 = Uint8(245);
+    check($245.nextPowerOf2).throws<Error>();
+    check($245.tryNextPowerOf2()).isNull();
+    check($245.clampedNextPowerOf2()).equals(Uint8(255));
+    check($245.wrappedNextPowerOf2()).equals(Uint8(0));
   });
 
   test('nextMultipleOf in range', () {
-    check(Uint8(1)).checkNextMultipleOf(
-      const _Uint8Result.all(1),
-      Uint8(1),
-    );
-    check(Uint8(2)).checkNextMultipleOf(
-      const _Uint8Result.all(2),
-      Uint8(1),
-    );
-    check(Uint8(63)).checkNextMultipleOf(
-      const _Uint8Result.all(63),
-      Uint8(1),
-    );
+    final $5 = Uint8(5);
+    final $10 = Uint8(10);
+
+    check($5.nextMultipleOf($10)).equals($10);
+    check($5.tryNextMultipleOf($10)).equals($10);
+    check($5.clampedNextMultipleOf($10)).equals($10);
+    check($5.wrappedNextMultipleOf($10)).equals($10);
+
+    final $7 = Uint8(7);
+    final $3 = Uint8(3);
+
+    check($7.nextMultipleOf($3)).equals(Uint8(9));
+    check($7.tryNextMultipleOf($3)).equals(Uint8(9));
+    check($7.clampedNextMultipleOf($3)).equals(Uint8(9));
+    check($7.wrappedNextMultipleOf($3)).equals(Uint8(9));
   });
 
   test('nextMultipleOf overflows', () {
-    check(Uint8(245)).checkNextMultipleOf(
-      const _Uint8Result.fails(
-        expectedClamp: 255,
-        expectedWrap: 44,
-      ),
-      Uint8(100),
-    );
+    check(() => Uint8.max.nextMultipleOf(Uint8(2))).throws<Error>();
+    check(Uint8.max.tryNextMultipleOf(Uint8(2))).isNull();
+    check(Uint8.max.clampedNextMultipleOf(Uint8(2))).equals(Uint8.max);
+    check(Uint8.max.wrappedNextMultipleOf(Uint8(2))).equals(Uint8(0));
   });
 
   test('countOnes', () {
@@ -414,112 +415,24 @@ void main() {
     check(Uint8(5) % Uint8(5)).equals(Uint8(0));
     check(Uint8(5) % Uint8(6)).equals(Uint8(5));
   });
-}
 
-final class _Uint8Result {
-  const _Uint8Result.fails({
-    required this.expectedClamp,
-    required this.expectedWrap,
-  })  : expected = null,
-        expectedTry = null;
+  group('operator *', () {
+    test('in range', () {
+      final $5 = Uint8(5);
+      final $20 = Uint8(20);
+      check($5 * $20).equals(Uint8(100));
+      check($5.tryMultiply($20)).equals(Uint8(100));
+      check($5.clampedMultiply($20)).equals(Uint8(100));
+      check($5.wrappedMultiply($20)).equals(Uint8(100));
+    });
 
-  const _Uint8Result.all(int expected)
-      // ignore: prefer_initializing_formals
-      : expected = expected,
-        expectedTry = expected,
-        expectedClamp = expected,
-        expectedWrap = expected;
-
-  final int? expected;
-  final int? expectedTry;
-  final int expectedClamp;
-  final int expectedWrap;
-}
-
-extension on Subject<Uint8> {
-  void checkPow(int exponent, _Uint8Result result) {
-    if (result.expected case final int expected) {
-      has((p) => p.pow(exponent), 'pow($exponent)').equals(
-        expected as Uint8,
-      );
-    } else if (assertionsEnabled) {
-      has((p) => () => p.pow(exponent), 'pow($exponent)').throws<Error>();
-    } else {
-      has((p) => p.pow(exponent), 'pow($exponent)').equals(
-        result.expectedWrap as Uint8,
-      );
-    }
-
-    has((p) => p.tryPow(exponent), 'tryPow($exponent)').equals(
-      result.expectedTry as Uint8?,
-    );
-
-    has((p) => p.clampedPow(exponent), 'clampedPow($exponent)').equals(
-      result.expectedClamp as Uint8,
-    );
-
-    has((p) => p.wrappedPow(exponent), 'wrappedPow($exponent)').equals(
-      result.expectedWrap as Uint8,
-    );
-  }
-
-  void checkNextPowerOf2(_Uint8Result result) {
-    if (result.expected != null) {
-      has((p) => p.nextPowerOf2(), 'nextPowerOf2()').equals(
-        result.expected as Uint8,
-      );
-    } else if (assertionsEnabled) {
-      has((p) => () => p.nextPowerOf2(), 'nextPowerOf2()').throws<Error>();
-    } else {
-      has((p) => p.nextPowerOf2(), 'nextPowerOf2()').equals(
-        result.expectedWrap as Uint8,
-      );
-    }
-
-    has((p) => p.tryNextPowerOf2(), 'tryNextPowerOf2()').equals(
-      result.expectedTry as Uint8?,
-    );
-
-    has((p) => p.clampedNextPowerOf2(), 'clampedNextPowerOf2()').equals(
-      result.expectedClamp as Uint8,
-    );
-
-    has((p) => p.wrappedNextPowerOf2(), 'wrappedNextPowerOf2()').equals(
-      result.expectedWrap as Uint8,
-    );
-  }
-
-  void checkNextMultipleOf(_Uint8Result result, Uint8 multiple) {
-    if (result.expected != null) {
-      has(
-        (p) => p.nextMultipleOf(multiple),
-        'nextMultipleOf($multiple)',
-      ).equals(result.expected as Uint8);
-    } else if (assertionsEnabled) {
-      has(
-        (p) => () => p.nextMultipleOf(multiple),
-        'nextMultipleOf($multiple)',
-      ).throws<Error>();
-    } else {
-      has(
-        (p) => p.nextMultipleOf(multiple),
-        'nextMultipleOf($multiple)',
-      ).equals(result.expectedWrap as Uint8);
-    }
-
-    has(
-      (p) => p.tryNextMultipleOf(multiple),
-      'tryNextMultipleOf($multiple)',
-    ).equals(result.expectedTry as Uint8?);
-
-    has(
-      (p) => p.clampedNextMultipleOf(multiple),
-      'clampedNextMultipleOf($multiple)',
-    ).equals(result.expectedClamp as Uint8);
-
-    has(
-      (p) => p.wrappedNextMultipleOf(multiple),
-      'wrappedNextMultipleOf($multiple)',
-    ).equals(result.expectedWrap as Uint8);
-  }
+    test('overflows', () {
+      final $200 = Uint8(200);
+      final $3 = Uint8(3);
+      check(() => $200 * $3).throws<Error>();
+      check($200.tryMultiply($3)).isNull();
+      check($200.clampedMultiply($3)).equals(Uint8(255));
+      check($200.wrappedMultiply($3)).equals(Uint8(88));
+    });
+  });
 }

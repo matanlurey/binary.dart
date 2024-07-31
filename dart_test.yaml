@@ -8,6 +8,18 @@ presets:
       - vm
     compilers:
       - kernel
+
+  # Comprehensive test suite that runs on all platforms/compilers.
+  comprehensive:
+    platforms:
+      - chrome
+      - node
+      - vm
+    compilers:
+      - exe
+      - kernel
+      - dart2js
+      - dart2wasm
   
   # Runs the tests only in the standalone VM in JIT mode.
   fast:
@@ -15,17 +27,6 @@ presets:
       - vm
     compilers:
       - kernel
-
-platforms:  
-  - chrome
-  - node
-  - vm
-
-compilers:
-  - exe
-  - kernel
-  - dart2js
-  - dart2wasm
 
 fold_stack_frames:
   except:

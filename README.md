@@ -129,10 +129,10 @@ To run the tests, run:
 dart test
 ```
 
-Or, to run the tests _just_ in the Dart VM, which is much faster:
+Or, to run a comprehensive set of tests on all supported platforms, run:
 
 ```shell
-dart test -P fast
+dart test -P comprehensive
 ```
 
 To check code coverage locally, run:

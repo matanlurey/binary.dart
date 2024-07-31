@@ -98,16 +98,21 @@ void main() {
   });
 
   test('pow that is in range', () {
-    const result = _Int8Result.all(16);
-    check(Int8(-2)).checkPow(4, result);
+    final $n2 = Int8(-2);
+
+    check($n2.pow(4)).equals(Int8(16));
+    check($n2.tryPow(4)).equals(Int8(16));
+    check($n2.clampedPow(4)).equals(Int8(16));
+    check($n2.wrappedPow(4)).equals(Int8(16));
   });
 
   test('pow that overflows', () {
-    const result = _Int8Result.fails(
-      expectedClamp: 127,
-      expectedWrap: 0,
-    );
-    check(Int8(-2)).checkPow(8, result);
+    final $n2 = Int8(-2);
+
+    check(() => $n2.pow(8)).throws<Error>();
+    check($n2.tryPow(8)).isNull();
+    check($n2.clampedPow(8)).equals(Int8(127));
+    check($n2.wrappedPow(8)).equals(Int8(0));
   });
 
   test('sqrt', () {
@@ -202,49 +207,83 @@ void main() {
   });
 
   test('nextPowerOf2 in range', () {
-    check(Int8(1)).checkNextPowerOf2(
-      const _Int8Result.all(1),
-    );
-    check(Int8(2)).checkNextPowerOf2(
-      const _Int8Result.all(2),
-    );
-    check(Int8(63)).checkNextPowerOf2(
-      const _Int8Result.all(64),
-    );
+    final $1 = Int8(1);
+    final $2 = Int8(2);
+    final $63 = Int8(63);
+    final $64 = Int8(64);
+
+    check($1).has((p) => p.nextPowerOf2(), 'nextPowerOf2').equals($1);
+    check($2).has((p) => p.nextPowerOf2(), 'nextPowerOf2').equals($2);
+    check($63).has((p) => p.nextPowerOf2(), 'nextPowerOf2').equals($64);
+
+    check($1).has((p) => p.tryNextPowerOf2(), 'nextPowerOf2').equals($1);
+    check($2).has((p) => p.tryNextPowerOf2(), 'nextPowerOf2').equals($2);
+    check($63).has((p) => p.tryNextPowerOf2(), 'nextPowerOf2').equals($64);
+
+    check($1).has((p) => p.clampedNextPowerOf2(), 'nextPowerOf2').equals($1);
+    check($2).has((p) => p.clampedNextPowerOf2(), 'nextPowerOf2').equals($2);
+    check($63).has((p) => p.clampedNextPowerOf2(), 'nextPowerOf2').equals($64);
+
+    check($1).has((p) => p.wrappedNextPowerOf2(), 'nextPowerOf2').equals($1);
+    check($2).has((p) => p.wrappedNextPowerOf2(), 'nextPowerOf2').equals($2);
+    check($63).has((p) => p.wrappedNextPowerOf2(), 'nextPowerOf2').equals($64);
   });
 
   test('nextPowerOf2 overflows', () {
-    check(Int8(127)).checkNextPowerOf2(
-      const _Int8Result.fails(
-        expectedClamp: 127,
-        expectedWrap: -128,
-      ),
-    );
+    final $127 = Int8(127);
+
+    check($127).has((p) => p.nextPowerOf2, 'nextPowerOf2').throws<Error>();
+    check($127).has((p) => p.tryNextPowerOf2(), 'nextPowerOf2').isNull();
+    check($127)
+        .has((p) => p.clampedNextPowerOf2(), 'nextPowerOf2')
+        .equals($127);
+    check($127)
+        .has((p) => p.wrappedNextPowerOf2(), 'nextPowerOf2')
+        .equals(Int8(-128));
   });
 
   test('nextMultipleOf in range', () {
-    check(Int8(1)).checkNextMultipleOf(
-      const _Int8Result.all(1),
-      Int8(1),
-    );
-    check(Int8(2)).checkNextMultipleOf(
-      const _Int8Result.all(2),
-      Int8(1),
-    );
-    check(Int8(63)).checkNextMultipleOf(
-      const _Int8Result.all(63),
-      Int8(1),
-    );
+    final $1 = Int8(1);
+    final $2 = Int8(2);
+    final $63 = Int8(63);
+    final $64 = Int8(64);
+
+    check($1).has((p) => p.nextMultipleOf($1), 'nextMultipleOf').equals($1);
+    check($2).has((p) => p.nextMultipleOf($2), 'nextMultipleOf').equals($2);
+    check($63).has((p) => p.nextMultipleOf($64), 'nextMultipleOf').equals($64);
+
+    check($1).has((p) => p.tryNextMultipleOf($1), 'nextMultipleOf').equals($1);
+    check($2).has((p) => p.tryNextMultipleOf($2), 'nextMultipleOf').equals($2);
+    check($63)
+        .has((p) => p.tryNextMultipleOf($64), 'nextMultipleOf')
+        .equals($64);
+
+    check($1)
+        .has((p) => p.clampedNextMultipleOf($1), 'nextMultipleOf')
+        .equals($1);
+    check($2)
+        .has((p) => p.clampedNextMultipleOf($2), 'nextMultipleOf')
+        .equals($2);
+    check($63)
+        .has((p) => p.clampedNextMultipleOf($64), 'nextMultipleOf')
+        .equals($64);
+
+    check($1)
+        .has((p) => p.wrappedNextMultipleOf($1), 'nextMultipleOf')
+        .equals($1);
+    check($2)
+        .has((p) => p.wrappedNextMultipleOf($2), 'nextMultipleOf')
+        .equals($2);
+    check($63)
+        .has((p) => p.wrappedNextMultipleOf($64), 'nextMultipleOf')
+        .equals($64);
   });
 
   test('nextMultipleOf overflows', () {
-    check(Int8(127)).checkNextMultipleOf(
-      const _Int8Result.fails(
-        expectedClamp: 127,
-        expectedWrap: -126,
-      ),
-      Int8(10),
-    );
+    check(() => Int8.max.nextMultipleOf(Int8(2))).throws<Error>();
+    check(Int8.max.tryNextMultipleOf(Int8(2))).isNull();
+    check(Int8.max.clampedNextMultipleOf(Int8(2))).equals(Int8(127));
+    check(Int8.max.wrappedNextMultipleOf(Int8(2))).equals(Int8(-128));
   });
 
   test('countOnes', () {
@@ -385,16 +424,11 @@ void main() {
     });
 
     test('should catch overflows', () {
-      check(Int8.min).checkAbs(
-        const _Int8Result.fails(
-          expectedClamp: 127,
-          expectedWrap: -128,
-        ),
-      );
-
-      check(Int8.max).checkAbs(
-        const _Int8Result.all(127),
-      );
+      if (assertionsEnabled) {
+        check(() => Int8.min.abs()).throws<Error>();
+      } else {
+        check(() => Int8.min.abs()).returnsNormally().equals(Int8.min);
+      }
     });
   });
 
@@ -510,132 +544,60 @@ void main() {
     check(Int8(-1)).has((p) => p % Int8(1), 'operator %').equals(Int8(0));
     check(Int8(-2)).has((p) => p % Int8(1), 'operator %').equals(Int8(0));
   });
-}
 
-final class _Int8Result {
-  const _Int8Result.fails({
-    required this.expectedClamp,
-    required this.expectedWrap,
-  })  : expected = null,
-        expectedTry = null;
+  group('operator *', () {
+    test('in range, two positive numbers', () {
+      final $2 = Int8(2);
+      final $3 = Int8(3);
+      check($2 * $3).equals(Int8(6));
+      check($2.tryMultiply($3)).equals(Int8(6));
+      check($2.clampedMultiply($3)).equals(Int8(6));
+      check($2.wrappedMultiply($3)).equals(Int8(6));
+    });
 
-  const _Int8Result.all(int expected)
-      // ignore: prefer_initializing_formals
-      : expected = expected,
-        expectedTry = expected,
-        expectedClamp = expected,
-        expectedWrap = expected;
+    test('in range, two negative numbers', () {
+      final $2 = Int8(-2);
+      final $3 = Int8(-3);
+      check($2 * $3).equals(Int8(6));
+      check($2.tryMultiply($3)).equals(Int8(6));
+      check($2.clampedMultiply($3)).equals(Int8(6));
+      check($2.wrappedMultiply($3)).equals(Int8(6));
+    });
 
-  final int? expected;
-  final int? expectedTry;
-  final int expectedClamp;
-  final int expectedWrap;
-}
+    test('in range, one positive and one negative number', () {
+      final $2 = Int8(2);
+      final $3 = Int8(-3);
+      check($2 * $3).equals(Int8(-6));
+      check($2.tryMultiply($3)).equals(Int8(-6));
+      check($2.clampedMultiply($3)).equals(Int8(-6));
+      check($2.wrappedMultiply($3)).equals(Int8(-6));
+    });
 
-extension on Subject<Int8> {
-  void checkPow(int exponent, _Int8Result result) {
-    if (result.expected case final int expected) {
-      has((p) => p.pow(exponent), 'pow($exponent)').equals(
-        expected as Int8,
-      );
-    } else if (assertionsEnabled) {
-      has((p) => () => p.pow(exponent), 'pow($exponent)').throws<Error>();
-    } else {
-      has((p) => p.pow(exponent), 'pow($exponent)').equals(
-        result.expectedWrap as Int8,
-      );
-    }
+    test('overflows, two positive numbers', () {
+      final $64 = Int8(64);
+      final $2 = Int8(2);
+      check(() => $64 * $2).throws<Error>();
+      check($64.tryMultiply($2)).isNull();
+      check($64.clampedMultiply($2)).equals(Int8(127));
+      check($64.wrappedMultiply($2)).equals(Int8(-128));
+    });
 
-    has((p) => p.tryPow(exponent), 'tryPow($exponent)').equals(
-      result.expectedTry as Int8?,
-    );
+    test('overflows, two negative numbers', () {
+      final $64 = Int8(-64);
+      final $2 = Int8(-2);
+      check(() => $64 * $2).throws<Error>();
+      check($64.tryMultiply($2)).isNull();
+      check($64.clampedMultiply($2)).equals(Int8(127));
+      check($64.wrappedMultiply($2)).equals(Int8(-128));
+    });
 
-    has((p) => p.clampedPow(exponent), 'clampedPow($exponent)').equals(
-      result.expectedClamp as Int8,
-    );
-
-    has((p) => p.wrappedPow(exponent), 'wrappedPow($exponent)').equals(
-      result.expectedWrap as Int8,
-    );
-  }
-
-  void checkNextPowerOf2(_Int8Result result) {
-    if (result.expected != null) {
-      has((p) => p.nextPowerOf2(), 'nextPowerOf2()').equals(
-        result.expected as Int8,
-      );
-    } else if (assertionsEnabled) {
-      has((p) => () => p.nextPowerOf2(), 'nextPowerOf2()').throws<Error>();
-    } else {
-      has((p) => p.nextPowerOf2(), 'nextPowerOf2()').equals(
-        result.expectedWrap as Int8,
-      );
-    }
-
-    has((p) => p.tryNextPowerOf2(), 'tryNextPowerOf2()').equals(
-      result.expected as Int8?,
-    );
-
-    has((p) => p.clampedNextPowerOf2(), 'clampedNextPowerOf2()').equals(
-      result.expectedClamp as Int8,
-    );
-
-    has((p) => p.wrappedNextPowerOf2(), 'wrappedNextPowerOf2()').equals(
-      result.expectedWrap as Int8,
-    );
-  }
-
-  void checkNextMultipleOf(_Int8Result result, Int8 multiple) {
-    if (result.expected != null) {
-      has(
-        (p) => p.nextMultipleOf(multiple),
-        'nextMultipleOf($multiple)',
-      ).equals(result.expected as Int8);
-    } else if (assertionsEnabled) {
-      has(
-        (p) => () => p.nextMultipleOf(multiple),
-        'nextMultipleOf($multiple)',
-      ).throws<Error>();
-    } else {
-      has(
-        (p) => p.nextMultipleOf(multiple),
-        'nextMultipleOf($multiple)',
-      ).equals(result.expectedWrap as Int8);
-    }
-
-    has(
-      (p) => p.tryNextMultipleOf(multiple),
-      'tryNextMultipleOf($multiple)',
-    ).equals(result.expected as Int8?);
-
-    has(
-      (p) => p.clampedNextMultipleOf(multiple),
-      'clampedNextMultipleOf($multiple)',
-    ).equals(result.expectedClamp as Int8);
-
-    has(
-      (p) => p.wrappedNextMultipleOf(multiple),
-      'wrappedNextMultipleOf($multiple)',
-    ).equals(result.expectedWrap as Int8);
-  }
-
-  void checkAbs(_Int8Result result) {
-    if (result.expected != null) {
-      has((p) => p.abs(), 'abs()').equals(result.expected as Int8);
-    } else if (assertionsEnabled) {
-      has((p) => () => p.abs(), 'abs()').throws<Error>();
-    } else {
-      has((p) => p.abs(), 'abs()').equals(result.expectedWrap as Int8);
-    }
-
-    has((p) => p.tryAbs(), 'tryAbs()').equals(result.expected as Int8?);
-
-    has((p) => p.clampedAbs(), 'clampedAbs()').equals(
-      result.expectedClamp as Int8,
-    );
-
-    has((p) => p.wrappedAbs(), 'wrappedAbs()').equals(
-      result.expectedWrap as Int8,
-    );
-  }
+    test('overflows, one positive and one negative number', () {
+      final $64 = Int8(64);
+      final $3 = Int8(-3);
+      check(() => $64 * $3).throws<Error>();
+      check($64.tryMultiply($3)).isNull();
+      check($64.clampedMultiply($3)).equals(Int8(-128));
+      check($64.wrappedMultiply($3)).equals(Int8(64));
+    });
+  });
 }
