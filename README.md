@@ -132,7 +132,7 @@ dart test
 Or, to run a comprehensive set of tests on all supported platforms, run:
 
 ```shell
-dart test -P comprehensive
+dart test -P all
 ```
 
 To check code coverage locally, run:

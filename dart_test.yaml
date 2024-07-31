@@ -10,7 +10,7 @@ presets:
       - kernel
 
   # Comprehensive test suite that runs on all platforms/compilers.
-  comprehensive:
+  all:
     platforms:
       - chrome
       - node

@@ -95,7 +95,6 @@ void main() {
 
   test('pow that is in range', () {
     final $2 = Uint8(2);
-    final $4 = Uint8(4);
     check($2.pow(4)).equals(Uint8(16));
     check($2.tryPow(4)).equals(Uint8(16));
     check($2.clampedPow(4)).equals(Uint8(16));
@@ -104,7 +103,13 @@ void main() {
 
   test('pow that overflows', () {
     final $2 = Uint8(2);
-    check(() => $2.pow(12)).throws<Error>();
+
+    if (assertionsEnabled) {
+      check(() => $2.pow(12)).throws<Error>();
+    } else {
+      check($2.pow(12)).equals(Uint8(0));
+    }
+
     check($2.tryPow(12)).isNull();
     check($2.clampedPow(12)).equals(Uint8(255));
     check($2.wrappedPow(12)).equals(Uint8(0));
@@ -188,7 +193,13 @@ void main() {
 
   test('nextPowerOf2 overflows', () {
     final $245 = Uint8(245);
-    check($245.nextPowerOf2).throws<Error>();
+
+    if (assertionsEnabled) {
+      check($245.nextPowerOf2).throws<Error>();
+    } else {
+      check($245.nextPowerOf2()).equals(Uint8(0));
+    }
+
     check($245.tryNextPowerOf2()).isNull();
     check($245.clampedNextPowerOf2()).equals(Uint8(255));
     check($245.wrappedNextPowerOf2()).equals(Uint8(0));
@@ -213,7 +224,12 @@ void main() {
   });
 
   test('nextMultipleOf overflows', () {
-    check(() => Uint8.max.nextMultipleOf(Uint8(2))).throws<Error>();
+    if (assertionsEnabled) {
+      check(() => Uint8.max.nextMultipleOf(Uint8(2))).throws<Error>();
+    } else {
+      check(Uint8.max.nextMultipleOf(Uint8(2))).equals(Uint8(0));
+    }
+
     check(Uint8.max.tryNextMultipleOf(Uint8(2))).isNull();
     check(Uint8.max.clampedNextMultipleOf(Uint8(2))).equals(Uint8.max);
     check(Uint8.max.wrappedNextMultipleOf(Uint8(2))).equals(Uint8(0));
@@ -429,7 +445,13 @@ void main() {
     test('overflows', () {
       final $200 = Uint8(200);
       final $3 = Uint8(3);
-      check(() => $200 * $3).throws<Error>();
+
+      if (assertionsEnabled) {
+        check(() => $200 * $3).throws<Error>();
+      } else {
+        check($200 * $3).equals(Uint8(88));
+      }
+
       check($200.tryMultiply($3)).isNull();
       check($200.clampedMultiply($3)).equals(Uint8(255));
       check($200.wrappedMultiply($3)).equals(Uint8(88));

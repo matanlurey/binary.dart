@@ -109,7 +109,12 @@ void main() {
   test('pow that overflows', () {
     final $n2 = Int8(-2);
 
-    check(() => $n2.pow(8)).throws<Error>();
+    if (assertionsEnabled) {
+      check(() => $n2.pow(8)).throws<Error>();
+    } else {
+      check(() => $n2.pow(8)).returnsNormally().equals(Int8(0));
+    }
+
     check($n2.tryPow(8)).isNull();
     check($n2.clampedPow(8)).equals(Int8(127));
     check($n2.wrappedPow(8)).equals(Int8(0));
@@ -232,7 +237,14 @@ void main() {
   test('nextPowerOf2 overflows', () {
     final $127 = Int8(127);
 
-    check($127).has((p) => p.nextPowerOf2, 'nextPowerOf2').throws<Error>();
+    if (assertionsEnabled) {
+      check($127).has((p) => p.nextPowerOf2, 'nextPowerOf2').throws<Error>();
+    } else {
+      check($127)
+          .has((p) => p.nextPowerOf2(), 'nextPowerOf2')
+          .equals(Int8(-128));
+    }
+
     check($127).has((p) => p.tryNextPowerOf2(), 'nextPowerOf2').isNull();
     check($127)
         .has((p) => p.clampedNextPowerOf2(), 'nextPowerOf2')
@@ -280,7 +292,14 @@ void main() {
   });
 
   test('nextMultipleOf overflows', () {
-    check(() => Int8.max.nextMultipleOf(Int8(2))).throws<Error>();
+    if (assertionsEnabled) {
+      check(() => Int8.max.nextMultipleOf(Int8(2))).throws<Error>();
+    } else {
+      check(() => Int8.max.nextMultipleOf(Int8(2)))
+          .returnsNormally()
+          .equals(Int8(-128));
+    }
+
     check(Int8.max.tryNextMultipleOf(Int8(2))).isNull();
     check(Int8.max.clampedNextMultipleOf(Int8(2))).equals(Int8(127));
     check(Int8.max.wrappedNextMultipleOf(Int8(2))).equals(Int8(-128));
@@ -576,7 +595,13 @@ void main() {
     test('overflows, two positive numbers', () {
       final $64 = Int8(64);
       final $2 = Int8(2);
-      check(() => $64 * $2).throws<Error>();
+
+      if (assertionsEnabled) {
+        check(() => $64 * $2).throws<Error>();
+      } else {
+        check(() => $64 * $2).returnsNormally().equals(Int8(-128));
+      }
+
       check($64.tryMultiply($2)).isNull();
       check($64.clampedMultiply($2)).equals(Int8(127));
       check($64.wrappedMultiply($2)).equals(Int8(-128));
@@ -585,7 +610,13 @@ void main() {
     test('overflows, two negative numbers', () {
       final $64 = Int8(-64);
       final $2 = Int8(-2);
-      check(() => $64 * $2).throws<Error>();
+
+      if (assertionsEnabled) {
+        check(() => $64 * $2).throws<Error>();
+      } else {
+        check(() => $64 * $2).returnsNormally().equals(Int8(-128));
+      }
+
       check($64.tryMultiply($2)).isNull();
       check($64.clampedMultiply($2)).equals(Int8(127));
       check($64.wrappedMultiply($2)).equals(Int8(-128));
@@ -594,7 +625,13 @@ void main() {
     test('overflows, one positive and one negative number', () {
       final $64 = Int8(64);
       final $3 = Int8(-3);
-      check(() => $64 * $3).throws<Error>();
+
+      if (assertionsEnabled) {
+        check(() => $64 * $3).throws<Error>();
+      } else {
+        check(() => $64 * $3).returnsNormally().equals(Int8(64));
+      }
+
       check($64.tryMultiply($3)).isNull();
       check($64.clampedMultiply($3)).equals(Int8(-128));
       check($64.wrappedMultiply($3)).equals(Int8(64));
