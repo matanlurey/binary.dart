@@ -62,7 +62,7 @@ import 'package:meta/meta.dart';
 /// important to be aware of this limitation.
 ///
 /// This also applies to methods such as [List.cast] or [Iterable.whereType].
-extension type const Int16._(int _) implements Comparable<num> {
+extension type const Int16._(int _) implements FixedInt {
   static const _descriptor = IntDescriptor<Int16>.signed(
     Int16.fromUnchecked,
     width: width,
@@ -145,6 +145,21 @@ extension type const Int16._(int _) implements Comparable<num> {
   @pragma('dart2js:tryInline')
   @pragma('vm:prefer-inline')
   factory Int16.fromClamped(int v) => _descriptor.fitClamping(v);
+
+  /// Defines an existing fixed-width integer [v] as a Int16.
+  ///
+  /// - If `this`'s width is >= [v]'s width, the result is the same as [v].
+  /// - Otherwise, the result is clamped to fit, similar to `fromClamped`.
+  ///
+  /// This is a convenience constructor; similar behavior can be achieved with:
+  ///
+  /// ```dart
+  /// final rawInt = v.toInt();
+  /// Int16.fromClamped(rawInt);
+  /// ```
+  @pragma('dart2js:tryInline')
+  @pragma('vm:prefer-inline')
+  factory Int16.fromInt(FixedInt v) => _descriptor.fitClamping(v.toInt());
 
   /// Creates a [Int16] using two integers as high and low bits.
   ///
@@ -842,6 +857,7 @@ extension type const Int16._(int _) implements Comparable<num> {
   /// This is the underlying integer representation of a [Int16], and is
   /// effectively an identity function, but for consistency and completeness,
   /// it is provided as a method to discourage casting.
+  @redeclare
   int toInt() => _;
 
   /// Returns this integer split into two parts: high and low bits.
@@ -1422,13 +1438,6 @@ extension type const Int16._(int _) implements Comparable<num> {
   /// or the number inverted.
   Int16 operator ~() {
     return _descriptor.uncheckedBinaryNot(_);
-  }
-
-  /// Returns `this` sign-extended to the full width, from the [startWidth].
-  ///
-  /// All bits to the left (inclusive of [startWidth]) are replaced as a result.
-  Int16 signExtend(int startWidth) {
-    return _descriptor.signExtend(_, startWidth);
   }
 
   /// Returns `this` as a binary string.

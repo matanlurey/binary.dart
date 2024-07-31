@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
-import 'package:binary/binary.dart' show Int8, debugCheckFixedWithInRange;
+import 'package:binary/binary.dart'
+    show FixedInt, Int8, debugCheckFixedWithInRange;
 import 'package:test/test.dart';
 
 import 'src/prelude.dart';
@@ -95,6 +96,18 @@ void main() {
       final (hi, lo) = i.hiLo;
       check(Int8.fromHiLo(hi, lo)).equals(i);
     }
+  });
+
+  group('Int8.fromInt', () {
+    test('same number', () {
+      final $F = 0xF as FixedInt;
+      check(Int8.fromInt($F)).equals(Int8(0xF));
+    });
+
+    test('truncates', () {
+      final $FF = 0xFF as FixedInt;
+      check(Int8.fromInt($FF)).equals(Int8.max);
+    });
   });
 
   test('pow that is in range', () {
@@ -476,6 +489,14 @@ void main() {
     test('should return the absolute value', () {
       check(Int8(-1).abs()).equals(Int8(1));
       check(Int8(1).abs()).equals(Int8(1));
+      check(Int8(1).uncheckedAbs()).equals(Int8(1));
+      check(Int8(-1).uncheckedAbs()).equals(Int8(1));
+      check(Int8(1).tryAbs()).equals(Int8(1));
+      check(Int8(-1).tryAbs()).equals(Int8(1));
+      check(Int8(1).clampedAbs()).equals(Int8(1));
+      check(Int8(-1).clampedAbs()).equals(Int8(1));
+      check(Int8(1).wrappedAbs()).equals(Int8(1));
+      check(Int8(-1).wrappedAbs()).equals(Int8(1));
     });
 
     test('should catch overflows', () {
@@ -484,6 +505,10 @@ void main() {
       } else {
         check(() => Int8.min.abs()).returnsNormally().equals(Int8.min);
       }
+
+      check(Int8.min.tryAbs()).isNull();
+      check(Int8.min.clampedAbs()).equals(Int8.max);
+      check(Int8.min.wrappedAbs()).equals(Int8.min);
     });
   });
 
@@ -885,16 +910,19 @@ void main() {
       check(Int8(0).tryNegate()).equals(Int8(0));
       check(Int8(0).clampedNegate()).equals(Int8(0));
       check(Int8(0).wrappedNegate()).equals(Int8(0));
+      check(Int8(0).uncheckedNegate()).equals(Int8(0));
 
       check(-Int8(1)).equals(Int8(-1));
       check(Int8(1).tryNegate()).equals(Int8(-1));
       check(Int8(1).clampedNegate()).equals(Int8(-1));
       check(Int8(1).wrappedNegate()).equals(Int8(-1));
+      check(Int8(1).uncheckedNegate()).equals(Int8(-1));
 
       check(-Int8(-1)).equals(Int8(1));
       check(Int8(-1).tryNegate()).equals(Int8(1));
       check(Int8(-1).clampedNegate()).equals(Int8(1));
       check(Int8(-1).wrappedNegate()).equals(Int8(1));
+      check(Int8(-1).uncheckedNegate()).equals(Int8(1));
     });
 
     test('should catch overflows', () {
@@ -1084,5 +1112,26 @@ void main() {
       check(Int8(-9).wrappedUnsignedShiftRight(2)).equals(Int8(-3));
       check(Int8(-9).clampedUnsignedShiftRight(2)).equals(Int8(127));
     });
+  });
+
+  test('operator ^', () {
+    check(Int8(0) ^ Int8(0)).equals(Int8(0));
+    check(Int8(0) ^ Int8(1)).equals(Int8(1));
+    check(Int8(1) ^ Int8(0)).equals(Int8(1));
+    check(Int8(1) ^ Int8(1)).equals(Int8(0));
+
+    check(Int8(0) ^ Int8(2)).equals(Int8(2));
+    check(Int8(2) ^ Int8(0)).equals(Int8(2));
+    check(Int8(2) ^ Int8(2)).equals(Int8(0));
+
+    check(Int8(0) ^ Int8(-1)).equals(Int8(-1));
+    check(Int8(-1) ^ Int8(0)).equals(Int8(-1));
+    check(Int8(-1) ^ Int8(-1)).equals(Int8(0));
+  });
+
+  test('operator ~', () {
+    check(~Int8(0)).equals(Int8(-1));
+    check(~Int8(1)).equals(Int8(-2));
+    check(~Int8(2)).equals(Int8(-3));
   });
 }

@@ -60,7 +60,7 @@ import 'package:meta/meta.dart';
 /// important to be aware of this limitation.
 ///
 /// This also applies to methods such as [List.cast] or [Iterable.whereType].
-extension type const Uint8._(int _) implements Comparable<num> {
+extension type const Uint8._(int _) implements FixedInt {
   static const _descriptor = IntDescriptor<Uint8>.unsigned(
     Uint8.fromUnchecked,
     width: width,
@@ -143,6 +143,21 @@ extension type const Uint8._(int _) implements Comparable<num> {
   @pragma('dart2js:tryInline')
   @pragma('vm:prefer-inline')
   factory Uint8.fromClamped(int v) => _descriptor.fitClamping(v);
+
+  /// Defines an existing fixed-width integer [v] as a Uint8.
+  ///
+  /// - If `this`'s width is >= [v]'s width, the result is the same as [v].
+  /// - Otherwise, the result is clamped to fit, similar to `fromClamped`.
+  ///
+  /// This is a convenience constructor; similar behavior can be achieved with:
+  ///
+  /// ```dart
+  /// final rawInt = v.toInt();
+  /// Uint8.fromClamped(rawInt);
+  /// ```
+  @pragma('dart2js:tryInline')
+  @pragma('vm:prefer-inline')
+  factory Uint8.fromInt(FixedInt v) => _descriptor.fitClamping(v.toInt());
 
   /// Creates a [Uint8] using two integers as high and low bits.
   ///
@@ -753,6 +768,7 @@ extension type const Uint8._(int _) implements Comparable<num> {
   /// This is the underlying integer representation of a [Uint8], and is
   /// effectively an identity function, but for consistency and completeness,
   /// it is provided as a method to discourage casting.
+  @redeclare
   int toInt() => _;
 
   /// Returns this integer split into two parts: high and low bits.
@@ -1172,13 +1188,6 @@ extension type const Uint8._(int _) implements Comparable<num> {
   /// See [int.operator ^] for more details.
   Uint8 operator ^(Uint8 other) {
     return _descriptor.uncheckedBinaryXor(_, other._);
-  }
-
-  /// Returns `this` sign-extended to the full width, from the [startWidth].
-  ///
-  /// All bits to the left (inclusive of [startWidth]) are replaced as a result.
-  Uint8 signExtend(int startWidth) {
-    return _descriptor.signExtend(_, startWidth);
   }
 
   /// Returns `this` as a binary string.

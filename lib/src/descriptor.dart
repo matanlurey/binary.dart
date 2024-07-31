@@ -27,6 +27,20 @@ const debugCheckUncheckedInRange = bool.fromEnvironment(
 /// Whether the platform is JavaScript.
 const _isJsNumerics = identical(1, 1.0);
 
+/// A base extension type for fixed-width integers.
+///
+/// This type is not very useful, and mostly exists for consistency.
+///
+/// @nodoc
+extension type const FixedInt._(int _) implements Comparable<num> {
+  /// This number as an [int].
+  ///
+  /// This is the underlying integer representation of the `FixedInt`, and is
+  /// effectively an identity function, but for consistency and completeness,
+  /// it is provided as a method to discourage casting.
+  int toInt() => _;
+}
+
 /// A descriptor for a fixed-width integer type [T].
 ///
 /// An integer descriptor is used to describe the properties of a fixed-width
@@ -374,11 +388,13 @@ final class IntDescriptor<T> {
     if (v >= 0) {
       return _uncheckedCast(v >> n);
     }
+    // coverage:ignore-start
     if (_isJsNumerics) {
       final mask = -1 << (width - n);
       final result = (v.toUnsigned(width) >> n) | mask;
       return _uncheckedCast(result.toSigned(width));
     }
+    // coverage:ignore-end
     final mask = -1 << (width - n);
     final result = (v >> n) | mask;
     return _uncheckedCast(result);
@@ -407,34 +423,21 @@ final class IntDescriptor<T> {
     return _uncheckedCast(signed ? result.toSigned(width) : result);
   }
 
-  /// Returns [v] sign-extended to the full width, from the [startWidth].
-  ///
-  /// All bits to the left (inclusive of [startWidth]) are replaced as a result.
-  @pragma('dart2js:tryInline')
-  @pragma('vm:prefer-inline')
-  T signExtend(int v, int startWidth) {
-    if (startWidth >= width) {
-      return _uncheckedCast(v);
-    }
-    final mask = 1 << (startWidth - 1);
-    if (v & mask == 0) {
-      return _uncheckedCast(v);
-    }
-    final result = v | ~((1 << startWidth) - 1);
-    return _uncheckedCast(result);
-  }
-
   /// Similar to [int.operator &], but consistent across platforms.
   ///
   /// See <https://dart.dev/guides/language/numbers#bitwise-operations>.
   @pragma('dart2js:tryInline')
   @pragma('vm:prefer-inline')
   T uncheckedBinaryAnd(int a, int b) {
+    // coverage:ignore-start
     if (!_isJsNumerics || unsigned) {
+      // coverage:ignore-end
       return _uncheckedCast(a & b);
     }
+    // coverage:ignore-start
     final result = a.toUnsigned(width) & b.toUnsigned(width);
     return _uncheckedCast(result.toSigned(width));
+    // coverage:ignore-end
   }
 
   /// Similar to [int.operator |], but consistent across platforms.
@@ -443,11 +446,15 @@ final class IntDescriptor<T> {
   @pragma('dart2js:tryInline')
   @pragma('vm:prefer-inline')
   T uncheckedBinaryOr(int a, int b) {
+    // coverage:ignore-start
     if (!_isJsNumerics || unsigned) {
+      // coverage:ignore-end
       return _uncheckedCast(a | b);
     }
+    // coverage:ignore-start
     final result = a.toUnsigned(width) | b.toUnsigned(width);
     return _uncheckedCast(result.toSigned(width));
+    // coverage:ignore-end
   }
 
   /// Similar to [int.operator ^], but consistent across platforms.
@@ -456,11 +463,15 @@ final class IntDescriptor<T> {
   @pragma('dart2js:tryInline')
   @pragma('vm:prefer-inline')
   T uncheckedBinaryXor(int a, int b) {
+    // coverage:ignore-start
     if (!_isJsNumerics || unsigned) {
+      // coverage:ignore-end
       return _uncheckedCast(a ^ b);
     }
+    // coverage:ignore-start
     final result = a.toUnsigned(width) ^ b.toUnsigned(width);
     return _uncheckedCast(result.toSigned(width));
+    // coverage:ignore-end
   }
 
   /// Similar to [int.operator ~], but consistent across platforms.
@@ -469,11 +480,15 @@ final class IntDescriptor<T> {
   @pragma('dart2js:tryInline')
   @pragma('vm:prefer-inline')
   T uncheckedBinaryNot(int v) {
+    // coverage:ignore-start
     if (!_isJsNumerics || unsigned) {
+      // coverage:ignore-end
       return _uncheckedCast(~v);
     }
+    // coverage:ignore-start
     final result = ~v.toUnsigned(width);
     return _uncheckedCast(result.toSigned(width));
+    // coverage:ignore-end
   }
 
   /// Similar to [int.operator >>], but consistent across platforms.
@@ -482,11 +497,15 @@ final class IntDescriptor<T> {
   @pragma('dart2js:tryInline')
   @pragma('vm:prefer-inline')
   T uncheckedShiftRight(int v, int n) {
+    // coverage:ignore-start
     if (!_isJsNumerics || v >= 0) {
+      // coverage:ignore-end
       return _uncheckedCast(v >> n);
     }
+    // coverage:ignore-start
     final result = v / 2.pow(n);
     return _uncheckedCast(result.floor());
+    // coverage:ignore-end
   }
 
   /// Similar to [int.operator <<], but consistent across platforms.
@@ -497,11 +516,15 @@ final class IntDescriptor<T> {
   @pragma('dart2js:tryInline')
   @pragma('vm:prefer-inline')
   int overflowingShiftLeft(int v, int n) {
+    // coverage:ignore-start
     if (!_isJsNumerics || v >= 0) {
+      // coverage:ignore-end
       return v << n;
     }
+    // coverage:ignore-start
     final result = v * 2.pow(n);
     return result;
+    // coverage:ignore-end
   }
 
   /// Returns [v] as a binary string.
@@ -540,7 +563,15 @@ final class _BitIterable extends Iterable<bool> {
 
   @override
   bool contains(Object? element) {
-    return element is bool && element ? _value != 0 : _value == 0;
+    if (element is! bool) {
+      return false;
+    }
+    if (element) {
+      // Checking if at least one bit is set.
+      return _value != 0;
+    }
+    // At least one bit is unset.
+    return _value != (1 << length) - 1;
   }
 
   @override

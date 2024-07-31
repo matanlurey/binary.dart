@@ -102,6 +102,19 @@ Uint8(255).wrappedAdd(Uint8(1));
 Uint8(255).clampedAdd(Uint8(1));
 ```
 
+An additional variant, `uncheckedAdd`, is available for when you are certain
+that overflow is not possible, and want to avoid the overhead of checking:
+
+```dart
+// Asserts in debug mode, no overhead in release mode, but can overflow!
+
+// OK, this will definitely not overflow.
+Uint8(1).uncheckedAdd(Uint8(3));
+
+// DANGEROUS: This will overflow, but it won't be checked in release mode!
+Uint8(255).uncheckedAdd(Uint8(1));
+```
+
 ### Bit Patterns
 
 There is also builder-type API for generating patterns to match against bits.
