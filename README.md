@@ -155,7 +155,7 @@ integers.
 [pub_url]: https://pub.dartlang.org/packages/binary
 [pub_img]: https://img.shields.io/pub/v/binary.svg
 [gha_url]: https://github.com/matanlurey/binary.dart/actions
-[gha_img]: https://github.com/matanlurey/binary.dart/workflows/Dart/badge.svg
+[gha_img]: https://github.com/matanlurey/binary.dart/actions/workflows/check.yaml/badge.svg
 [cov_url]: https://codecov.io/gh/matanlurey/binary.dart
 [cov_img]: https://codecov.io/gh/matanlurey/binary.dart/branch/main/graph/badge.svg
 [doc_url]: https://www.dartdocs.org/documentation/binary/latest
