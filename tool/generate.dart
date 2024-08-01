@@ -13,7 +13,7 @@ void main() {
   }
 
   // Load 'tool/template.dart'.
-  final template = io.File(p.join('tool', 'template.dart')).readAsStringSync();
+  final template = io.File(p.join('tool', 'template')).readAsStringSync();
 
   // Generate files based on the following descriptors:
   ({
