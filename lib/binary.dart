@@ -1,55 +1,28 @@
-/// Utilities for working with binary data within Dart.
+/// Utilities for working with binary data and fixed-width integers within
+/// Dart.
 ///
-/// > NOTE: Unless otherwise noted, all functionality is based around treating
-/// > bits as [little endian](https://en.wikipedia.org/wiki/Endianness), that
-/// > is, in a 32-bit integer the leftmost bit is 31 and the rightmost bit is 0.
+/// A spiritual successor to [`package:fixnum`][], or "what if fixnum still
+/// received updates and used modern Dart features, with a focus on being able
+/// to manipulate bits and bytes in a way that is both safe and efficient, using
+/// [extension types][] heavily to avoid unnecessary object creation.
 ///
-/// There are a few sets extension methods that are intended to be generally
-/// useful for libraries and apps that need to access, manipulate, or visualize
-/// binary data (and individual bits), and are intended to be as performant as
-/// possible:
+/// [package:fixnum]: https://pub.dev/packages/fixnum
+/// [extension types]: https://dart.dev/language/extension-types
 ///
-/// - [BinaryInt]: Provides `int` with methods to access/manipulate bytes.
-/// - [BinaryList]: Assumes a `List<int>` of just `0` and `1`, provides methods.
-/// - [BinaryString]: Assumes a `String` of just `'0'` and `1`, provides methods.
+/// > [!NOTE]
+/// > Unless otherwise noted, all functionality is based on treating bits as
+/// > [little endian], that is, in a 32-bit integer the leftmost bit is 31 and
+/// > the rightmost bit is 0. This is the same as the default behavior of the
+/// > Dart SDK.
 ///
-/// Do note that the built-in `dart:typed_data` representations, such as
-/// [Uint8List] are _greatly_ preferred in terms of performance to creating your
-/// own abstractions like `List<int>`. Extensions similar to [BinaryInt] are
-/// also provided for the various typed list sub-types:
-///
-/// - [BinaryInt8List]
-/// - [BinaryUint8List]
-/// - ... and so on, up to `Int32List` and `Uint32List`.
-///
-/// > Notably, the above extension methods do _not_ know the underlying bit
-/// > size and require a `length` parameter where the method would otherwise be
-/// > ambiguous.
-///
-/// For users that desire more type safety (i.e. want to explicitly declare and
-/// enforce size of binary data) at the cost of performance, there are also
-/// boxed int representations:
-///
-/// - [Bit]
-/// - [Int4], [Uint4]
-/// - [Int8], [Uint8]
-/// - [Int16], [Uint16]
-/// - [Int32], [Uint32]
-///
-/// > Integers with a size greater than 32-bits are not explicitly supported
-/// > due to the fact that compatibility varies based on the deployment
-/// > platform (e.g. on the web/JavaScript).
-/// >
-/// > We could add limited forms of support with `BigInt`; file a request!
-library binary;
+/// [little endian]: https://en.wikipedia.org/wiki/Endianness
+library;
 
-import 'dart:typed_data';
-import '/src/boxed_int.dart';
-import '/src/int.dart';
-import '/src/list.dart';
-
-export 'src/bit_pattern.dart';
-export 'src/boxed_int.dart';
-export 'src/int.dart';
-export 'src/list.dart';
-export 'src/string.dart';
+export 'src/descriptor.dart';
+export 'src/extension.dart';
+export 'src/int16.dart';
+export 'src/int32.dart';
+export 'src/int8.dart';
+export 'src/uint16.dart';
+export 'src/uint32.dart';
+export 'src/uint8.dart';

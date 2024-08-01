@@ -8,9 +8,14 @@ Utilities for accessing binary data and bit manipulation in Dart and Flutter.
 [![Dartdocs][doc_img]][doc_url]
 [![Style guide][sty_img]][sty_url]
 
-## Getting started
+> [!IMPORTANT]
+> Version 4.0.0 has a _large_ set of breaking changes, including removing the
+> vast majority of extension methods and boxed classes, in favor of using the
+> newer _extension types_ feature in Dart. I would be opening to adding back
+> some deprecated methods, or a `lib/compat.dart` file if there is demand;
+> please [file an issue][] if you need this.
 
-Using `package:binary` is easy, we have almost no dependencies. Use `pub add`:
+## Getting started
 
 ```bash
 dart pub add binary
@@ -20,83 +25,95 @@ Then, import the package and start using it:
 
 ```dart
 import 'package:binary/binary.dart';
-
-// Start using package:binary.
 ```
 
-If you are not familiar with [extension methods in Dart][], it is worth reading
-the documentation before using this package, which has heavy use of extensions
-for most functionality. A small primer is instead of writing something like:
+If you are not familiar with [extension methods][] and [extension types][], it
+is worth reading the documentation before using this package, which has heavy
+use of extensions for most functionality. A small primer is instead of writing
+something like:
 
 ```dart
 void main() {
   // Old API in version <= 0.1.3:
   print(toBinaryPadded(0x0C, 8)); // 00001100
-}
-```
 
-You now use `toBinaryPadded` (and other methods) as an _extension_ method:
-
-```dart
-void main() {
-  // New API.
+  // Old API in version < 4.0.0:
   print(0x0C.toBinaryPadded(8)); // 00001100
 }
 ```
 
+You now use `toBinaryString` (and other methods) on an _extension type_:
+
+```dart
+void main() {
+  // New API.
+  print(Uint8(0x0C).toBinaryString()); // 00001100
+}
+```
+
+Notice that the width is no longer required, as the type itself knows its width.
+
 ## Usage
 
-This package provides a few sets of APIs extension methods and boxed classes.
+This package provides a few sets of APIs extension types and methods.
 
-> See the [API docs](https://www.dartdocs.org/documentation/binary/latest) for
-> complete documentation.
-
-Most users will use the extension methods on `int` or `String`:
+Most users will use one of the fixed-width integer types, such as `Uint8`:
 
 ```dart
-// Uses "parseBits" (on String) and "shiftRight" (on int).
-void main() {
-  test('shiftRight should work identical to >>> in JavaScript', () {
-    expect(
-      '0111' '1111'.bits.shiftRight(5, 8),
-      '0000' '0011'.bits,
-    );
-  });
-}
+// Parse and reprsent a binary integer:
+final rawInt = int.parse('0111' '1111', radix: 2);
+final fixInt = Uint8(rawInt);
+print(fixInt); // 127
+
+// Works identically to the >>> operator in JavaScript:
+final shifted = fixInt.signedRightShift(5);
+print(shifted.toBinaryString()); // 00000011
 ```
 
-For convenience, extension methods are also present on `List<int>`:
+### Overflows
+
+Fixed with integers do not overflow unexpectedly, unlike the core Dart types.
+
+By default, any operation that _can_ overflow throws an assertion error in debug
+mode, and wraps around in release mode. For example:
 
 ```dart
-// Uses "rotateRight" (on List<int>).
-void main() {
-  test('rotateRight should work similarly to int.rotateRight', () {
-    final list = ['0110' '0000'.bits];
-    expect(
-      list.rotateRight(0, 1).toBinaryPadded(8),
-      '0011' '0000',
-    );
-  });
-}
+// An error in debug mode, or 0 in release mode.
+Uint8(255) + Uint8(1);
 ```
 
-There are also some specialized extension methods on the `typed_data` types:
+To disable assertions, and always wrap, even in debug mode:
 
-- `Uint8List`, `Int8List`
-- `Uint16List`, `Int16List`
-- `Uint32List`, `Int32List`
+```dart
+debugCheckFixedWithInRange = false;
+```
 
-### Boxed Types
+Finer-grained control is available by using variants of the operators that
+explicitly handle overflow:
 
-It is possible to sacrifice performance in order to get more type safety and
-range checking. For apps or libraries where this is a suitable tradeoff, we
-provide these boxed types/classes:
+```dart
+// Returns null if the operation would overflow.
+Uint8(255).tryAdd(Uint8(1));
 
-- `Bit`
-- `Int4` and `Uint4`
-- `Int8` and `Uint8`
-- `Int16` and `Uint16`
-- `Int32` and `Uint32`
+// Wraps around if the operation would overflow.
+Uint8(255).wrappedAdd(Uint8(1));
+
+// Clamps the result to the min/max value if the operation would overflow.
+Uint8(255).clampedAdd(Uint8(1));
+```
+
+An additional variant, `uncheckedAdd`, is available for when you are certain
+that overflow is not possible, and want to avoid the overhead of checking:
+
+```dart
+// Asserts in debug mode, no overhead in release mode, but can overflow!
+
+// OK, this will definitely not overflow.
+Uint8(1).uncheckedAdd(Uint8(3));
+
+// DANGEROUS: This will overflow, but it won't be checked in release mode!
+Uint8(255).uncheckedAdd(Uint8(1));
+```
 
 ### Bit Patterns
 
@@ -123,22 +140,54 @@ void main() {
 
 ## Compatibility
 
-This package is intended to work identically and well in both the standalone
-Dart VM, Flutter, and web builds of Dart and Flutter (both in DDC and Dart2JS).
-As a result, there are no built-in ways to access integers > 32-bit provided (as
-web integers are limited).
+This package is intended to work identically and well in:
 
-Feel free to [file an issue][] if you'd like limited support for 64 and 128-bit.
+- The Dart VM, in both JIT and AOT modes.
+- Flutter, in both JIT and AOT modes.
+- The web, in both DDC, Dart2JS modes and compiled to WASM.
+
+As a result, there are no built-in ways to access integers > 32-bit provided (as
+JS integers are limited).
+
+Feel free to [file an issue][] if you'd like limited support for 64 and 128-bit
+integers.
 
 [pub_url]: https://pub.dartlang.org/packages/binary
 [pub_img]: https://img.shields.io/pub/v/binary.svg
 [gha_url]: https://github.com/matanlurey/binary.dart/actions
-[gha_img]: https://github.com/matanlurey/binary.dart/workflows/Dart/badge.svg
+[gha_img]: https://github.com/matanlurey/binary.dart/actions/workflows/check.yaml/badge.svg
 [cov_url]: https://codecov.io/gh/matanlurey/binary.dart
 [cov_img]: https://codecov.io/gh/matanlurey/binary.dart/branch/main/graph/badge.svg
 [doc_url]: https://www.dartdocs.org/documentation/binary/latest
 [doc_img]: https://img.shields.io/badge/Documentation-binary-blue.svg
-[sty_url]: https://pub.dev/packages/matan
-[sty_img]: https://img.shields.io/badge/style-matan-9cf.svg
-[extension methods in dart]: https://dart.dev/guides/language/extension-methods
+[sty_url]: https://pub.dev/packages/oath
+[sty_img]: https://img.shields.io/badge/style-oath-9cf.svg
+[extension methods]: https://dart.dev/guides/language/extension-methods
+[extension types]: https://dart.dev/guides/language/extension-types
 [file an issue]: https://github.com/matanlurey/binary.dart/issues
+
+## Contributing
+
+To run the tests, run:
+
+```shell
+dart test
+```
+
+Or, to run a comprehensive set of tests on all supported platforms, run:
+
+```shell
+dart test -P all
+```
+
+To check code coverage locally, run:
+
+```shell
+./chore coverage
+```
+
+To preview `dartdoc` output locally, run:
+
+```shell
+./chore dartdoc
+```

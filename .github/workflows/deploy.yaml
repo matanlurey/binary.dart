@@ -1,0 +1,21 @@
+name: Deploy
+
+on:
+  # Post-submit.
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.1.1
+      - uses: dart-lang/setup-dart@v1.6.4
+      - run: dart pub get
+      - name: Build API Docs
+        run: ./chore dartdoc
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./doc/api

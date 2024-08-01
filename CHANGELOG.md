@@ -1,5 +1,83 @@
 # CHANGELOG
 
+## 4.0.0-alpha
+
+> [!IMPORTANT]
+> Version 4.0.0 has a _large_ set of breaking changes, including removing the
+> vast majority of extension methods and boxed classes, in favor of using the
+> newer _extension types_ feature in Dart. I would be opening to adding back
+> some deprecated methods, or a `lib/compat.dart` file if there is demand;
+> please [file an issue][] if you need this.
+
+[file an issue]: https://github.com/matanlurey/binary.dart/issues
+
+**New features**:
+
+Lots and lots. It will be easier to just read the API documentation.
+
+**Breaking changes:**
+
+_Basically everything_. The entire API has been restructured to use extension
+types, and some APIs removed entirely that were either not well-thought out
+(_oops_) or were unnecessary:
+
+- `Integral`, which was a base type for defining integers, has been removed in
+  favor of a helper class, `IntDescriptor`, which is used to define new integer
+  types, and acts sort of a meta type or poor man's macro for defining features:
+
+  ```diff
+  - class Int4 extends Integral<Int4> {
+  -   Int4(int value) : super.checked(value, signed: true, size: 4);
+  -
+  -   @override
+  -   Int4 wrapSafeValue(int value) => Int4(value);
+  - }
+
+  + extension type const Int4._(int _) implements FixedInt {
+  +   static const _descriptor = _IntDescriptor<Int8>.signed(
+  +     Int4.fromUnchecked,
+  +     width: 4,
+  +     max: 7,
+  +   );
+  +
+  +   factory Int4(int v) => _descriptor.fit(v);
+  +
+  +   // ...
+  + }
+  ```
+
+  In practice, it is much more difficult to implement a custom type, as many
+  methods have to be hand-written, but it is also a much better future-proof
+  approach. In the near-term, it's possible we could expose the code generator
+  used by this package internally as a tool for others to use, and longer-term
+  [Dart macros](https://dart.dev/language/macros) can be used to simplify this
+  process for users.
+
+- Fixed-size integers still exist, but with an updated API. Replacements are a
+  follows:
+
+  - `.bitChunk(l, r)` -> `.chunk(l, [s?])`
+  - `.bitRange(l, r)` -> `.slice(l, [r?])`
+  - `.bitsSet` -> `.countOnes()`
+  - `.clearBit(n)` -> `.setNthBit(n, false)`
+  - `.getBit(n)` -> `.nthBit(n)` or `operator [n]`
+  - `.replaceBitRange(l, r, b)` -> `.replace(l, r?, b)`
+  - `.rotateLeftShift(n)` -> `.rotateLeft(n)`
+  - `.rotateRightShift(n)` -> `.rotateRight(n)`
+  - `.setBit(n)` -> `.setNthBit(n)`
+  - `.signExtend(n)` -> _removed_.
+  - `.size` has been removed in favor of a static `.width`; as extension types
+    are non-virtual.
+  - `.toggleBit(n)` -> `.toggleNthBit(n)`
+  - `.value` -> `.toInt()`
+
+- The extension methods `BinaryInt` were removed. Instead, use the extension
+  types directly. A small subset of helper methods are available on
+  `IntExtension` but have little in common with the previous API (mostly
+  convenience methods).
+
+- Every other extension method set was removed.
+
 ## 3.0.1
 
 - Downgrade [meta](https://pub.dev/packages/meta) version to [v1.7.0](https://pub.dev/packages/meta/versions/1.7.0) for Flutter compatibility.
@@ -16,7 +94,7 @@ _Special thanks to <https://github.com/leynier> for driving this update!_
 
 ## 2.0.0
 
-### Highlights
+**Highlights**:
 
 Added limited support for operations on integer values that exceed 32-bits.
 Before `2.0.0` most of the methods provided by this package had undefined
@@ -40,7 +118,7 @@ assumed to have _undefined behavior_ when compiled to JavaScript.
 
 > Tip: Don't want to consider all of that? You can always just use `Uint32`!
 
-### Operating on Larger Ints
+**Operating on Larger Ints**:
 
 Added `<int>.hiLo()`, which returns a fixed 2-length `Uint32List` where
 element 0 is the "hi" (upper bits) and element 1 is the "lo" (lower bits).
@@ -61,7 +139,7 @@ future release, but you may also try using these other implemntations:
 - [BigInt](https://api.dart.dev/stable/2.8.4/dart-core/BigInt-class.html)
 - [Int64](https://pub.dev/documentation/fixnum/latest/fixnum/Int64-class.html)
 
-### Additional changes
+**Additional Changes:**
 
 - Added `<int>.pow(n)`, which is like `<dart:math>.pow` with a return of `int`.
 - Added `<Integral>.signExtend(startSize)`.

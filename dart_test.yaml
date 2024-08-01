@@ -1,4 +1,36 @@
-platforms:
-  - chrome
-  - node
-  - vm
+# https://github.com/dart-lang/test/blob/master/pkgs/test/doc/configuration.md
+
+presets:
+  # Runs VM-specific tests and captures coverage.
+  coverage:
+    reporter: github
+    platforms:
+      - vm
+    compilers:
+      - kernel
+
+  # Comprehensive test suite that runs on all platforms/compilers.
+  all:
+    platforms:
+      - chrome
+      - node
+      - vm
+    compilers:
+      - exe
+      - kernel
+      - dart2js
+      - dart2wasm
+  
+  # Runs the tests only in the standalone VM in JIT mode.
+  fast:
+    platforms:
+      - vm
+    compilers:
+      - kernel
+
+fold_stack_frames:
+  except:
+    - checks
+    - test
+    - test_api
+    - stream_channel

@@ -1,0 +1,15 @@
+#!/usr/bin/env sh
+
+# Chore is a tiny task runner with some pre-defined commands.
+
+set -e
+
+GIT_URL="https://github.com/matanlurey/chore.dart.git"
+GIT_REF="8b252e7"
+
+# Silently activate the pinned version of `chore.dart` from GitHub.
+# Only print if there is an error.
+dart pub global activate -sgit $GIT_URL --git-ref=$GIT_REF 2>&1 > /dev/null
+
+# Now run and forward arguments and the output.
+dart pub global run chore "$@"

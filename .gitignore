@@ -1,8 +1,5 @@
 .dart_tool/
-.packages
-.vscode/
+doc/api/
 coverage/
-# https://github.com/pulyaevskiy/test-coverage/issues/15
-coverage_badge.svg
-test/.test_coverage.dart
 pubspec.lock
+out.js*
