@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the IntDescriptor class from the binary library, for the Dart programming language.">
+  <title>IntDescriptor class - binary library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../static-assets/styles.css?v1">
+  <link rel="icon" href="../static-assets/favicon.png?v1">
+
+  
+</head>
+
+
+<body data-base-href="../" data-using-base-href="false" class="light-theme">
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../index.html">binary</a></li>
+    <li><a href="../binary/binary-library.html">binary.dart</a></li>
+    <li class="self-crumb">IntDescriptor<span class="signature">&lt;<wbr><span class="type-parameter">T</span>&gt;</span> class</li>
+  </ol>
+  <div class="self-name">IntDescriptor</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <div class="toggle" id="theme-button" title="Toggle brightness">
+    <label for="theme">
+      <input type="checkbox" id="theme" value="light-theme">
+      <span id="dark-theme-button" class="material-symbols-outlined">
+        dark_mode
+      </span>
+      <span id="light-theme-button" class="material-symbols-outlined">
+        light_mode
+      </span>
+    </label>
+  </div>
+</header>
+<main>
+
+<div
+    id="dartdoc-main-content"
+    class="main-content"
+    data-above-sidebar="binary&#47;binary-library-sidebar.html"
+    data-below-sidebar="binary&#47;IntDescriptor-class-sidebar.html">
+    <div>
+<h1><span class="kind-class">IntDescriptor&lt;<wbr><span class="type-parameter">T</span>&gt;</span> class 
+    <a href="https://dart.dev/language/class-modifiers#final" class="feature feature-final" title="This class can neither be extended, implemented, nor mixed in.">final</a>
+ 
+</h1></div>
+
+    
+<section class="desc markdown">
+  <p>A descriptor for a fixed-width integer type <code>T</code>.</p>
+<p>An integer descriptor is used to describe the properties of a fixed-width
+integer type, such as the width of the integer in bits, whether it is signed
+or unsigned, and the minimum and maximum values that can be represented by
+the integer.</p>
+<p>Default implementations of most of the methods that are exposed with the
+underlying type <code>T</code> are provided, reducing the amount of boilerplate code
+that needs to be written when working with fixed-width integers. In most
+cases, the <code>T</code> type will be used directly in place of the descriptor,
+but the descriptor can be used to create custom sized integers.</p>
+<h2 id="example">Example</h2>
+<pre class="language-dart"><code class="language-dart">final int8 = IntDescriptor&lt;int&gt;.signed(width: 8);
+</code></pre>
+</section>
+
+
+    <section>
+      <dl class="dl-horizontal">
+        
+
+        
+        
+
+
+
+        
+  <dt>Annotations</dt>
+  <dd>
+    <ul class="annotation-list clazz-relationships">
+        <li>@<a href="https://pub.dev/documentation/meta/1.15.0/meta/immutable-constant.html">immutable</a></li>
+    </ul>
+  </dd>
+
+
+      </dl>
+    </section>
+
+    
+  <section class="summary offset-anchor" id="constructors">
+    <h2>Constructors</h2>
+
+    <dl class="constructor-summary-list">
+        <dt id="IntDescriptor.signed" class="callable">
+          <span class="name"><a href="../binary/IntDescriptor/IntDescriptor.signed.html">IntDescriptor.signed</a></span><span class="signature">(<span class="parameter" id="signed-param-_assertCast"><span class="type-annotation">T</span> <span class="parameter-name">_assertCast</span>(<span class="parameter" id="param-"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span></span>), </span><span class="parameter" id="signed-param-width">{<span>required</span> <span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">width</span>, </span><span class="parameter" id="signed-param-max"><span>required</span> <span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">max</span>}</span>)</span>
+        </dt>
+        <dd>
+          Creates a new descriptor for a fixed-width signed integer of type <code>T</code>.
+            <div class="constructor-modifier features">const</div>
+        </dd>
+        <dt id="IntDescriptor.unsigned" class="callable">
+          <span class="name"><a href="../binary/IntDescriptor/IntDescriptor.unsigned.html">IntDescriptor.unsigned</a></span><span class="signature">(<span class="parameter" id="unsigned-param-_assertCast"><span class="type-annotation">T</span> <span class="parameter-name">_assertCast</span>(<span class="parameter" id="param-"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span></span>), </span><span class="parameter" id="unsigned-param-width">{<span>required</span> <span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">width</span>, </span><span class="parameter" id="unsigned-param-max"><span>required</span> <span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">max</span>}</span>)</span>
+        </dt>
+        <dd>
+          Creates a new descriptor for a fixed-width unsigned integer of type <code>T</code>.
+            <div class="constructor-modifier features">const</div>
+        </dd>
+    </dl>
+  </section>
+    
+  <section
+      class="summary offset-anchor"
+      id="instance-properties">
+    <h2>Properties</h2>
+    <dl class="properties">
+        <dt id="hashCode" class="property">
+  <span class="name"><a href="../binary/IntDescriptor/hashCode.html">hashCode</a></span>
+  <span class="signature">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span>
+  
+
+</dt>
+<dd>
+  The hash code for this object.
+  <div class="features"><span class="feature">no setter</span><span class="feature">override</span></div>
+
+</dd>
+
+        <dt id="max" class="property">
+  <span class="name"><a href="../binary/IntDescriptor/max.html">max</a></span>
+  <span class="signature">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span>
+  
+
+</dt>
+<dd>
+  Represents the maximum integer value of type <code>T</code>, inclusive.
+  <div class="features"><span class="feature">final</span></div>
+
+</dd>
+
+        <dt id="min" class="property">
+  <span class="name"><a href="../binary/IntDescriptor/min.html">min</a></span>
+  <span class="signature">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span>
+  
+
+</dt>
+<dd>
+  Represents the minimum integer value of type <code>T</code>.
+  <div class="features"><span class="feature">final</span></div>
+
+</dd>
+
+        <dt id="runtimeType" class="property inherited">
+  <span class="name"><a href="https://api.dart.dev/stable/3.4.4/dart-core/Object/runtimeType.html">runtimeType</a></span>
+  <span class="signature">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/Type-class.html">Type</a></span>
+  
+
+</dt>
+<dd class="inherited">
+  A representation of the runtime type of the object.
+  <div class="features"><span class="feature">no setter</span><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="signed" class="property">
+  <span class="name"><a href="../binary/IntDescriptor/signed.html">signed</a></span>
+  <span class="signature">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/bool-class.html">bool</a></span>
+  
+
+</dt>
+<dd>
+  Whether the integer is signed.
+  <div class="features"><span class="feature">final</span></div>
+
+</dd>
+
+        <dt id="unsigned" class="property">
+  <span class="name"><a href="../binary/IntDescriptor/unsigned.html">unsigned</a></span>
+  <span class="signature">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/bool-class.html">bool</a></span>
+  
+
+</dt>
+<dd>
+  Whether the integer is unsigned.
+  <div class="features"><span class="feature">no setter</span></div>
+
+</dd>
+
+        <dt id="width" class="property">
+  <span class="name"><a href="../binary/IntDescriptor/width.html">width</a></span>
+  <span class="signature">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span>
+  
+
+</dt>
+<dd>
+  The width of the integer in bits.
+  <div class="features"><span class="feature">final</span></div>
+
+</dd>
+
+    </dl>
+  </section>
+    
+  <section
+      class="summary offset-anchor"
+      id="instance-methods">
+    <h2>Methods</h2>
+    <dl class="callables">
+        <dt id="bits" class="callable">
+  <span class="name"><a href="../binary/IntDescriptor/bits.html">bits</a></span><span class="signature">(<wbr><span class="parameter" id="bits-param-v"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">v</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/Iterable-class.html">Iterable</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.dart.dev/stable/3.4.4/dart-core/bool-class.html">bool</a></span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns an iterable of bits in <code>v</code>, from least to most significant.
+  
+
+</dd>
+
+        <dt id="countLeadingOnes" class="callable">
+  <span class="name"><a href="../binary/IntDescriptor/countLeadingOnes.html">countLeadingOnes</a></span><span class="signature">(<wbr><span class="parameter" id="countLeadingOnes-param-v"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">v</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns the number of leading ones in the binary representation of <code>v</code>.
+  
+
+</dd>
+
+        <dt id="countLeadingZeros" class="callable">
+  <span class="name"><a href="../binary/IntDescriptor/countLeadingZeros.html">countLeadingZeros</a></span><span class="signature">(<wbr><span class="parameter" id="countLeadingZeros-param-v"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">v</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns the number of leading zeros in the binary representation of <code>v</code>.
+  
+
+</dd>
+
+        <dt id="countOnes" class="callable">
+  <span class="name"><a href="../binary/IntDescriptor/countOnes.html">countOnes</a></span><span class="signature">(<wbr><span class="parameter" id="countOnes-param-v"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">v</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns the number of ones in the binary representation of <code>v</code>.
+  
+
+</dd>
+
+        <dt id="countTrailingOnes" class="callable">
+  <span class="name"><a href="../binary/IntDescriptor/countTrailingOnes.html">countTrailingOnes</a></span><span class="signature">(<wbr><span class="parameter" id="countTrailingOnes-param-v"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">v</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns the number of trailing ones in the binary representation of <code>v</code>.
+  
+
+</dd>
+
+        <dt id="countTrailingZeros" class="callable">
+  <span class="name"><a href="../binary/IntDescriptor/countTrailingZeros.html">countTrailingZeros</a></span><span class="signature">(<wbr><span class="parameter" id="countTrailingZeros-param-v"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">v</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns the number of trailing zeros in the binary representation of <code>v</code>.
+  
+
+</dd>
+
+        <dt id="countZeros" class="callable">
+  <span class="name"><a href="../binary/IntDescriptor/countZeros.html">countZeros</a></span><span class="signature">(<wbr><span class="parameter" id="countZeros-param-v"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">v</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns the number of zeros in the binary representation of <code>v</code>.
+  
+
+</dd>
+
+        <dt id="fit" class="callable">
+  <span class="name"><a href="../binary/IntDescriptor/fit.html">fit</a></span><span class="signature">(<wbr><span class="parameter" id="fit-param-v"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">v</span></span>)
+    <span class="returntype parameter">&#8594; T</span>
+  </span>
+  
+
+</dt>
+<dd>
+  Asserts that <code>v</code> fits within the range of the integer descriptor.
+  
+
+</dd>
+
+        <dt id="fitChecked" class="callable">
+  <span class="name"><a href="../binary/IntDescriptor/fitChecked.html">fitChecked</a></span><span class="signature">(<wbr><span class="parameter" id="fitChecked-param-v"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">v</span></span>)
+    <span class="returntype parameter">&#8594; T?</span>
+  </span>
+  
+
+</dt>
+<dd>
+  Checks if <code>v</code> fits within the range of the integer descriptor.
+  
+
+</dd>
+
+        <dt id="fitClamping" class="callable">
+  <span class="name"><a href="../binary/IntDescriptor/fitClamping.html">fitClamping</a></span><span class="signature">(<wbr><span class="parameter" id="fitClamping-param-v"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">v</span></span>)
+    <span class="returntype parameter">&#8594; T</span>
+  </span>
+  
+
+</dt>
+<dd>
+  Clamps <code>v</code> to fit within the range of the integer descriptor.
+  
+
+</dd>
+
+        <dt id="fitWrapped" class="callable">
+  <span class="name"><a href="../binary/IntDescriptor/fitWrapped.html">fitWrapped</a></span><span class="signature">(<wbr><span class="parameter" id="fitWrapped-param-v"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">v</span></span>)
+    <span class="returntype parameter">&#8594; T</span>
+  </span>
+  
+
+</dt>
+<dd>
+  Wraps <code>v</code> to fit within the range of the integer descriptor.
+  
+
+</dd>
+
+        <dt id="fromHiLo" class="callable">
+  <span class="name"><a href="../binary/IntDescriptor/fromHiLo.html">fromHiLo</a></span><span class="signature">(<wbr><span class="parameter" id="fromHiLo-param-hi"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">hi</span>, </span><span class="parameter" id="fromHiLo-param-lo"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">lo</span></span>)
+    <span class="returntype parameter">&#8594; T</span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns a <code>T</code> with the provided high and low bits.
+  
+
+</dd>
+
+        <dt id="hiLo" class="callable">
+  <span class="name"><a href="../binary/IntDescriptor/hiLo.html">hiLo</a></span><span class="signature">(<wbr><span class="parameter" id="hiLo-param-v"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">v</span></span>)
+    <span class="returntype parameter">&#8594; (<span class="field"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span>, </span><span class="field"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span></span>)</span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns the <code>v</code> split into two parts: the high and low bits.
+  
+
+</dd>
+
+        <dt id="noSuchMethod" class="callable inherited">
+  <span class="name"><a href="https://api.dart.dev/stable/3.4.4/dart-core/Object/noSuchMethod.html">noSuchMethod</a></span><span class="signature">(<wbr><span class="parameter" id="noSuchMethod-param-invocation"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/Invocation-class.html">Invocation</a></span> <span class="parameter-name">invocation</span></span>)
+    <span class="returntype parameter">&#8594; dynamic</span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  Invoked when a nonexistent method or property is accessed.
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="overflowingShiftLeft" class="callable">
+  <span class="name"><a href="../binary/IntDescriptor/overflowingShiftLeft.html">overflowingShiftLeft</a></span><span class="signature">(<wbr><span class="parameter" id="overflowingShiftLeft-param-v"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">v</span>, </span><span class="parameter" id="overflowingShiftLeft-param-n"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">n</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Similar to <a href="https://api.dart.dev/stable/3.4.4/dart-core/int/operator_shift_left.html">int.operator &lt;&lt;</a>, but consistent across platforms.
+  
+
+</dd>
+
+        <dt id="rotateLeft" class="callable">
+  <span class="name"><a href="../binary/IntDescriptor/rotateLeft.html">rotateLeft</a></span><span class="signature">(<wbr><span class="parameter" id="rotateLeft-param-v"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">v</span>, </span><span class="parameter" id="rotateLeft-param-n"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">n</span></span>)
+    <span class="returntype parameter">&#8594; T</span>
+  </span>
+  
+
+</dt>
+<dd>
+  Rotates the bits in <code>v</code> to the left by <code>n</code> positions.
+  
+
+</dd>
+
+        <dt id="rotateRight" class="callable">
+  <span class="name"><a href="../binary/IntDescriptor/rotateRight.html">rotateRight</a></span><span class="signature">(<wbr><span class="parameter" id="rotateRight-param-v"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">v</span>, </span><span class="parameter" id="rotateRight-param-n"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">n</span></span>)
+    <span class="returntype parameter">&#8594; T</span>
+  </span>
+  
+
+</dt>
+<dd>
+  Rotates the bits in <code>v</code> to the right by <code>n</code> positions.
+  
+
+</dd>
+
+        <dt id="signedRightShift" class="callable">
+  <span class="name"><a href="../binary/IntDescriptor/signedRightShift.html">signedRightShift</a></span><span class="signature">(<wbr><span class="parameter" id="signedRightShift-param-v"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">v</span>, </span><span class="parameter" id="signedRightShift-param-n"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">n</span></span>)
+    <span class="returntype parameter">&#8594; T</span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns <code>v</code> arithmetically right-shifted by <code>n</code> bits.
+  
+
+</dd>
+
+        <dt id="toBinaryString" class="callable">
+  <span class="name"><a href="../binary/IntDescriptor/toBinaryString.html">toBinaryString</a></span><span class="signature">(<wbr><span class="parameter" id="toBinaryString-param-v"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">v</span>, </span><span class="parameter" id="toBinaryString-param-padded">{<span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/bool-class.html">bool</a></span> <span class="parameter-name">padded</span> = <span class="default-value">true</span>}</span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/String-class.html">String</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns <code>v</code> as a binary string.
+  
+
+</dd>
+
+        <dt id="toString" class="callable">
+  <span class="name"><a href="../binary/IntDescriptor/toString.html">toString</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/String-class.html">String</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  A string representation of this object.
+  <div class="features"><span class="feature">override</span></div>
+
+</dd>
+
+        <dt id="uncheckedBinaryAnd" class="callable">
+  <span class="name"><a href="../binary/IntDescriptor/uncheckedBinaryAnd.html">uncheckedBinaryAnd</a></span><span class="signature">(<wbr><span class="parameter" id="uncheckedBinaryAnd-param-a"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">a</span>, </span><span class="parameter" id="uncheckedBinaryAnd-param-b"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">b</span></span>)
+    <span class="returntype parameter">&#8594; T</span>
+  </span>
+  
+
+</dt>
+<dd>
+  Similar to <a href="https://api.dart.dev/stable/3.4.4/dart-core/int/operator_bitwise_and.html">int.operator &amp;</a>, but consistent across platforms.
+  
+
+</dd>
+
+        <dt id="uncheckedBinaryNot" class="callable">
+  <span class="name"><a href="../binary/IntDescriptor/uncheckedBinaryNot.html">uncheckedBinaryNot</a></span><span class="signature">(<wbr><span class="parameter" id="uncheckedBinaryNot-param-v"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">v</span></span>)
+    <span class="returntype parameter">&#8594; T</span>
+  </span>
+  
+
+</dt>
+<dd>
+  Similar to <a href="https://api.dart.dev/stable/3.4.4/dart-core/int/operator_bitwise_negate.html">int.operator ~</a>, but consistent across platforms.
+  
+
+</dd>
+
+        <dt id="uncheckedBinaryOr" class="callable">
+  <span class="name"><a href="../binary/IntDescriptor/uncheckedBinaryOr.html">uncheckedBinaryOr</a></span><span class="signature">(<wbr><span class="parameter" id="uncheckedBinaryOr-param-a"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">a</span>, </span><span class="parameter" id="uncheckedBinaryOr-param-b"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">b</span></span>)
+    <span class="returntype parameter">&#8594; T</span>
+  </span>
+  
+
+</dt>
+<dd>
+  Similar to <a href="https://api.dart.dev/stable/3.4.4/dart-core/int/operator_bitwise_or.html">int.operator |</a>, but consistent across platforms.
+  
+
+</dd>
+
+        <dt id="uncheckedBinaryXor" class="callable">
+  <span class="name"><a href="../binary/IntDescriptor/uncheckedBinaryXor.html">uncheckedBinaryXor</a></span><span class="signature">(<wbr><span class="parameter" id="uncheckedBinaryXor-param-a"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">a</span>, </span><span class="parameter" id="uncheckedBinaryXor-param-b"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">b</span></span>)
+    <span class="returntype parameter">&#8594; T</span>
+  </span>
+  
+
+</dt>
+<dd>
+  Similar to <a href="https://api.dart.dev/stable/3.4.4/dart-core/int/operator_bitwise_exclusive_or.html">int.operator ^</a>, but consistent across platforms.
+  
+
+</dd>
+
+        <dt id="uncheckedChunk" class="callable">
+  <span class="name"><a href="../binary/IntDescriptor/uncheckedChunk.html">uncheckedChunk</a></span><span class="signature">(<wbr><span class="parameter" id="uncheckedChunk-param-v"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">v</span>, </span><span class="parameter" id="uncheckedChunk-param-left"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">left</span>, </span><span class="parameter" id="uncheckedChunk-param-size">[<span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">size</span>]</span>)
+    <span class="returntype parameter">&#8594; T</span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns a new instance with bits in <code>left</code> to <code>size</code>.
+  
+
+</dd>
+
+        <dt id="uncheckedReplace" class="callable">
+  <span class="name"><a href="../binary/IntDescriptor/uncheckedReplace.html">uncheckedReplace</a></span><span class="signature">(<wbr><span class="parameter" id="uncheckedReplace-param-target"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">target</span>, </span><span class="parameter" id="uncheckedReplace-param-left"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">left</span>, </span><span class="parameter" id="uncheckedReplace-param-right"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">right</span>, </span><span class="parameter" id="uncheckedReplace-param-replacement"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">replacement</span></span>)
+    <span class="returntype parameter">&#8594; T</span>
+  </span>
+  
+
+</dt>
+<dd>
+  Replaces bits <code>left</code> to <code>right</code>, inclusive, with the same number of bits
+from <code>replacement</code>.
+  
+
+</dd>
+
+        <dt id="uncheckedSetNthBit" class="callable">
+  <span class="name"><a href="../binary/IntDescriptor/uncheckedSetNthBit.html">uncheckedSetNthBit</a></span><span class="signature">(<wbr><span class="parameter" id="uncheckedSetNthBit-param-v"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">v</span>, </span><span class="parameter" id="uncheckedSetNthBit-param-n"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">n</span>, </span><span class="parameter" id="uncheckedSetNthBit-param-value">[<span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/bool-class.html">bool</a></span> <span class="parameter-name">value</span> = <span class="default-value">true</span>]</span>)
+    <span class="returntype parameter">&#8594; T</span>
+  </span>
+  
+
+</dt>
+<dd>
+  Sets and returns the <code>n</code>th bit in <code>v</code> to <code>value</code>.
+  
+
+</dd>
+
+        <dt id="uncheckedShiftRight" class="callable">
+  <span class="name"><a href="../binary/IntDescriptor/uncheckedShiftRight.html">uncheckedShiftRight</a></span><span class="signature">(<wbr><span class="parameter" id="uncheckedShiftRight-param-v"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">v</span>, </span><span class="parameter" id="uncheckedShiftRight-param-n"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">n</span></span>)
+    <span class="returntype parameter">&#8594; T</span>
+  </span>
+  
+
+</dt>
+<dd>
+  Similar to <a href="https://api.dart.dev/stable/3.4.4/dart-core/int/operator_shift_right.html">int.operator &gt;&gt;</a>, but consistent across platforms.
+  
+
+</dd>
+
+        <dt id="uncheckedSlice" class="callable">
+  <span class="name"><a href="../binary/IntDescriptor/uncheckedSlice.html">uncheckedSlice</a></span><span class="signature">(<wbr><span class="parameter" id="uncheckedSlice-param-v"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">v</span>, </span><span class="parameter" id="uncheckedSlice-param-left"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">left</span>, </span><span class="parameter" id="uncheckedSlice-param-right">[<span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">right</span>]</span>)
+    <span class="returntype parameter">&#8594; T</span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns a new instance with bits <code>left</code> to <code>right</code>, inclusive.
+  
+
+</dd>
+
+        <dt id="uncheckedToggleNthBit" class="callable">
+  <span class="name"><a href="../binary/IntDescriptor/uncheckedToggleNthBit.html">uncheckedToggleNthBit</a></span><span class="signature">(<wbr><span class="parameter" id="uncheckedToggleNthBit-param-v"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">v</span>, </span><span class="parameter" id="uncheckedToggleNthBit-param-n"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">n</span></span>)
+    <span class="returntype parameter">&#8594; T</span>
+  </span>
+  
+
+</dt>
+<dd>
+  Toggles and returns the <code>n</code>th bit in <code>v</code>.
+  
+
+</dd>
+
+    </dl>
+  </section>
+    
+  <section
+      class="summary offset-anchor"
+      id="operators">
+    <h2>Operators</h2>
+    <dl class="callables">
+        <dt id="operator ==" class="callable">
+  <span class="name"><a href="../binary/IntDescriptor/operator_equals.html">operator ==</a></span><span class="signature">(<wbr><span class="parameter" id="==-param-other"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/Object-class.html">Object</a></span> <span class="parameter-name">other</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/bool-class.html">bool</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  The equality operator.
+  <div class="features"><span class="feature">override</span></div>
+
+</dd>
+
+    </dl>
+  </section>
+    
+    
+    
+
+
+  </div> <!-- /.main-content -->
+
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="../index.html">binary</a></li>
+    <li><a href="../binary/binary-library.html">binary</a></li>
+    <li class="self-crumb">IntDescriptor<span class="signature">&lt;<wbr><span class="type-parameter">T</span>&gt;</span> class</li>
+</ol>
+
+
+    <h5>binary library</h5>
+    <div id="dartdoc-sidebar-left-content"></div>
+  </div>
+
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+  </div><!--/.sidebar-offcanvas-->
+
+</main>
+
+<footer>
+  <span class="no-break">
+    binary
+      4.0.0-alpha
+  </span>
+
+  
+</footer>
+
+
+
+<script src="../static-assets/highlight.pack.js?v1"></script>
+<script src="../static-assets/docs.dart.js"></script>
+
+
+
+</body>
+
+</html>
+

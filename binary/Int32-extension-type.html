@@ -1,0 +1,1743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the Int32 extension type from the binary library, for the Dart programming language.">
+  <title>Int32 extension type - binary library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../static-assets/styles.css?v1">
+  <link rel="icon" href="../static-assets/favicon.png?v1">
+
+  
+</head>
+
+
+<body data-base-href="../" data-using-base-href="false" class="light-theme">
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../index.html">binary</a></li>
+    <li><a href="../binary/binary-library.html">binary.dart</a></li>
+    <li class="self-crumb">Int32 extension type</li>
+  </ol>
+  <div class="self-name">Int32</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <div class="toggle" id="theme-button" title="Toggle brightness">
+    <label for="theme">
+      <input type="checkbox" id="theme" value="light-theme">
+      <span id="dark-theme-button" class="material-symbols-outlined">
+        dark_mode
+      </span>
+      <span id="light-theme-button" class="material-symbols-outlined">
+        light_mode
+      </span>
+    </label>
+  </div>
+</header>
+<main>
+<div
+    id="dartdoc-main-content"
+    class="main-content"
+    data-above-sidebar="binary&#47;binary-library-sidebar.html"
+    data-below-sidebar="binary&#47;Int32-extension-type-sidebar.html">
+    <div>
+<h1><span class="kind-class">Int32</span>
+      extension type 
+ 
+</h1></div>
+
+    
+<section class="desc markdown">
+  <p>A signed 32-bit integer.</p>
+<p>This type is <em>not</em> explicitly boxed, and uses <a href="https://dart.dev/language/extension-types">extension types</a>; that
+means that <em>any</em> <a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a> value <em>can</em> be used as an Int32, but only values
+in the range of <a href="../binary/Int32/min-constant.html">min</a> and <a href="../binary/Int32/max-constant.html">max</a> are considered valid.</p>
+<h2 id="constructing">Constructing</h2>
+<p>For most use cases, use the default <a href="https://api.dart.dev/stable/3.4.4/dart-core/num/num.html">Int32.new</a> constructor:</p>
+<pre class="language-dart"><code class="language-dart">Int32(3); // 3
+</code></pre>
+<p>In <em>debug</em> mode, an assertion is made that the value is in a valid range;
+otherwise, the value is wrapped, if necessary, to fit in the valid range.
+This behavior can be used explicitly with <code>Int32.fromWrapped</code>:</p>
+<pre class="language-dart"><code class="language-dart">Int32.fromWrapped(Int32.max + 1); // &lt;min&gt;
+</code></pre>
+<p>See also:</p>
+<ul>
+<li><code>Int32.fromClamped</code>, which clamps the value if it is out of range.</li>
+<li><a href="../binary/Int32/tryFrom.html">Int32.tryFrom</a>, which returns <code>null</code> if the value is out of range.</li>
+</ul>
+<h2 id="operations">Operations</h2>
+<p>In most cases, every method available on <a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a> is also available on an
+Int32.</p>
+<p>Some methods that only make sense for unsigned integers are not available
+for signed integers, and vice versa, and some methods that are typically
+inherited from <a href="https://api.dart.dev/stable/3.4.4/dart-core/num-class.html">num</a>, but not useful for integers, are not available; these
+can still be accessed through the underlying <a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a> value, using <a href="../binary/Int32/toInt.html">toInt</a>:</p>
+<pre class="language-dart"><code class="language-dart">Int32(3).toInt().toStringAsExponential(); // "3e+0"
+</code></pre>
+<h2 id="safety">Safety</h2>
+<p>Extension types are lightweight, but they are <em>not</em> completely type-safe;
+any <a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a> can be casted to an Int32, and will bypass the range checks;
+we believe that the performance benefits outweigh the risks, but it is
+important to be aware of this limitation.</p>
+<p>This also applies to methods such as <a href="https://api.dart.dev/stable/3.4.4/dart-core/List/cast.html">List.cast</a> or <a href="https://api.dart.dev/stable/3.4.4/dart-core/Iterable/whereType.html">Iterable.whereType</a>.</p>
+</section>
+
+    <section>
+      <dl class="dl-horizontal">
+        <dt>on</dt>
+        <dd>
+          <ul class="comma-separated clazz-relationships">
+              <li><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></li>
+          </ul>
+        </dd>
+        
+  <dt>Implemented types</dt>
+  <dd>
+    <ul class="comma-separated clazz-relationships">
+        <li><a href="https://api.dart.dev/stable/3.4.4/dart-core/Comparable-class.html">Comparable</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.dart.dev/stable/3.4.4/dart-core/num-class.html">num</a></span>&gt;</span></li>
+    </ul>
+  </dd>
+
+      </dl>
+      
+
+
+    </section>
+
+    
+  <section class="summary offset-anchor" id="constructors">
+    <h2>Constructors</h2>
+
+    <dl class="constructor-summary-list">
+        <dt id="Int32" class="callable">
+          <span class="name"><a href="../binary/Int32/Int32.html">Int32</a></span><span class="signature">(<span class="parameter" id="-param-v"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">v</span></span>)</span>
+        </dt>
+        <dd>
+          Defines <code>v</code> as A signed 32-bit integer, wrapping if necessary.
+            <div class="constructor-modifier features">factory</div>
+        </dd>
+        <dt id="Int32.fromClamped" class="callable">
+          <span class="name"><a href="../binary/Int32/Int32.fromClamped.html">Int32.fromClamped</a></span><span class="signature">(<span class="parameter" id="fromClamped-param-v"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">v</span></span>)</span>
+        </dt>
+        <dd>
+          Defines <code>v</code> as A signed 32-bit integer.
+            <div class="constructor-modifier features">factory</div>
+        </dd>
+        <dt id="Int32.fromHiLo" class="callable">
+          <span class="name"><a href="../binary/Int32/Int32.fromHiLo.html">Int32.fromHiLo</a></span><span class="signature">(<span class="parameter" id="fromHiLo-param-hi"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">hi</span>, </span><span class="parameter" id="fromHiLo-param-lo"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">lo</span></span>)</span>
+        </dt>
+        <dd>
+          Creates a <a href="../binary/Int32-extension-type.html">Int32</a> using two integers as high and low bits.
+            <div class="constructor-modifier features">factory</div>
+        </dd>
+        <dt id="Int32.fromInt" class="callable">
+          <span class="name"><a href="../binary/Int32/Int32.fromInt.html">Int32.fromInt</a></span><span class="signature">(<span class="parameter" id="fromInt-param-v"><span class="type-annotation">FixedInt</span> <span class="parameter-name">v</span></span>)</span>
+        </dt>
+        <dd>
+          Defines an existing fixed-width integer <code>v</code> as a Int32.
+            <div class="constructor-modifier features">factory</div>
+        </dd>
+        <dt id="Int32.fromUnchecked" class="callable">
+          <span class="name"><a href="../binary/Int32/Int32.fromUnchecked.html">Int32.fromUnchecked</a></span><span class="signature">(<span class="parameter" id="fromUnchecked-param-v"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">v</span></span>)</span>
+        </dt>
+        <dd>
+          Defines <code>v</code> as A signed 32-bit integer.
+            <div class="constructor-modifier features">const</div>
+        </dd>
+        <dt id="Int32.fromWrapped" class="callable">
+          <span class="name"><a href="../binary/Int32/Int32.fromWrapped.html">Int32.fromWrapped</a></span><span class="signature">(<span class="parameter" id="fromWrapped-param-v"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">v</span></span>)</span>
+        </dt>
+        <dd>
+          Defines <code>v</code> as A signed 32-bit integer.
+            <div class="constructor-modifier features">factory</div>
+        </dd>
+    </dl>
+  </section>
+    
+  <section
+      class="summary offset-anchor"
+      id="instance-properties">
+    <h2>Properties</h2>
+    <dl class="properties">
+        <dt id="bitLength" class="property">
+  <span class="name"><a href="../binary/Int32/bitLength.html">bitLength</a></span>
+  <span class="signature">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span>
+  
+
+</dt>
+<dd>
+  Returns the <em>minimum</em> number of bits required to store this integer.
+  <div class="features"><span class="feature">no setter</span></div>
+
+</dd>
+
+        <dt id="bits" class="property">
+  <span class="name"><a href="../binary/Int32/bits.html">bits</a></span>
+  <span class="signature">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/Iterable-class.html">Iterable</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.dart.dev/stable/3.4.4/dart-core/bool-class.html">bool</a></span>&gt;</span></span>
+  
+
+</dt>
+<dd>
+  Bits, from least significant to most significant.
+  <div class="features"><span class="feature">no setter</span></div>
+
+</dd>
+
+        <dt id="hashCode" class="property inherited">
+  <span class="name"><a href="https://api.dart.dev/stable/3.4.4/dart-core/Object/hashCode.html">hashCode</a></span>
+  <span class="signature">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span>
+  
+
+</dt>
+<dd class="inherited">
+  The hash code for this object.
+  <div class="features"><span class="feature">no setter</span><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="hiLo" class="property">
+  <span class="name"><a href="../binary/Int32/hiLo.html">hiLo</a></span>
+  <span class="signature">&#8594; (<span class="field"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span>, </span><span class="field"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span></span>)</span>
+  
+
+</dt>
+<dd>
+  Returns this integer split into two parts: high and low bits.
+  <div class="features"><span class="feature">no setter</span></div>
+
+</dd>
+
+        <dt id="isEven" class="property">
+  <span class="name"><a href="../binary/Int32/isEven.html">isEven</a></span>
+  <span class="signature">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/bool-class.html">bool</a></span>
+  
+
+</dt>
+<dd>
+  Returns true if and only if this integer is even.
+  <div class="features"><span class="feature">no setter</span></div>
+
+</dd>
+
+        <dt id="isMax" class="property">
+  <span class="name"><a href="../binary/Int32/isMax.html">isMax</a></span>
+  <span class="signature">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/bool-class.html">bool</a></span>
+  
+
+</dt>
+<dd>
+  Whether this integer is the maximum value representable by this type.
+  <div class="features"><span class="feature">no setter</span></div>
+
+</dd>
+
+        <dt id="isMin" class="property">
+  <span class="name"><a href="../binary/Int32/isMin.html">isMin</a></span>
+  <span class="signature">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/bool-class.html">bool</a></span>
+  
+
+</dt>
+<dd>
+  Whether this integer is the minimum value representable by this type.
+  <div class="features"><span class="feature">no setter</span></div>
+
+</dd>
+
+        <dt id="isNegative" class="property">
+  <span class="name"><a href="../binary/Int32/isNegative.html">isNegative</a></span>
+  <span class="signature">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/bool-class.html">bool</a></span>
+  
+
+</dt>
+<dd>
+  Returns true if and only if this integer is negative.
+  <div class="features"><span class="feature">no setter</span></div>
+
+</dd>
+
+        <dt id="isOdd" class="property">
+  <span class="name"><a href="../binary/Int32/isOdd.html">isOdd</a></span>
+  <span class="signature">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/bool-class.html">bool</a></span>
+  
+
+</dt>
+<dd>
+  Returns true if and only if this integer is odd.
+  <div class="features"><span class="feature">no setter</span></div>
+
+</dd>
+
+        <dt id="isPositive" class="property">
+  <span class="name"><a href="../binary/Int32/isPositive.html">isPositive</a></span>
+  <span class="signature">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/bool-class.html">bool</a></span>
+  
+
+</dt>
+<dd>
+  Returns true if and only if this integer is positive.
+  <div class="features"><span class="feature">no setter</span></div>
+
+</dd>
+
+        <dt id="isZero" class="property">
+  <span class="name"><a href="../binary/Int32/isZero.html">isZero</a></span>
+  <span class="signature">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/bool-class.html">bool</a></span>
+  
+
+</dt>
+<dd>
+  Returns true if and only if this integer is zero.
+  <div class="features"><span class="feature">no setter</span></div>
+
+</dd>
+
+        <dt id="msb" class="property">
+  <span class="name"><a href="../binary/Int32/msb.html">msb</a></span>
+  <span class="signature">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/bool-class.html">bool</a></span>
+  
+
+</dt>
+<dd>
+  Returns whether the most significant bit is set.
+  <div class="features"><span class="feature">no setter</span></div>
+
+</dd>
+
+        <dt id="runtimeType" class="property inherited">
+  <span class="name"><a href="https://api.dart.dev/stable/3.4.4/dart-core/Object/runtimeType.html">runtimeType</a></span>
+  <span class="signature">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/Type-class.html">Type</a></span>
+  
+
+</dt>
+<dd class="inherited">
+  A representation of the runtime type of the object.
+  <div class="features"><span class="feature">no setter</span><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="sign" class="property">
+  <span class="name"><a href="../binary/Int32/sign.html">sign</a></span>
+  <span class="signature">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a></span>
+  
+
+</dt>
+<dd>
+  Returns the sign of this integer.
+  <div class="features"><span class="feature">no setter</span></div>
+
+</dd>
+
+    </dl>
+  </section>
+    
+  <section
+      class="summary offset-anchor"
+      id="instance-methods">
+    <h2>Methods</h2>
+    <dl class="callables">
+        <dt id="abs" class="callable">
+  <span class="name"><a href="../binary/Int32/abs.html">abs</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns the absolute value of this integer.
+  
+
+</dd>
+
+        <dt id="chunk" class="callable">
+  <span class="name"><a href="../binary/Int32/chunk.html">chunk</a></span><span class="signature">(<wbr><span class="parameter" id="chunk-param-left"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">left</span>, </span><span class="parameter" id="chunk-param-size">[<span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">size</span>]</span>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns a new <a href="../binary/Int32-extension-type.html">Int32</a> with bits in <code>left</code> to <code>size</code>.
+  
+
+</dd>
+
+        <dt id="clamp" class="callable">
+  <span class="name"><a href="../binary/Int32/clamp.html">clamp</a></span><span class="signature">(<wbr><span class="parameter" id="clamp-param-lowerLimit"><span class="type-annotation"><a href="../binary/Int32-extension-type.html">Int32</a></span> <span class="parameter-name">lowerLimit</span>, </span><span class="parameter" id="clamp-param-upperLimit"><span class="type-annotation"><a href="../binary/Int32-extension-type.html">Int32</a></span> <span class="parameter-name">upperLimit</span></span>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns <code>this</code> clamped to be in the range of <code>lowerLimit</code> and
+<code>upperLimit</code>.
+  
+
+</dd>
+
+        <dt id="clampedAbs" class="callable">
+  <span class="name"><a href="../binary/Int32/clampedAbs.html">clampedAbs</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns the absolute value of this integer.
+  
+
+</dd>
+
+        <dt id="clampedAdd" class="callable">
+  <span class="name"><a href="../binary/Int32/clampedAdd.html">clampedAdd</a></span><span class="signature">(<wbr><span class="parameter" id="clampedAdd-param-other"><span class="type-annotation"><a href="../binary/Int32-extension-type.html">Int32</a></span> <span class="parameter-name">other</span></span>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Adds <code>other</code> to this number.
+  
+
+</dd>
+
+        <dt id="clampedMultiply" class="callable">
+  <span class="name"><a href="../binary/Int32/clampedMultiply.html">clampedMultiply</a></span><span class="signature">(<wbr><span class="parameter" id="clampedMultiply-param-other"><span class="type-annotation"><a href="../binary/Int32-extension-type.html">Int32</a></span> <span class="parameter-name">other</span></span>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Multiplies this number by other.
+  
+
+</dd>
+
+        <dt id="clampedNegate" class="callable">
+  <span class="name"><a href="../binary/Int32/clampedNegate.html">clampedNegate</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  The negation of <code>this</code>.
+  
+
+</dd>
+
+        <dt id="clampedNextMultipleOf" class="callable">
+  <span class="name"><a href="../binary/Int32/clampedNextMultipleOf.html">clampedNextMultipleOf</a></span><span class="signature">(<wbr><span class="parameter" id="clampedNextMultipleOf-param-n"><span class="type-annotation"><a href="../binary/Int32-extension-type.html">Int32</a></span> <span class="parameter-name">n</span></span>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Calculates the smallest value greater than or equal to <code>this</code> that is
+a multiple of <code>n</code>.
+  
+
+</dd>
+
+        <dt id="clampedNextPowerOf2" class="callable">
+  <span class="name"><a href="../binary/Int32/clampedNextPowerOf2.html">clampedNextPowerOf2</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns the smallest power of two greater than or equal to <code>this</code>.
+  
+
+</dd>
+
+        <dt id="clampedPow" class="callable">
+  <span class="name"><a href="../binary/Int32/clampedPow.html">clampedPow</a></span><span class="signature">(<wbr><span class="parameter" id="clampedPow-param-exponent"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">exponent</span></span>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns the exponention of this integer with the given <code>exponent</code>.
+  
+
+</dd>
+
+        <dt id="clampedShiftLeft" class="callable">
+  <span class="name"><a href="../binary/Int32/clampedShiftLeft.html">clampedShiftLeft</a></span><span class="signature">(<wbr><span class="parameter" id="clampedShiftLeft-param-shiftAmount"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">shiftAmount</span></span>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Shifts the bits of this integer to the left by <code>shiftAmount</code>.
+  
+
+</dd>
+
+        <dt id="clampedSubtract" class="callable">
+  <span class="name"><a href="../binary/Int32/clampedSubtract.html">clampedSubtract</a></span><span class="signature">(<wbr><span class="parameter" id="clampedSubtract-param-other"><span class="type-annotation"><a href="../binary/Int32-extension-type.html">Int32</a></span> <span class="parameter-name">other</span></span>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Subtracts <code>other</code> from this number.
+  
+
+</dd>
+
+        <dt id="clampedUnsignedShiftRight" class="callable">
+  <span class="name"><a href="../binary/Int32/clampedUnsignedShiftRight.html">clampedUnsignedShiftRight</a></span><span class="signature">(<wbr><span class="parameter" id="clampedUnsignedShiftRight-param-shiftAmount"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">shiftAmount</span></span>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Bitwise unsigned right shift by <code>shiftAmount</code> bits.
+  
+
+</dd>
+
+        <dt id="compareTo" class="callable inherited">
+  <span class="name"><a href="https://api.dart.dev/stable/3.4.4/dart-core/Comparable/compareTo.html">compareTo</a></span><span class="signature">(<wbr><span class="parameter" id="compareTo-param-other"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/num-class.html">num</a></span> <span class="parameter-name">other</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  Compares this object to another object.
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="countLeadingZeros" class="callable">
+  <span class="name"><a href="../binary/Int32/countLeadingZeros.html">countLeadingZeros</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns the number of leading zeros in the binary representation of
+<code>this</code>.
+  
+
+</dd>
+
+        <dt id="countOnes" class="callable">
+  <span class="name"><a href="../binary/Int32/countOnes.html">countOnes</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns the number of <code>1</code>s in the binary representation of <code>this</code>.
+  
+
+</dd>
+
+        <dt id="countTrailingOnes" class="callable">
+  <span class="name"><a href="../binary/Int32/countTrailingOnes.html">countTrailingOnes</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns the number of trailing ones in the binary representation of <code>this</code>.
+  
+
+</dd>
+
+        <dt id="countTrailingZeros" class="callable">
+  <span class="name"><a href="../binary/Int32/countTrailingZeros.html">countTrailingZeros</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns the number of trailing zeros in the binary representation of
+<code>this</code>.
+  
+
+</dd>
+
+        <dt id="countZeros" class="callable">
+  <span class="name"><a href="../binary/Int32/countZeros.html">countZeros</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns the number of <code>0</code>s in the binary representation of <code>this</code>.
+  
+
+</dd>
+
+        <dt id="log" class="callable">
+  <span class="name"><a href="../binary/Int32/log.html">log</a></span><span class="signature">(<wbr><span class="parameter" id="log-param-base">[<span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">base</span>]</span>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns the natural logarithm of this integer, rounded down.
+  
+
+</dd>
+
+        <dt id="log10" class="callable">
+  <span class="name"><a href="../binary/Int32/log10.html">log10</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns the base 10 logarithm of this integer, rounded down.
+  
+
+</dd>
+
+        <dt id="log2" class="callable">
+  <span class="name"><a href="../binary/Int32/log2.html">log2</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns the base 2 logarithm of this integer, rounded down.
+  
+
+</dd>
+
+        <dt id="midpoint" class="callable">
+  <span class="name"><a href="../binary/Int32/midpoint.html">midpoint</a></span><span class="signature">(<wbr><span class="parameter" id="midpoint-param-other"><span class="type-annotation"><a href="../binary/Int32-extension-type.html">Int32</a></span> <span class="parameter-name">other</span></span>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns the midpoint between this integer and <code>other</code>, rounded down.
+  
+
+</dd>
+
+        <dt id="nextMultipleOf" class="callable">
+  <span class="name"><a href="../binary/Int32/nextMultipleOf.html">nextMultipleOf</a></span><span class="signature">(<wbr><span class="parameter" id="nextMultipleOf-param-n"><span class="type-annotation"><a href="../binary/Int32-extension-type.html">Int32</a></span> <span class="parameter-name">n</span></span>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Calculates the smallest value greater than or equal to <code>this</code> that is
+a multiple of <code>n</code>.
+  
+
+</dd>
+
+        <dt id="nextPowerOf2" class="callable">
+  <span class="name"><a href="../binary/Int32/nextPowerOf2.html">nextPowerOf2</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns the smallest power of two greater than or equal to <code>this</code>.
+  
+
+</dd>
+
+        <dt id="noSuchMethod" class="callable inherited">
+  <span class="name"><a href="https://api.dart.dev/stable/3.4.4/dart-core/Object/noSuchMethod.html">noSuchMethod</a></span><span class="signature">(<wbr><span class="parameter" id="noSuchMethod-param-invocation"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/Invocation-class.html">Invocation</a></span> <span class="parameter-name">invocation</span></span>)
+    <span class="returntype parameter">&#8594; dynamic</span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  Invoked when a nonexistent method or property is accessed.
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="nthBit" class="callable">
+  <span class="name"><a href="../binary/Int32/nthBit.html">nthBit</a></span><span class="signature">(<wbr><span class="parameter" id="nthBit-param-n"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">n</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/bool-class.html">bool</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns whether the n-th bit is set.
+  
+
+</dd>
+
+        <dt id="pow" class="callable">
+  <span class="name"><a href="../binary/Int32/pow.html">pow</a></span><span class="signature">(<wbr><span class="parameter" id="pow-param-exponent"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">exponent</span></span>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns the exponention of this integer with the given <code>exponent</code>.
+  
+
+</dd>
+
+        <dt id="remainder" class="callable">
+  <span class="name"><a href="../binary/Int32/remainder.html">remainder</a></span><span class="signature">(<wbr><span class="parameter" id="remainder-param-other"><span class="type-annotation"><a href="../binary/Int32-extension-type.html">Int32</a></span> <span class="parameter-name">other</span></span>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  The remainder of the truncating division of <code>this</code> by <code>other</code>.
+  
+
+</dd>
+
+        <dt id="replace" class="callable">
+  <span class="name"><a href="../binary/Int32/replace.html">replace</a></span><span class="signature">(<wbr><span class="parameter" id="replace-param-left"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">left</span>, </span><span class="parameter" id="replace-param-right"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">right</span>, </span><span class="parameter" id="replace-param-replacement"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">replacement</span></span>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns a new instance with bits <code>left</code> to <code>right</code>, inclusive, replaced
+with the same number of bits from <code>replacement</code>.
+  
+
+</dd>
+
+        <dt id="rotateLeft" class="callable">
+  <span class="name"><a href="../binary/Int32/rotateLeft.html">rotateLeft</a></span><span class="signature">(<wbr><span class="parameter" id="rotateLeft-param-n"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">n</span></span>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Rotates the bits in <code>this</code> to the left by <code>n</code> positions.
+  
+
+</dd>
+
+        <dt id="rotateRight" class="callable">
+  <span class="name"><a href="../binary/Int32/rotateRight.html">rotateRight</a></span><span class="signature">(<wbr><span class="parameter" id="rotateRight-param-n"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">n</span></span>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Rotates the bits in <code>this</code> to the right by <code>n</code> positions.
+  
+
+</dd>
+
+        <dt id="setNthBit" class="callable">
+  <span class="name"><a href="../binary/Int32/setNthBit.html">setNthBit</a></span><span class="signature">(<wbr><span class="parameter" id="setNthBit-param-n"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">n</span>, </span><span class="parameter" id="setNthBit-param-value">[<span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/bool-class.html">bool</a></span> <span class="parameter-name">value</span> = <span class="default-value">true</span>]</span>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Sets the n-th bit to <code>value</code>, where <code>true</code> is <code>1</code> and <code>false</code> is <code>0</code>.
+  
+
+</dd>
+
+        <dt id="signedRightShift" class="callable">
+  <span class="name"><a href="../binary/Int32/signedRightShift.html">signedRightShift</a></span><span class="signature">(<wbr><span class="parameter" id="signedRightShift-param-shiftAmount"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">shiftAmount</span></span>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Bitwise signed right shift by <code>shiftAmount</code> bits.
+  
+
+</dd>
+
+        <dt id="slice" class="callable">
+  <span class="name"><a href="../binary/Int32/slice.html">slice</a></span><span class="signature">(<wbr><span class="parameter" id="slice-param-left"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">left</span>, </span><span class="parameter" id="slice-param-right">[<span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">right</span>]</span>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns a new instance with bits <code>left</code> to <code>right</code>, inclusive.
+  
+
+</dd>
+
+        <dt id="sqrt" class="callable">
+  <span class="name"><a href="../binary/Int32/sqrt.html">sqrt</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns the square root of this integer, rounded down.
+  
+
+</dd>
+
+        <dt id="toBinaryString" class="callable">
+  <span class="name"><a href="../binary/Int32/toBinaryString.html">toBinaryString</a></span><span class="signature">(<wbr><span class="parameter" id="toBinaryString-param-padded">{<span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/bool-class.html">bool</a></span> <span class="parameter-name">padded</span> = <span class="default-value">true</span>}</span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/String-class.html">String</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns <code>this</code> as a binary string.
+  
+
+</dd>
+
+        <dt id="toDouble" class="callable">
+  <span class="name"><a href="../binary/Int32/toDouble.html">toDouble</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/double-class.html">double</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  This number as a <a href="https://api.dart.dev/stable/3.4.4/dart-core/double-class.html">double</a>.
+  
+
+</dd>
+
+        <dt id="toggleNthBit" class="callable">
+  <span class="name"><a href="../binary/Int32/toggleNthBit.html">toggleNthBit</a></span><span class="signature">(<wbr><span class="parameter" id="toggleNthBit-param-n"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">n</span></span>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Toggles the n-th bit.
+  
+
+</dd>
+
+        <dt id="toInt" class="callable">
+  <span class="name"><a href="../binary/Int32/toInt.html">toInt</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  This number as an <a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a>.
+  
+
+</dd>
+
+        <dt id="toString" class="callable inherited">
+  <span class="name"><a href="https://api.dart.dev/stable/3.4.4/dart-core/Object/toString.html">toString</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/String-class.html">String</a></span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  A string representation of this object.
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="tryAbs" class="callable">
+  <span class="name"><a href="../binary/Int32/tryAbs.html">tryAbs</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a>?</span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns the absolute value of this integer.
+  
+
+</dd>
+
+        <dt id="tryAdd" class="callable">
+  <span class="name"><a href="../binary/Int32/tryAdd.html">tryAdd</a></span><span class="signature">(<wbr><span class="parameter" id="tryAdd-param-other"><span class="type-annotation"><a href="../binary/Int32-extension-type.html">Int32</a></span> <span class="parameter-name">other</span></span>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a>?</span>
+  </span>
+  
+
+</dt>
+<dd>
+  Adds <code>other</code> to this number.
+  
+
+</dd>
+
+        <dt id="tryMultiply" class="callable">
+  <span class="name"><a href="../binary/Int32/tryMultiply.html">tryMultiply</a></span><span class="signature">(<wbr><span class="parameter" id="tryMultiply-param-other"><span class="type-annotation"><a href="../binary/Int32-extension-type.html">Int32</a></span> <span class="parameter-name">other</span></span>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a>?</span>
+  </span>
+  
+
+</dt>
+<dd>
+  Multiplies this number by other.
+  
+
+</dd>
+
+        <dt id="tryNegate" class="callable">
+  <span class="name"><a href="../binary/Int32/tryNegate.html">tryNegate</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a>?</span>
+  </span>
+  
+
+</dt>
+<dd>
+  The negation of <code>this</code>.
+  
+
+</dd>
+
+        <dt id="tryNextMultipleOf" class="callable">
+  <span class="name"><a href="../binary/Int32/tryNextMultipleOf.html">tryNextMultipleOf</a></span><span class="signature">(<wbr><span class="parameter" id="tryNextMultipleOf-param-n"><span class="type-annotation"><a href="../binary/Int32-extension-type.html">Int32</a></span> <span class="parameter-name">n</span></span>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a>?</span>
+  </span>
+  
+
+</dt>
+<dd>
+  Calculates the smallest value greater than or equal to <code>this</code> that is
+a multiple of <code>n</code>.
+  
+
+</dd>
+
+        <dt id="tryNextPowerOf2" class="callable">
+  <span class="name"><a href="../binary/Int32/tryNextPowerOf2.html">tryNextPowerOf2</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a>?</span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns the smallest power of two greater than or equal to <code>this</code>.
+  
+
+</dd>
+
+        <dt id="tryPow" class="callable">
+  <span class="name"><a href="../binary/Int32/tryPow.html">tryPow</a></span><span class="signature">(<wbr><span class="parameter" id="tryPow-param-exponent"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">exponent</span></span>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a>?</span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns the exponention of this integer with the given <code>exponent</code>.
+  
+
+</dd>
+
+        <dt id="tryShiftLeft" class="callable">
+  <span class="name"><a href="../binary/Int32/tryShiftLeft.html">tryShiftLeft</a></span><span class="signature">(<wbr><span class="parameter" id="tryShiftLeft-param-shiftAmount"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">shiftAmount</span></span>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a>?</span>
+  </span>
+  
+
+</dt>
+<dd>
+  Shifts the bits of this integer to the left by <code>shiftAmount</code>.
+  
+
+</dd>
+
+        <dt id="trySubtract" class="callable">
+  <span class="name"><a href="../binary/Int32/trySubtract.html">trySubtract</a></span><span class="signature">(<wbr><span class="parameter" id="trySubtract-param-other"><span class="type-annotation"><a href="../binary/Int32-extension-type.html">Int32</a></span> <span class="parameter-name">other</span></span>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a>?</span>
+  </span>
+  
+
+</dt>
+<dd>
+  Subtracts <code>other</code> from this number.
+  
+
+</dd>
+
+        <dt id="tryUnsignedShiftRight" class="callable">
+  <span class="name"><a href="../binary/Int32/tryUnsignedShiftRight.html">tryUnsignedShiftRight</a></span><span class="signature">(<wbr><span class="parameter" id="tryUnsignedShiftRight-param-shiftAmount"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">shiftAmount</span></span>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a>?</span>
+  </span>
+  
+
+</dt>
+<dd>
+  Bitwise unsigned right shift by <code>shiftAmount</code> bits.
+  
+
+</dd>
+
+        <dt id="uncheckedAbs" class="callable">
+  <span class="name"><a href="../binary/Int32/uncheckedAbs.html">uncheckedAbs</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns the absolute value of this integer.
+  
+
+</dd>
+
+        <dt id="uncheckedAdd" class="callable">
+  <span class="name"><a href="../binary/Int32/uncheckedAdd.html">uncheckedAdd</a></span><span class="signature">(<wbr><span class="parameter" id="uncheckedAdd-param-other"><span class="type-annotation"><a href="../binary/Int32-extension-type.html">Int32</a></span> <span class="parameter-name">other</span></span>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Adds <code>other</code> to this number.
+  
+
+</dd>
+
+        <dt id="uncheckedChunk" class="callable">
+  <span class="name"><a href="../binary/Int32/uncheckedChunk.html">uncheckedChunk</a></span><span class="signature">(<wbr><span class="parameter" id="uncheckedChunk-param-left"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">left</span>, </span><span class="parameter" id="uncheckedChunk-param-size">[<span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">size</span>]</span>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns a new <a href="../binary/Int32-extension-type.html">Int32</a> with bits in <code>left</code> to <code>size</code>.
+  
+
+</dd>
+
+        <dt id="uncheckedMultiply" class="callable">
+  <span class="name"><a href="../binary/Int32/uncheckedMultiply.html">uncheckedMultiply</a></span><span class="signature">(<wbr><span class="parameter" id="uncheckedMultiply-param-other"><span class="type-annotation"><a href="../binary/Int32-extension-type.html">Int32</a></span> <span class="parameter-name">other</span></span>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Multiplies this number by other.
+  
+
+</dd>
+
+        <dt id="uncheckedNegate" class="callable">
+  <span class="name"><a href="../binary/Int32/uncheckedNegate.html">uncheckedNegate</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  The negation of <code>this</code>.
+  
+
+</dd>
+
+        <dt id="uncheckedNextMultipleOf" class="callable">
+  <span class="name"><a href="../binary/Int32/uncheckedNextMultipleOf.html">uncheckedNextMultipleOf</a></span><span class="signature">(<wbr><span class="parameter" id="uncheckedNextMultipleOf-param-n"><span class="type-annotation"><a href="../binary/Int32-extension-type.html">Int32</a></span> <span class="parameter-name">n</span></span>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Calculates the smallest value greater than or equal to <code>this</code> that is
+  
+
+</dd>
+
+        <dt id="uncheckedNextPowerOf2" class="callable">
+  <span class="name"><a href="../binary/Int32/uncheckedNextPowerOf2.html">uncheckedNextPowerOf2</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns the smallest power of two greater than or equal to <code>this</code>.
+  
+
+</dd>
+
+        <dt id="uncheckedPow" class="callable">
+  <span class="name"><a href="../binary/Int32/uncheckedPow.html">uncheckedPow</a></span><span class="signature">(<wbr><span class="parameter" id="uncheckedPow-param-exponent"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">exponent</span></span>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns the exponention of this integer with the given <code>exponent</code>.
+  
+
+</dd>
+
+        <dt id="uncheckedReplace" class="callable">
+  <span class="name"><a href="../binary/Int32/uncheckedReplace.html">uncheckedReplace</a></span><span class="signature">(<wbr><span class="parameter" id="uncheckedReplace-param-left"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">left</span>, </span><span class="parameter" id="uncheckedReplace-param-right"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">right</span>, </span><span class="parameter" id="uncheckedReplace-param-replacement"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">replacement</span></span>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns a new instance with bits <code>left</code> to <code>right</code>, inclusive, replaced
+with the same number of bits from <code>replacement</code>.
+  
+
+</dd>
+
+        <dt id="uncheckedSetNthBit" class="callable">
+  <span class="name"><a href="../binary/Int32/uncheckedSetNthBit.html">uncheckedSetNthBit</a></span><span class="signature">(<wbr><span class="parameter" id="uncheckedSetNthBit-param-n"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">n</span>, </span><span class="parameter" id="uncheckedSetNthBit-param-value">[<span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/bool-class.html">bool</a></span> <span class="parameter-name">value</span> = <span class="default-value">true</span>]</span>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Sets the n-th bit to <code>value</code>, where <code>true</code> is <code>1</code> and <code>false</code> is <code>0</code>.
+  
+
+</dd>
+
+        <dt id="uncheckedShiftLeft" class="callable">
+  <span class="name"><a href="../binary/Int32/uncheckedShiftLeft.html">uncheckedShiftLeft</a></span><span class="signature">(<wbr><span class="parameter" id="uncheckedShiftLeft-param-shiftAmount"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">shiftAmount</span></span>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Shifts the bits of this integer to the left by <code>shiftAmount</code>.
+  
+
+</dd>
+
+        <dt id="uncheckedSlice" class="callable">
+  <span class="name"><a href="../binary/Int32/uncheckedSlice.html">uncheckedSlice</a></span><span class="signature">(<wbr><span class="parameter" id="uncheckedSlice-param-left"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">left</span>, </span><span class="parameter" id="uncheckedSlice-param-right">[<span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">right</span>]</span>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns a new instance with bits <code>left</code> to <code>right</code>, inclusive.
+  
+
+</dd>
+
+        <dt id="uncheckedSubtract" class="callable">
+  <span class="name"><a href="../binary/Int32/uncheckedSubtract.html">uncheckedSubtract</a></span><span class="signature">(<wbr><span class="parameter" id="uncheckedSubtract-param-other"><span class="type-annotation"><a href="../binary/Int32-extension-type.html">Int32</a></span> <span class="parameter-name">other</span></span>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Subtracts <code>other</code> from this number.
+  
+
+</dd>
+
+        <dt id="uncheckedToggleNthBit" class="callable">
+  <span class="name"><a href="../binary/Int32/uncheckedToggleNthBit.html">uncheckedToggleNthBit</a></span><span class="signature">(<wbr><span class="parameter" id="uncheckedToggleNthBit-param-n"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">n</span></span>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Toggles the n-th bit.
+  
+
+</dd>
+
+        <dt id="uncheckedUnsignedShiftRight" class="callable">
+  <span class="name"><a href="../binary/Int32/uncheckedUnsignedShiftRight.html">uncheckedUnsignedShiftRight</a></span><span class="signature">(<wbr><span class="parameter" id="uncheckedUnsignedShiftRight-param-shiftAmount"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">shiftAmount</span></span>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Bitwise unsigned right shift by <code>shiftAmount</code> bits.
+  
+
+</dd>
+
+        <dt id="wrappedAbs" class="callable">
+  <span class="name"><a href="../binary/Int32/wrappedAbs.html">wrappedAbs</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns the absolute value of this integer.
+  
+
+</dd>
+
+        <dt id="wrappedAdd" class="callable">
+  <span class="name"><a href="../binary/Int32/wrappedAdd.html">wrappedAdd</a></span><span class="signature">(<wbr><span class="parameter" id="wrappedAdd-param-other"><span class="type-annotation"><a href="../binary/Int32-extension-type.html">Int32</a></span> <span class="parameter-name">other</span></span>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Adds <code>other</code> to this number.
+  
+
+</dd>
+
+        <dt id="wrappedMultiply" class="callable">
+  <span class="name"><a href="../binary/Int32/wrappedMultiply.html">wrappedMultiply</a></span><span class="signature">(<wbr><span class="parameter" id="wrappedMultiply-param-other"><span class="type-annotation"><a href="../binary/Int32-extension-type.html">Int32</a></span> <span class="parameter-name">other</span></span>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Multiplies this number by other.
+  
+
+</dd>
+
+        <dt id="wrappedNegate" class="callable">
+  <span class="name"><a href="../binary/Int32/wrappedNegate.html">wrappedNegate</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  The negation of <code>this</code>.
+  
+
+</dd>
+
+        <dt id="wrappedNextMultipleOf" class="callable">
+  <span class="name"><a href="../binary/Int32/wrappedNextMultipleOf.html">wrappedNextMultipleOf</a></span><span class="signature">(<wbr><span class="parameter" id="wrappedNextMultipleOf-param-n"><span class="type-annotation"><a href="../binary/Int32-extension-type.html">Int32</a></span> <span class="parameter-name">n</span></span>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Calculates the smallest value greater than or equal to <code>this</code> that is
+a multiple of <code>n</code>.
+  
+
+</dd>
+
+        <dt id="wrappedNextPowerOf2" class="callable">
+  <span class="name"><a href="../binary/Int32/wrappedNextPowerOf2.html">wrappedNextPowerOf2</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns the smallest power of two greater than or equal to <code>this</code>.
+  
+
+</dd>
+
+        <dt id="wrappedPow" class="callable">
+  <span class="name"><a href="../binary/Int32/wrappedPow.html">wrappedPow</a></span><span class="signature">(<wbr><span class="parameter" id="wrappedPow-param-exponent"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">exponent</span></span>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns the exponention of this integer with the given <code>exponent</code>.
+  
+
+</dd>
+
+        <dt id="wrappedShiftLeft" class="callable">
+  <span class="name"><a href="../binary/Int32/wrappedShiftLeft.html">wrappedShiftLeft</a></span><span class="signature">(<wbr><span class="parameter" id="wrappedShiftLeft-param-shiftAmount"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">shiftAmount</span></span>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Shifts the bits of this integer to the left by <code>shiftAmount</code>.
+  
+
+</dd>
+
+        <dt id="wrappedSubtract" class="callable">
+  <span class="name"><a href="../binary/Int32/wrappedSubtract.html">wrappedSubtract</a></span><span class="signature">(<wbr><span class="parameter" id="wrappedSubtract-param-other"><span class="type-annotation"><a href="../binary/Int32-extension-type.html">Int32</a></span> <span class="parameter-name">other</span></span>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Subtracts <code>other</code> from this number.
+  
+
+</dd>
+
+        <dt id="wrappedUnsignedShiftRight" class="callable">
+  <span class="name"><a href="../binary/Int32/wrappedUnsignedShiftRight.html">wrappedUnsignedShiftRight</a></span><span class="signature">(<wbr><span class="parameter" id="wrappedUnsignedShiftRight-param-shiftAmount"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">shiftAmount</span></span>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Bitwise unsigned right shift by <code>shiftAmount</code> bits.
+  
+
+</dd>
+
+    </dl>
+  </section>
+    
+  <section
+      class="summary offset-anchor"
+      id="operators">
+    <h2>Operators</h2>
+    <dl class="callables">
+        <dt id="operator %" class="callable">
+  <span class="name"><a href="../binary/Int32/operator_modulo.html">operator %</a></span><span class="signature">(<wbr><span class="parameter" id="%-param-other"><span class="type-annotation"><a href="../binary/Int32-extension-type.html">Int32</a></span> <span class="parameter-name">other</span></span>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Euclidean modulo of this number by other.
+  
+
+</dd>
+
+        <dt id="operator &amp;" class="callable">
+  <span class="name"><a href="../binary/Int32/operator_bitwise_and.html">operator &</a></span><span class="signature">(<wbr><span class="parameter" id="&-param-other"><span class="type-annotation"><a href="../binary/Int32-extension-type.html">Int32</a></span> <span class="parameter-name">other</span></span>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Bit-wise and operator.
+  
+
+</dd>
+
+        <dt id="operator *" class="callable">
+  <span class="name"><a href="../binary/Int32/operator_multiply.html">operator *</a></span><span class="signature">(<wbr><span class="parameter" id="*-param-other"><span class="type-annotation"><a href="../binary/Int32-extension-type.html">Int32</a></span> <span class="parameter-name">other</span></span>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Multiplies this number by other.
+  
+
+</dd>
+
+        <dt id="operator +" class="callable">
+  <span class="name"><a href="../binary/Int32/operator_plus.html">operator +</a></span><span class="signature">(<wbr><span class="parameter" id="+-param-other"><span class="type-annotation"><a href="../binary/Int32-extension-type.html">Int32</a></span> <span class="parameter-name">other</span></span>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Adds <code>other</code> to this number.
+  
+
+</dd>
+
+        <dt id="operator -" class="callable">
+  <span class="name"><a href="../binary/Int32/operator_minus.html">operator -</a></span><span class="signature">(<wbr><span class="parameter" id="--param-other"><span class="type-annotation"><a href="../binary/Int32-extension-type.html">Int32</a></span> <span class="parameter-name">other</span></span>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Subtracts <code>other</code> from this number.
+  
+
+</dd>
+
+        <dt id="operator &lt;" class="callable">
+  <span class="name"><a href="../binary/Int32/operator_less.html">operator <</a></span><span class="signature">(<wbr><span class="parameter" id="<-param-other"><span class="type-annotation"><a href="../binary/Int32-extension-type.html">Int32</a></span> <span class="parameter-name">other</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/bool-class.html">bool</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Whether this number is numerically smaller than <code>other</code>.
+  
+
+</dd>
+
+        <dt id="operator &lt;&lt;" class="callable">
+  <span class="name"><a href="../binary/Int32/operator_shift_left.html">operator <<</a></span><span class="signature">(<wbr><span class="parameter" id="<<-param-shiftAmount"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">shiftAmount</span></span>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Shifts the bits of this integer to the left by <code>shiftAmount</code>.
+  
+
+</dd>
+
+        <dt id="operator &lt;=" class="callable">
+  <span class="name"><a href="../binary/Int32/operator_less_equal.html">operator <=</a></span><span class="signature">(<wbr><span class="parameter" id="<=-param-other"><span class="type-annotation"><a href="../binary/Int32-extension-type.html">Int32</a></span> <span class="parameter-name">other</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/bool-class.html">bool</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Whether this number is numerically smaller than or equal to <code>other</code>.
+  
+
+</dd>
+
+        <dt id="operator ==" class="callable inherited">
+  <span class="name"><a href="https://api.dart.dev/stable/3.4.4/dart-core/Object/operator_equals.html">operator ==</a></span><span class="signature">(<wbr><span class="parameter" id="==-param-other"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/Object-class.html">Object</a></span> <span class="parameter-name">other</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/bool-class.html">bool</a></span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  The equality operator.
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="operator &gt;" class="callable">
+  <span class="name"><a href="../binary/Int32/operator_greater.html">operator ></a></span><span class="signature">(<wbr><span class="parameter" id=">-param-other"><span class="type-annotation"><a href="../binary/Int32-extension-type.html">Int32</a></span> <span class="parameter-name">other</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/bool-class.html">bool</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Whether this number is numerically greater than <code>other</code>.
+  
+
+</dd>
+
+        <dt id="operator &gt;=" class="callable">
+  <span class="name"><a href="../binary/Int32/operator_greater_equal.html">operator >=</a></span><span class="signature">(<wbr><span class="parameter" id=">=-param-other"><span class="type-annotation"><a href="../binary/Int32-extension-type.html">Int32</a></span> <span class="parameter-name">other</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/bool-class.html">bool</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Whether this number is numerically greater than or equal to <code>other</code>.
+  
+
+</dd>
+
+        <dt id="operator &gt;&gt;" class="callable">
+  <span class="name"><a href="../binary/Int32/operator_shift_right.html">operator >></a></span><span class="signature">(<wbr><span class="parameter" id=">>-param-shiftAmount"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">shiftAmount</span></span>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Shifts the bits of this integer to the right by <code>shiftAmount</code>.
+  
+
+</dd>
+
+        <dt id="operator &gt;&gt;&gt;" class="callable">
+  <span class="name"><a href="../binary/Int32/operator_triple_shift.html">operator >>></a></span><span class="signature">(<wbr><span class="parameter" id=">>>-param-shiftAmount"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">shiftAmount</span></span>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Bitwise unsigned right shift by <code>shiftAmount</code> bits.
+  
+
+</dd>
+
+        <dt id="operator []" class="callable">
+  <span class="name"><a href="../binary/Int32/operator_get.html">operator []</a></span><span class="signature">(<wbr><span class="parameter" id="[]-param-n"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">n</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/bool-class.html">bool</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns whether the n-th bit is set.
+  
+
+</dd>
+
+        <dt id="operator ^" class="callable">
+  <span class="name"><a href="../binary/Int32/operator_bitwise_exclusive_or.html">operator ^</a></span><span class="signature">(<wbr><span class="parameter" id="^-param-other"><span class="type-annotation"><a href="../binary/Int32-extension-type.html">Int32</a></span> <span class="parameter-name">other</span></span>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Bit-wise exclusive-or operator.
+  
+
+</dd>
+
+        <dt id="operator unary-" class="callable">
+  <span class="name"><a href="../binary/Int32/operator_unary_minus.html">operator unary-</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  The negation of <code>this</code>.
+  
+
+</dd>
+
+        <dt id="operator |" class="callable">
+  <span class="name"><a href="../binary/Int32/operator_bitwise_or.html">operator |</a></span><span class="signature">(<wbr><span class="parameter" id="|-param-other"><span class="type-annotation"><a href="../binary/Int32-extension-type.html">Int32</a></span> <span class="parameter-name">other</span></span>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Bit-wise or operator.
+  
+
+</dd>
+
+        <dt id="operator ~" class="callable">
+  <span class="name"><a href="../binary/Int32/operator_bitwise_negate.html">operator ~</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  The bit-wise negate operator.
+  
+
+</dd>
+
+        <dt id="operator ~&#47;" class="callable">
+  <span class="name"><a href="../binary/Int32/operator_truncate_divide.html">operator ~/</a></span><span class="signature">(<wbr><span class="parameter" id="~/-param-other"><span class="type-annotation"><a href="../binary/Int32-extension-type.html">Int32</a></span> <span class="parameter-name">other</span></span>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Truncating division operator.
+  
+
+</dd>
+
+    </dl>
+  </section>
+    
+    
+  <section class="summary offset-anchor" id="static-methods">
+    <h2>Static Methods</h2>
+    <dl class="callables">
+        <dt id="checkRange" class="callable">
+  <span class="name"><a href="../binary/Int32/checkRange.html">checkRange</a></span><span class="signature">(<wbr><span class="parameter" id="checkRange-param-value"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">value</span></span>)
+    <span class="returntype parameter">&#8594; void</span>
+  </span>
+  
+
+</dt>
+<dd>
+  Throws a <a href="https://api.dart.dev/stable/3.4.4/dart-core/RangeError-class.html">RangeError</a> if <code>value</code> is not in a valid range for Int32.
+  
+
+</dd>
+
+        <dt id="isValid" class="callable">
+  <span class="name"><a href="../binary/Int32/isValid.html">isValid</a></span><span class="signature">(<wbr><span class="parameter" id="isValid-param-v"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">v</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/bool-class.html">bool</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns whether <code>v</code> is in a valid range for Int32.
+  
+
+</dd>
+
+        <dt id="tryFrom" class="callable">
+  <span class="name"><a href="../binary/Int32/tryFrom.html">tryFrom</a></span><span class="signature">(<wbr><span class="parameter" id="tryFrom-param-v"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">v</span></span>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Int32-extension-type.html">Int32</a>?</span>
+  </span>
+  
+
+</dt>
+<dd>
+  Defines <code>v</code> as A signed 32-bit integer.
+  
+
+</dd>
+
+    </dl>
+  </section>
+    
+
+  <section class="summary offset-anchor" id="constants">
+    <h2>Constants</h2>
+
+    <dl class="properties">
+        <dt id="max" class="constant">
+    <span class="name "><a href="../binary/Int32/max-constant.html">max</a></span>
+  <span class="signature">&#8594; const <a href="../binary/Int32-extension-type.html">Int32</a></span>
+  
+
+</dt>
+<dd>
+  The maximum value that this type can represent.
+  
+
+</dd>
+
+        <dt id="min" class="constant">
+    <span class="name "><a href="../binary/Int32/min-constant.html">min</a></span>
+  <span class="signature">&#8594; const <a href="../binary/Int32-extension-type.html">Int32</a></span>
+  
+
+</dt>
+<dd>
+  The minimum value that this type can represent.
+  
+
+</dd>
+
+        <dt id="width" class="constant">
+    <span class="name "><a href="../binary/Int32/width-constant.html">width</a></span>
+  <span class="signature">&#8594; const <a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span>
+  
+
+</dt>
+<dd>
+  The number of bits used to represent values of this type.
+  
+
+</dd>
+
+    </dl>
+  </section>
+
+</div><!-- /.main-content -->
+
+<div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+  <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="../index.html">binary</a></li>
+    <li><a href="../binary/binary-library.html">binary</a></li>
+    <li class="self-crumb">Int32 extension type</li>
+</ol>
+
+
+  <h5>binary library</h5>
+  <div id="dartdoc-sidebar-left-content"></div>
+</div>
+
+<div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+</div><!--/.sidebar-offcanvas-->
+
+</main>
+
+<footer>
+  <span class="no-break">
+    binary
+      4.0.0-alpha
+  </span>
+
+  
+</footer>
+
+
+
+<script src="../static-assets/highlight.pack.js?v1"></script>
+<script src="../static-assets/docs.dart.js"></script>
+
+
+
+</body>
+
+</html>
+

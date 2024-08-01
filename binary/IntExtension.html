@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the IntExtension extension from the binary library, for the Dart programming language.">
+  <title>IntExtension extension - binary library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../static-assets/styles.css?v1">
+  <link rel="icon" href="../static-assets/favicon.png?v1">
+
+  
+</head>
+
+
+<body data-base-href="../" data-using-base-href="false" class="light-theme">
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../index.html">binary</a></li>
+    <li><a href="../binary/binary-library.html">binary.dart</a></li>
+    <li class="self-crumb">IntExtension extension</li>
+  </ol>
+  <div class="self-name">IntExtension</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <div class="toggle" id="theme-button" title="Toggle brightness">
+    <label for="theme">
+      <input type="checkbox" id="theme" value="light-theme">
+      <span id="dark-theme-button" class="material-symbols-outlined">
+        dark_mode
+      </span>
+      <span id="light-theme-button" class="material-symbols-outlined">
+        light_mode
+      </span>
+    </label>
+  </div>
+</header>
+<main>
+<div
+    id="dartdoc-main-content"
+    class="main-content"
+    data-above-sidebar="binary&#47;binary-library-sidebar.html"
+    data-below-sidebar="binary&#47;IntExtension-extension-sidebar.html">
+    <div>
+<h1><span class="kind-class">IntExtension</span> extension 
+ 
+</h1></div>
+
+    
+<section class="desc markdown">
+  <p>Additional functionality for any integer, without size restrictions.</p>
+<p>This extension provides additional functionality for integers that is not
+provided by the standard library. This includes convenience methods for
+accessing <code>dart:math</code> functions, as well as behavior that is not provided by
+the standard library such as <a href="../binary/IntExtension/midpoint.html">midpoint</a> and <a href="../binary/IntExtension/isPowerOf2.html">isPowerOf2</a>.</p>
+<p>Methods in <a href="../binary/IntExtension.html">IntExtension</a> make no assumptions about the size of the
+integer.</p>
+<h2 id="example">Example</h2>
+<pre class="language-dart"><code class="language-dart">2.pow(3); // 8
+0x0F.countOnes(); // 4
+</code></pre>
+</section>
+
+    <section>
+      <dl class="dl-horizontal">
+        <dt>on</dt>
+        <dd>
+          <ul class="comma-separated clazz-relationships">
+              <li><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></li>
+          </ul>
+        </dd>
+      </dl>
+      
+
+
+    </section>
+
+    
+    
+  <section
+      class="summary offset-anchor"
+      id="instance-methods">
+    <h2>Methods</h2>
+    <dl class="callables">
+        <dt id="isPowerOf2" class="callable">
+  <span class="name"><a href="../binary/IntExtension/isPowerOf2.html">isPowerOf2</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/bool-class.html">bool</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns <code>true</code> iff <code>value == 2^n</code> for some integer <code>n</code>.
+  
+
+</dd>
+
+        <dt id="log" class="callable">
+  <span class="name"><a href="../binary/IntExtension/log.html">log</a></span><span class="signature">(<wbr><span class="parameter" id="log-param-base">[<span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">base</span>]</span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns the natural logarithm of this integer, rounded down.
+  
+
+</dd>
+
+        <dt id="log10" class="callable">
+  <span class="name"><a href="../binary/IntExtension/log10.html">log10</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns the base 10 logarithm of this integer, rounded down.
+  
+
+</dd>
+
+        <dt id="log2" class="callable">
+  <span class="name"><a href="../binary/IntExtension/log2.html">log2</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns the base 2 logarithm of this integer, rounded down.
+  
+
+</dd>
+
+        <dt id="midpoint" class="callable">
+  <span class="name"><a href="../binary/IntExtension/midpoint.html">midpoint</a></span><span class="signature">(<wbr><span class="parameter" id="midpoint-param-other"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">other</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns the midpoint between this integer and <code>other</code>.
+  
+
+</dd>
+
+        <dt id="nextMultipleOf" class="callable">
+  <span class="name"><a href="../binary/IntExtension/nextMultipleOf.html">nextMultipleOf</a></span><span class="signature">(<wbr><span class="parameter" id="nextMultipleOf-param-n"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">n</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Calculates the smallest value greater than or equal to <code>this</code> that is
+a multiple of <code>n</code>.
+  
+
+</dd>
+
+        <dt id="nextPowerOf2" class="callable">
+  <span class="name"><a href="../binary/IntExtension/nextPowerOf2.html">nextPowerOf2</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns the smallest power of two greater than or equal to <code>this</code>.
+  
+
+</dd>
+
+        <dt id="nthBit" class="callable">
+  <span class="name"><a href="../binary/IntExtension/nthBit.html">nthBit</a></span><span class="signature">(<wbr><span class="parameter" id="nthBit-param-n"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">n</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/bool-class.html">bool</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns whether the n-th bit is set.
+  
+
+</dd>
+
+        <dt id="pow" class="callable">
+  <span class="name"><a href="../binary/IntExtension/pow.html">pow</a></span><span class="signature">(<wbr><span class="parameter" id="pow-param-exponent"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">exponent</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns the exponentiation of this integer with the given <code>exponent</code>.
+  
+
+</dd>
+
+        <dt id="sqrt" class="callable">
+  <span class="name"><a href="../binary/IntExtension/sqrt.html">sqrt</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns the square root of this integer, rounded down.
+  
+
+</dd>
+
+    </dl>
+  </section>
+    
+  <section
+      class="summary offset-anchor"
+      id="operators">
+    <h2>Operators</h2>
+    <dl class="callables">
+        <dt id="operator []" class="callable">
+  <span class="name"><a href="../binary/IntExtension/operator_get.html">operator []</a></span><span class="signature">(<wbr><span class="parameter" id="[]-param-n"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">n</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/bool-class.html">bool</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns whether the n-th bit is set.
+  
+
+</dd>
+
+    </dl>
+  </section>
+    
+    
+    
+
+
+</div> <!-- /.main-content -->
+
+<div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+  <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="../index.html">binary</a></li>
+    <li><a href="../binary/binary-library.html">binary</a></li>
+    <li class="self-crumb">IntExtension extension</li>
+</ol>
+
+
+  <h5>binary library</h5>
+  <div id="dartdoc-sidebar-left-content"></div>
+</div>
+
+<div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+</div><!--/.sidebar-offcanvas-->
+
+</main>
+
+<footer>
+  <span class="no-break">
+    binary
+      4.0.0-alpha
+  </span>
+
+  
+</footer>
+
+
+
+<script src="../static-assets/highlight.pack.js?v1"></script>
+<script src="../static-assets/docs.dart.js"></script>
+
+
+
+</body>
+
+</html>
+
+
+

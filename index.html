@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="binary API docs, for the Dart programming language.">
+  <title>binary - Dart API docs</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="static-assets/github.css?v1">
+  <link rel="stylesheet" href="static-assets/styles.css?v1">
+  <link rel="icon" href="static-assets/favicon.png?v1">
+
+  
+</head>
+
+
+<body data-base-href="" data-using-base-href="false" class="light-theme">
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li class="self-crumb">binary package</li>
+  </ol>
+  <div class="self-name">binary</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <div class="toggle" id="theme-button" title="Toggle brightness">
+    <label for="theme">
+      <input type="checkbox" id="theme" value="light-theme">
+      <span id="dark-theme-button" class="material-symbols-outlined">
+        dark_mode
+      </span>
+      <span id="light-theme-button" class="material-symbols-outlined">
+        light_mode
+      </span>
+    </label>
+  </div>
+</header>
+<main>
+
+  <div id="dartdoc-main-content" class="main-content">
+      
+<section class="desc markdown">
+  <h1 id="binary">Binary</h1>
+<p>Utilities for accessing binary data and bit manipulation in Dart and Flutter.</p>
+<p><a href="https://pub.dartlang.org/packages/binary"><img src="https://img.shields.io/pub/v/binary.svg" alt="Binary on pub.dev"></a>
+<a href="https://codecov.io/gh/matanlurey/binary.dart"><img src="https://codecov.io/gh/matanlurey/binary.dart/branch/main/graph/badge.svg" alt="Code coverage"></a>
+<a href="https://github.com/matanlurey/binary.dart/actions"><img src="https://github.com/matanlurey/binary.dart/actions/workflows/check.yaml/badge.svg" alt="Github action status"></a>
+<a href="https://www.dartdocs.org/documentation/binary/latest"><img src="https://img.shields.io/badge/Documentation-binary-blue.svg" alt="Dartdocs"></a>
+<a href="https://pub.dev/packages/oath"><img src="https://img.shields.io/badge/style-oath-9cf.svg" alt="Style guide"></a></p>
+<div class="markdown-alert markdown-alert-important">
+<p class="markdown-alert-title">Important</p>
+<p>Version 4.0.0 has a <em>large</em> set of breaking changes, including removing the
+vast majority of extension methods and boxed classes, in favor of using the
+newer <em>extension types</em> feature in Dart. I would be opening to adding back
+some deprecated methods, or a <code>lib/compat.dart</code> file if there is demand;
+please <a href="https://github.com/matanlurey/binary.dart/issues">file an issue</a> if you need this.</p>
+</div>
+<h2 id="getting-started">Getting started</h2>
+<pre class="language-bash"><code class="language-bash">dart pub add binary
+</code></pre>
+<p>Then, import the package and start using it:</p>
+<pre class="language-dart"><code class="language-dart">import 'package:binary/binary.dart';
+</code></pre>
+<p>If you are not familiar with <a href="https://dart.dev/guides/language/extension-methods">extension methods</a> and <a href="https://dart.dev/guides/language/extension-types">extension types</a>, it
+is worth reading the documentation before using this package, which has heavy
+use of extensions for most functionality. A small primer is instead of writing
+something like:</p>
+<pre class="language-dart"><code class="language-dart">void main() {
+  // Old API in version &lt;= 0.1.3:
+  print(toBinaryPadded(0x0C, 8)); // 00001100
+
+  // Old API in version &lt; 4.0.0:
+  print(0x0C.toBinaryPadded(8)); // 00001100
+}
+</code></pre>
+<p>You now use <code>toBinaryString</code> (and other methods) on an <em>extension type</em>:</p>
+<pre class="language-dart"><code class="language-dart">void main() {
+  // New API.
+  print(Uint8(0x0C).toBinaryString()); // 00001100
+}
+</code></pre>
+<p>Notice that the width is no longer required, as the type itself knows its width.</p>
+<h2 id="usage">Usage</h2>
+<p>This package provides a few sets of APIs extension types and methods.</p>
+<p>Most users will use one of the fixed-width integer types, such as <code>Uint8</code>:</p>
+<pre class="language-dart"><code class="language-dart">// Parse and reprsent a binary integer:
+final rawInt = int.parse('0111' '1111', radix: 2);
+final fixInt = Uint8(rawInt);
+print(fixInt); // 127
+
+// Works identically to the &gt;&gt;&gt; operator in JavaScript:
+final shifted = fixInt.signedRightShift(5);
+print(shifted.toBinaryString()); // 00000011
+</code></pre>
+<h3 id="overflows">Overflows</h3>
+<p>Fixed with integers do not overflow unexpectedly, unlike the core Dart types.</p>
+<p>By default, any operation that <em>can</em> overflow throws an assertion error in debug
+mode, and wraps around in release mode. For example:</p>
+<pre class="language-dart"><code class="language-dart">// An error in debug mode, or 0 in release mode.
+Uint8(255) + Uint8(1);
+</code></pre>
+<p>To disable assertions, and always wrap, even in debug mode:</p>
+<pre class="language-dart"><code class="language-dart">debugCheckFixedWithInRange = false;
+</code></pre>
+<p>Finer-grained control is available by using variants of the operators that
+explicitly handle overflow:</p>
+<pre class="language-dart"><code class="language-dart">// Returns null if the operation would overflow.
+Uint8(255).tryAdd(Uint8(1));
+
+// Wraps around if the operation would overflow.
+Uint8(255).wrappedAdd(Uint8(1));
+
+// Clamps the result to the min/max value if the operation would overflow.
+Uint8(255).clampedAdd(Uint8(1));
+</code></pre>
+<p>An additional variant, <code>uncheckedAdd</code>, is available for when you are certain
+that overflow is not possible, and want to avoid the overhead of checking:</p>
+<pre class="language-dart"><code class="language-dart">// Asserts in debug mode, no overhead in release mode, but can overflow!
+
+// OK, this will definitely not overflow.
+Uint8(1).uncheckedAdd(Uint8(3));
+
+// DANGEROUS: This will overflow, but it won't be checked in release mode!
+Uint8(255).uncheckedAdd(Uint8(1));
+</code></pre>
+<h3 id="bit-patterns">Bit Patterns</h3>
+<p>There is also builder-type API for generating patterns to match against bits.
+The easiest way to explain this API is it is <em>like</em> <code>RegExp</code>, except for
+matching and capturing components of bits:</p>
+<pre class="language-dart"><code class="language-dart">void main() {
+  // Create a BitPattern.
+  final $01V = BitPatternBuilder([
+    BitPart.zero,
+    BitPart.one,
+    BitPart.v(1),
+  ]).build();
+
+  // Match it against bits.
+  print($01V.matches('011'.bits)); // true
+
+  // Capture variables (if any), similar to a RegExp.
+  print($01V.capture('011'.bits)); // [1]
+}
+</code></pre>
+<h2 id="compatibility">Compatibility</h2>
+<p>This package is intended to work identically and well in:</p>
+<ul>
+<li>The Dart VM, in both JIT and AOT modes.</li>
+<li>Flutter, in both JIT and AOT modes.</li>
+<li>The web, in both DDC, Dart2JS modes and compiled to WASM.</li>
+</ul>
+<p>As a result, there are no built-in ways to access integers &gt; 32-bit provided (as
+JS integers are limited).</p>
+<p>Feel free to <a href="https://github.com/matanlurey/binary.dart/issues">file an issue</a> if you'd like limited support for 64 and 128-bit
+integers.</p>
+<h2 id="contributing">Contributing</h2>
+<p>To run the tests, run:</p>
+<pre class="language-shell"><code class="language-shell">dart test
+</code></pre>
+<p>Or, to run a comprehensive set of tests on all supported platforms, run:</p>
+<pre class="language-shell"><code class="language-shell">dart test -P all
+</code></pre>
+<p>To check code coverage locally, run:</p>
+<pre class="language-shell"><code class="language-shell">./chore coverage
+</code></pre>
+<p>To preview <code>dartdoc</code> output locally, run:</p>
+<pre class="language-shell"><code class="language-shell">./chore dartdoc
+</code></pre>
+</section>
+
+
+      <section class="summary">
+          <h2>Libraries</h2>
+        <dl>
+          <dt id="binary">
+  <span class="name"><a href="binary/binary-library.html">binary</a></span> 
+
+</dt>
+<dd>Utilities for working with binary data and fixed-width integers within
+Dart.
+</dd>
+
+        </dl>
+      </section>
+
+  </div> <!-- /.main-content -->
+
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li class="self-crumb">binary package</li>
+</ol>
+
+
+    <h5 class="hidden-xs"><span class="package-name">binary</span> <span class="package-kind">package</span></h5>
+    <ol>
+      <li class="section-title">Libraries</li>
+      <li><a href="binary/binary-library.html">binary</a></li>
+</ol>
+
+  </div>
+
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+  </div>
+
+</main>
+
+<footer>
+  <span class="no-break">
+    binary
+      4.0.0-alpha
+  </span>
+
+  
+</footer>
+
+
+
+<script src="static-assets/highlight.pack.js?v1"></script>
+<script src="static-assets/docs.dart.js"></script>
+
+
+
+</body>
+
+</html>
+
