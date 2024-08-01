@@ -12,8 +12,8 @@ void main() {
     return;
   }
 
-  // Load 'tool/template.tpl'.
-  final template = io.File(p.join('tool', 'template.tpl')).readAsStringSync();
+  // Load 'tool/template.dart'.
+  final template = io.File(p.join('tool', 'template.dart')).readAsStringSync();
 
   // Generate files based on the following descriptors:
   ({

@@ -78,6 +78,14 @@ extension type const Uint16._(int _) implements FixedInt {
   /// The number of bits used to represent values of this type.
   static const width = 16;
 
+  /// Returns whether [v] is in a valid range for Uint16.
+  static bool isValid(int v) => v >= 0 && v <= 65535;
+
+  /// Throws a [RangeError] if [value] is not in a valid range for Uint16.
+  static void checkRange(int value) {
+    RangeError.checkValueInInterval(value, 0, 65535, 'value');
+  }
+
   /// Defines [v] as An unsigned 16-bit integer, wrapping if necessary.
   ///
   /// In debug mode, an assertion is made that [v] is in a valid range.
@@ -598,12 +606,12 @@ extension type const Uint16._(int _) implements FixedInt {
   /// The result is left-padded with 0's.
   ///
   /// Both [left] and [size] must be in range.
-  Uint16 bitChunk(int left, [int? size]) {
+  Uint16 chunk(int left, [int? size]) {
     RangeError.checkValidRange(0, left, width - 1, 'left');
     if (size != null) {
       RangeError.checkValidRange(0, size, width - left, 'size');
     }
-    return uncheckedBitChunk(left, size);
+    return uncheckedChunk(left, size);
   }
 
   /// Returns a new [Uint16] with bits in [left] to [size].
@@ -611,8 +619,8 @@ extension type const Uint16._(int _) implements FixedInt {
   /// The result is left-padded with 0's.
   ///
   /// If either [left] or [size] is out of range, the behavior is undefined.
-  Uint16 uncheckedBitChunk(int left, [int? size]) {
-    return _descriptor.uncheckedBitChunk(_, left, size);
+  Uint16 uncheckedChunk(int left, [int? size]) {
+    return _descriptor.uncheckedChunk(_, left, size);
   }
 
   /// Returns a new instance with bits [left] to [right], inclusive.
@@ -620,12 +628,12 @@ extension type const Uint16._(int _) implements FixedInt {
   /// The result is left-padded with 0's.
   ///
   /// Both [left] and [right] must be in range.
-  Uint16 bitSlice(int left, [int? right]) {
+  Uint16 slice(int left, [int? right]) {
     RangeError.checkValidRange(0, left, width - 1, 'left');
     if (right != null) {
       RangeError.checkValidRange(left, right, width - 1, 'right');
     }
-    return uncheckedBitSlice(left, right);
+    return uncheckedSlice(left, right);
   }
 
   /// Returns a new instance with bits [left] to [right], inclusive.
@@ -633,8 +641,8 @@ extension type const Uint16._(int _) implements FixedInt {
   /// The result is left-padded with 0's.
   ///
   /// If either [left] or [right] is out of range, the behavior is undefined.
-  Uint16 uncheckedBitSlice(int left, [int? right]) {
-    return _descriptor.uncheckedBitSlice(_, left, right);
+  Uint16 uncheckedSlice(int left, [int? right]) {
+    return _descriptor.uncheckedSlice(_, left, right);
   }
 
   /// Returns a new instance with bits [left] to [right], inclusive, replaced
@@ -643,12 +651,12 @@ extension type const Uint16._(int _) implements FixedInt {
   /// Additional bits in [replacement] are ignored.
   ///
   /// Both [left] and [right] must be in range.
-  Uint16 bitReplace(int left, int? right, int replacement) {
+  Uint16 replace(int left, int? right, int replacement) {
     RangeError.checkValidRange(0, left, width - 1, 'left');
     if (right != null) {
       RangeError.checkValidRange(left, right, width - 1, 'right');
     }
-    return uncheckedBitReplace(left, right, replacement);
+    return uncheckedReplace(left, right, replacement);
   }
 
   /// Returns a new instance with bits [left] to [right], inclusive, replaced
@@ -657,8 +665,8 @@ extension type const Uint16._(int _) implements FixedInt {
   /// Additional bits in [replacement] are ignored.
   ///
   /// If either [left] or [right] is out of range, the behavior is undefined.
-  Uint16 uncheckedBitReplace(int left, int? right, int replacement) {
-    return _descriptor.uncheckedBitReplace(_, left, right, replacement);
+  Uint16 uncheckedReplace(int left, int? right, int replacement) {
+    return _descriptor.uncheckedReplace(_, left, right, replacement);
   }
 
   /// Rotates the bits in `this` to the left by [n] positions.

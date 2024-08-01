@@ -23,7 +23,6 @@ export 'src/extension.dart';
 export 'src/int16.dart';
 export 'src/int32.dart';
 export 'src/int8.dart';
-export 'src/typed_data.dart';
 export 'src/uint16.dart';
 export 'src/uint32.dart';
 export 'src/uint8.dart';

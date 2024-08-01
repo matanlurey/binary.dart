@@ -301,7 +301,7 @@ final class IntDescriptor<T> {
   /// or the behavior is undefined.
   @pragma('dart2js:tryInline')
   @pragma('vm:prefer-inline')
-  T uncheckedBitChunk(int v, int left, [int? size]) {
+  T uncheckedChunk(int v, int left, [int? size]) {
     var result = 0;
     size ??= width - left;
     for (var i = 0; i < size; i++) {
@@ -320,10 +320,10 @@ final class IntDescriptor<T> {
   /// or the behavior is undefined.
   @pragma('dart2js:tryInline')
   @pragma('vm:prefer-inline')
-  T uncheckedBitSlice(int v, int left, [int? right]) {
+  T uncheckedSlice(int v, int left, [int? right]) {
     // Convert to a chunk.
     right ??= width - 1;
-    return uncheckedBitChunk(v, left, right - left + 1);
+    return uncheckedChunk(v, left, right - left + 1);
   }
 
   /// Replaces bits [left] to [right], inclusive, with the same number of bits
@@ -333,7 +333,7 @@ final class IntDescriptor<T> {
   /// or the behavior is undefined.
   @pragma('dart2js:tryInline')
   @pragma('vm:prefer-inline')
-  T uncheckedBitReplace(int target, int left, int? right, int replacement) {
+  T uncheckedReplace(int target, int left, int? right, int replacement) {
     right ??= width - 1;
     final mask = ((1 << (right - left + 1)) - 1) << left;
     final result = (target & ~mask) | ((replacement << left) & mask);

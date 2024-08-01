@@ -401,42 +401,42 @@ void main() {
     test('should return the last 4 bits, left-padded with 0s', () {
       final i1 = int.parse('01111111', radix: 2);
       //                    ^^^^
-      final s1 = Int8(i1).bitChunk(4).toBinaryString();
+      final s1 = Int8(i1).chunk(4).toBinaryString();
       check(s1).equals('00000111');
     });
 
     test('should return the first 4 bits', () {
       final i1 = int.parse('01111111', radix: 2);
       //                        ^^^^
-      final s1 = Int8(i1).bitChunk(0, 4).toBinaryString();
+      final s1 = Int8(i1).chunk(0, 4).toBinaryString();
       check(s1).equals('00001111');
     });
 
     test('should return the middle 4 bits', () {
       final i1 = int.parse('01111111', radix: 2);
       //                      ^^^^
-      final s1 = Int8(i1).bitChunk(2, 4).toBinaryString();
+      final s1 = Int8(i1).chunk(2, 4).toBinaryString();
       check(s1).equals('00001111');
     });
 
     test('should use slice to get the last 4 bits', () {
       final i1 = int.parse('01111111', radix: 2);
       //                    ^^^^
-      final s1 = Int8(i1).bitSlice(4).toBinaryString();
+      final s1 = Int8(i1).slice(4).toBinaryString();
       check(s1).equals('00000111');
     });
 
     test('should use slice to get the first 4 bits', () {
       final i1 = int.parse('01111111', radix: 2);
       //                        ^^^^
-      final s1 = Int8(i1).bitSlice(0, 3).toBinaryString();
+      final s1 = Int8(i1).slice(0, 3).toBinaryString();
       check(s1).equals('00001111');
     });
 
     test('should use slice to get the middle 4 bits', () {
       final i1 = int.parse('01111111', radix: 2);
       //                      ^^^^
-      final s1 = Int8(i1).bitSlice(2, 5).toBinaryString();
+      final s1 = Int8(i1).slice(2, 5).toBinaryString();
       check(s1).equals('00001111');
     });
 
@@ -444,7 +444,7 @@ void main() {
       final i1 = int.parse('01111111', radix: 2);
       //                        ^^^^
       final i2 = int.parse('1010', radix: 2);
-      final s1 = Int8(i1).bitReplace(0, 3, i2).toBinaryString();
+      final s1 = Int8(i1).replace(0, 3, i2).toBinaryString();
       check(s1).equals('01111010');
     });
 
@@ -452,7 +452,7 @@ void main() {
       final i1 = int.parse('01111111', radix: 2);
       //                     ^^^
       final i2 = int.parse('101', radix: 2);
-      final s1 = Int8(i1).bitReplace(4, 7, i2).toBinaryString();
+      final s1 = Int8(i1).replace(4, 7, i2).toBinaryString();
       check(s1).equals('01011111');
     });
 
