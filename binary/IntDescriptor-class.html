@@ -375,6 +375,19 @@ but the descriptor can be used to create custom sized integers.</p>
 
 </dd>
 
+        <dt id="isPowerOf2" class="callable">
+  <span class="name"><a href="../binary/IntDescriptor/isPowerOf2.html">isPowerOf2</a></span><span class="signature">(<wbr><span class="parameter" id="isPowerOf2-param-v"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">v</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/bool-class.html">bool</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns <code>true</code> iff <code>value == 2^n</code> for some integer <code>n</code>.
+  
+
+</dd>
+
         <dt id="noSuchMethod" class="callable inherited">
   <span class="name"><a href="https://api.dart.dev/stable/3.4.4/dart-core/Object/noSuchMethod.html">noSuchMethod</a></span><span class="signature">(<wbr><span class="parameter" id="noSuchMethod-param-invocation"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/Invocation-class.html">Invocation</a></span> <span class="parameter-name">invocation</span></span>)
     <span class="returntype parameter">&#8594; dynamic</span>
@@ -385,6 +398,46 @@ but the descriptor can be used to create custom sized integers.</p>
 <dd class="inherited">
   Invoked when a nonexistent method or property is accessed.
   <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="nthBit" class="callable">
+  <span class="name"><a href="../binary/IntDescriptor/nthBit.html">nthBit</a></span><span class="signature">(<wbr><span class="parameter" id="nthBit-param-v"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">v</span>, </span><span class="parameter" id="nthBit-param-n"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">n</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/bool-class.html">bool</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns whether the n-th bit is set.
+  
+
+</dd>
+
+        <dt id="overflowingNextMultipleOf" class="callable">
+  <span class="name"><a href="../binary/IntDescriptor/overflowingNextMultipleOf.html">overflowingNextMultipleOf</a></span><span class="signature">(<wbr><span class="parameter" id="overflowingNextMultipleOf-param-v"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">v</span>, </span><span class="parameter" id="overflowingNextMultipleOf-param-n"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">n</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Calculates the smallest value greater than or equal to <code>this</code> that is
+a multiple of <code>n</code>.
+  
+
+</dd>
+
+        <dt id="overflowingNextPowerOf2" class="callable">
+  <span class="name"><a href="../binary/IntDescriptor/overflowingNextPowerOf2.html">overflowingNextPowerOf2</a></span><span class="signature">(<wbr><span class="parameter" id="overflowingNextPowerOf2-param-v"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">v</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns the smallest power of two greater than or equal to <code>v</code>.
+  
 
 </dd>
 
@@ -667,7 +720,7 @@ from <code>replacement</code>.
 <footer>
   <span class="no-break">
     binary
-      4.0.0-alpha+6
+      4.0.0-alpha+7
   </span>
 
   

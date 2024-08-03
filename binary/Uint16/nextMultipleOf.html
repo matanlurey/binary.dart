@@ -92,7 +92,9 @@ release mode.</p>
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">Uint16 nextMultipleOf(Uint16 n) =&gt; Uint16(_.nextMultipleOf(n._));</code></pre>
+  <pre class="language-dart"><code class="language-dart">Uint16 nextMultipleOf(Uint16 n) {
+  return Uint16(_descriptor.overflowingNextMultipleOf(_, n));
+}</code></pre>
 </section>
 
 
@@ -126,7 +128,7 @@ release mode.</p>
 <footer>
   <span class="no-break">
     binary
-      4.0.0-alpha+6
+      4.0.0-alpha+7
   </span>
 
   

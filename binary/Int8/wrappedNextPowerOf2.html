@@ -90,7 +90,9 @@
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">Int8 wrappedNextPowerOf2() =&gt; Int8.fromWrapped(_.nextPowerOf2());</code></pre>
+  <pre class="language-dart"><code class="language-dart">Int8 wrappedNextPowerOf2() {
+  return Int8.fromWrapped(_descriptor.overflowingNextPowerOf2(_));
+}</code></pre>
 </section>
 
 
@@ -124,7 +126,7 @@
 <footer>
   <span class="no-break">
     binary
-      4.0.0-alpha+6
+      4.0.0-alpha+7
   </span>
 
   

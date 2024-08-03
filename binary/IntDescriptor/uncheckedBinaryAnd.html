@@ -84,15 +84,7 @@
   <pre class="language-dart"><code class="language-dart">@pragma(&#39;dart2js:tryInline&#39;)
 @pragma(&#39;vm:prefer-inline&#39;)
 T uncheckedBinaryAnd(int a, int b) {
-  &#47;&#47; coverage:ignore-start
-  if (!_isJsNumerics || unsigned) {
-    &#47;&#47; coverage:ignore-end
-    return _uncheckedCast(a &amp; b);
-  }
-  &#47;&#47; coverage:ignore-start
-  final result = a.toUnsigned(width) &amp; b.toUnsigned(width);
-  return _uncheckedCast(result.toSigned(width));
-  &#47;&#47; coverage:ignore-end
+  return _uncheckedCast(_overflowingBinaryAnd(a, b));
 }</code></pre>
 </section>
 
@@ -127,7 +119,7 @@ T uncheckedBinaryAnd(int a, int b) {
 <footer>
   <span class="no-break">
     binary
-      4.0.0-alpha+6
+      4.0.0-alpha+7
   </span>
 
   

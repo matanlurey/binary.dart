@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
-  <meta name="description" content="API docs for the nextMultipleOf method from the IntExtension extension, for the Dart programming language.">
-  <title>nextMultipleOf method - IntExtension extension - binary library - Dart API</title>
+  <meta name="description" content="API docs for the overflowingNextMultipleOf method from the IntDescriptor class, for the Dart programming language.">
+  <title>overflowingNextMultipleOf method - IntDescriptor class - binary library - Dart API</title>
 
 
   
@@ -30,10 +30,10 @@
   <ol class="breadcrumbs gt-separated dark hidden-xs">
     <li><a href="../../index.html">binary</a></li>
     <li><a href="../../binary/binary-library.html">binary.dart</a></li>
-    <li><a href="../../binary/IntExtension.html">IntExtension</a></li>
-    <li class="self-crumb">nextMultipleOf method</li>
+    <li><a href="../../binary/IntDescriptor-class.html">IntDescriptor<span class="signature">&lt;<wbr><span class="type-parameter">T</span>&gt;</span></a></li>
+    <li class="self-crumb">overflowingNextMultipleOf method</li>
   </ol>
-  <div class="self-name">nextMultipleOf</div>
+  <div class="self-name">overflowingNextMultipleOf</div>
   <form class="search navbar-right" role="search">
     <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
   </form>
@@ -54,17 +54,18 @@
 <div
     id="dartdoc-main-content"
     class="main-content"
-    data-above-sidebar="binary&#47;IntExtension-extension-sidebar.html"
+    data-above-sidebar="binary&#47;IntDescriptor-class-sidebar.html"
     data-below-sidebar="">
     <div>
-<h1><span class="kind-method">nextMultipleOf</span> method 
+<h1><span class="kind-method">overflowingNextMultipleOf</span> method 
 </h1></div>
 
     <section class="multi-line-signature">
       
 
 <span class="returntype"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span>
-<span class="name ">nextMultipleOf</span>(<wbr><ol class="parameter-list"><li><span class="parameter" id="nextMultipleOf-param-n"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">n</span></span></li>
+<span class="name ">overflowingNextMultipleOf</span>(<wbr><ol class="parameter-list"><li><span class="parameter" id="overflowingNextMultipleOf-param-v"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">v</span>, </span></li>
+<li><span class="parameter" id="overflowingNextMultipleOf-param-n"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">n</span></span></li>
 </ol>)
 
       
@@ -75,10 +76,6 @@
   <p>Calculates the smallest value greater than or equal to <code>this</code> that is
 a multiple of <code>n</code>.</p>
 <p><code>n</code> must be a positive integer.</p>
-<h2 id="example">Example</h2>
-<pre class="language-dart"><code class="language-dart">7.nextMultipleOf(3); // 9
-8.nextMultipleOf(3); // 9
-</code></pre>
 </section>
 
 
@@ -87,8 +84,8 @@ a multiple of <code>n</code>.</p>
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@pragma(&#39;dart2js:tryInline&#39;)
 @pragma(&#39;vm:prefer-inline&#39;)
-int nextMultipleOf(int n) {
-  return ((this + n - 1) ~&#47; RangeError.checkNotNegative(n)) * n;
+int overflowingNextMultipleOf(int v, int n) {
+  return ((v + n - 1) ~&#47; RangeError.checkNotNegative(n)) * n;
 }</code></pre>
 </section>
 
@@ -106,12 +103,12 @@ int nextMultipleOf(int n) {
 <ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
     <li><a href="../../index.html">binary</a></li>
     <li><a href="../../binary/binary-library.html">binary</a></li>
-    <li><a href="../../binary/IntExtension.html">IntExtension</a></li>
-    <li class="self-crumb">nextMultipleOf method</li>
+    <li><a href="../../binary/IntDescriptor-class.html">IntDescriptor<span class="signature">&lt;<wbr><span class="type-parameter">T</span>&gt;</span></a></li>
+    <li class="self-crumb">overflowingNextMultipleOf method</li>
 </ol>
 
 
-    <h5>IntExtension extension on <a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></h5>
+    <h5>IntDescriptor class</h5>
     <div id="dartdoc-sidebar-left-content"></div>
   </div><!--/.sidebar-offcanvas-->
 
@@ -123,7 +120,7 @@ int nextMultipleOf(int n) {
 <footer>
   <span class="no-break">
     binary
-      4.0.0-alpha+6
+      4.0.0-alpha+7
   </span>
 
   

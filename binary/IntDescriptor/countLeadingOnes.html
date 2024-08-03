@@ -84,7 +84,7 @@
 int countLeadingOnes(int v) {
   var count = 0;
   for (var i = width - 1; i &gt;= 0; i--) {
-    if (v.nthBit(i)) {
+    if (nthBit(v, i)) {
       count++;
     } else {
       break;
@@ -125,7 +125,7 @@ int countLeadingOnes(int v) {
 <footer>
   <span class="no-break">
     binary
-      4.0.0-alpha+6
+      4.0.0-alpha+7
   </span>
 
   

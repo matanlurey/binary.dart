@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
-  <meta name="description" content="API docs for the nthBit method from the IntExtension extension, for the Dart programming language.">
-  <title>nthBit method - IntExtension extension - binary library - Dart API</title>
+  <meta name="description" content="API docs for the Int16.checkRange constructor from ExtensionType Int16 from the binary library, for the Dart programming language.">
+  <title>Int16.checkRange constructor - Int16 - binary library - Dart API</title>
 
 
   
@@ -30,10 +30,10 @@
   <ol class="breadcrumbs gt-separated dark hidden-xs">
     <li><a href="../../index.html">binary</a></li>
     <li><a href="../../binary/binary-library.html">binary.dart</a></li>
-    <li><a href="../../binary/IntExtension.html">IntExtension</a></li>
-    <li class="self-crumb">nthBit method</li>
+    <li><a href="../../binary/Int16-extension-type.html">Int16</a></li>
+    <li class="self-crumb">Int16.checkRange factory constructor</li>
   </ol>
-  <div class="self-name">nthBit</div>
+  <div class="self-name">Int16.checkRange</div>
   <form class="search navbar-right" role="search">
     <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
   </form>
@@ -51,44 +51,34 @@
 </header>
 <main>
 
-<div
-    id="dartdoc-main-content"
-    class="main-content"
-    data-above-sidebar="binary&#47;IntExtension-extension-sidebar.html"
-    data-below-sidebar="">
-    <div>
-<h1><span class="kind-method">nthBit</span> method 
+  <div
+      id="dartdoc-main-content"
+      class="main-content"
+      data-above-sidebar="binary&#47;Int16-extension-type-sidebar.html"
+      data-below-sidebar="">
+      <div>
+<h1><span class="kind-constructor">Int16.checkRange</span> constructor 
 </h1></div>
 
     <section class="multi-line-signature">
       
-
-<span class="returntype"><a href="https://api.dart.dev/stable/3.4.4/dart-core/bool-class.html">bool</a></span>
-<span class="name ">nthBit</span>(<wbr><ol class="parameter-list"><li><span class="parameter" id="nthBit-param-n"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">n</span></span></li>
+      <span class="name ">Int16.checkRange</span>(<wbr><ol class="parameter-list"><li><span class="parameter" id="checkRange-param-value"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">value</span></span></li>
 </ol>)
-
-      
-
     </section>
+
     
 <section class="desc markdown">
-  <p>Returns whether the n-th bit is set.</p>
-<h2 id="example">Example</h2>
-<pre class="language-dart"><code class="language-dart">0x0F.nthBit(0); // true
-0x0F.nthBit(1); // true
-0x0F.nthBit(2); // true
-0x0F.nthBit(3); // true
-0x0F.nthBit(4); // false
-</code></pre>
+  <p>Returns <code>value</code> if its in a valid range for Int16.</p>
 </section>
 
 
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">@pragma(&#39;dart2js:tryInline&#39;)
-@pragma(&#39;vm:prefer-inline&#39;)
-bool nthBit(int n) =&gt; (this &amp; (1 &lt;&lt; n)) != 0;</code></pre>
+  <pre class="language-dart"><code class="language-dart">factory Int16.checkRange(int value) {
+  RangeError.checkValueInInterval(value, minInt, maxInt, &#39;value&#39;);
+  return Int16.fromUnchecked(value);
+}</code></pre>
 </section>
 
 
@@ -105,24 +95,24 @@ bool nthBit(int n) =&gt; (this &amp; (1 &lt;&lt; n)) != 0;</code></pre>
 <ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
     <li><a href="../../index.html">binary</a></li>
     <li><a href="../../binary/binary-library.html">binary</a></li>
-    <li><a href="../../binary/IntExtension.html">IntExtension</a></li>
-    <li class="self-crumb">nthBit method</li>
+    <li><a href="../../binary/Int16-extension-type.html">Int16</a></li>
+    <li class="self-crumb">Int16.checkRange factory constructor</li>
 </ol>
 
 
-    <h5>IntExtension extension on <a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></h5>
+    <h5>Int16 extension type</h5>
     <div id="dartdoc-sidebar-left-content"></div>
-  </div><!--/.sidebar-offcanvas-->
+  </div><!--/.sidebar-offcanvas-left-->
 
   <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
-</div><!--/.sidebar-offcanvas-->
+  </div><!--/.sidebar-offcanvas-->
 
 </main>
 
 <footer>
   <span class="no-break">
     binary
-      4.0.0-alpha+6
+      4.0.0-alpha+7
   </span>
 
   

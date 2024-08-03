@@ -91,7 +91,9 @@ release mode.</p>
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">Uint32 nextPowerOf2() =&gt; Uint32(_.nextPowerOf2());</code></pre>
+  <pre class="language-dart"><code class="language-dart">Uint32 nextPowerOf2() {
+  return Uint32(_descriptor.overflowingNextPowerOf2(_));
+}</code></pre>
 </section>
 
 
@@ -125,7 +127,7 @@ release mode.</p>
 <footer>
   <span class="no-break">
     binary
-      4.0.0-alpha+6
+      4.0.0-alpha+7
   </span>
 
   

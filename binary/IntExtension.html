@@ -65,7 +65,7 @@
 <p>This extension provides additional functionality for integers that is not
 provided by the standard library. This includes convenience methods for
 accessing <code>dart:math</code> functions, as well as behavior that is not provided by
-the standard library such as <a href="../binary/IntExtension/midpoint.html">midpoint</a> and <a href="../binary/IntExtension/isPowerOf2.html">isPowerOf2</a>.</p>
+the standard library such as <a href="../binary/IntExtension/midpoint.html">midpoint</a>.</p>
 <p>Methods in <a href="../binary/IntExtension.html">IntExtension</a> make no assumptions about the size of the
 integer.</p>
 <h2 id="example">Example</h2>
@@ -95,19 +95,6 @@ integer.</p>
       id="instance-methods">
     <h2>Methods</h2>
     <dl class="callables">
-        <dt id="isPowerOf2" class="callable">
-  <span class="name"><a href="../binary/IntExtension/isPowerOf2.html">isPowerOf2</a></span><span class="signature">(<wbr>)
-    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/bool-class.html">bool</a></span>
-  </span>
-  
-
-</dt>
-<dd>
-  Returns <code>true</code> iff <code>value == 2^n</code> for some integer <code>n</code>.
-  
-
-</dd>
-
         <dt id="log" class="callable">
   <span class="name"><a href="../binary/IntExtension/log.html">log</a></span><span class="signature">(<wbr><span class="parameter" id="log-param-base">[<span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">base</span>]</span>)
     <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span>
@@ -160,46 +147,6 @@ integer.</p>
 
 </dd>
 
-        <dt id="nextMultipleOf" class="callable">
-  <span class="name"><a href="../binary/IntExtension/nextMultipleOf.html">nextMultipleOf</a></span><span class="signature">(<wbr><span class="parameter" id="nextMultipleOf-param-n"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">n</span></span>)
-    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span>
-  </span>
-  
-
-</dt>
-<dd>
-  Calculates the smallest value greater than or equal to <code>this</code> that is
-a multiple of <code>n</code>.
-  
-
-</dd>
-
-        <dt id="nextPowerOf2" class="callable">
-  <span class="name"><a href="../binary/IntExtension/nextPowerOf2.html">nextPowerOf2</a></span><span class="signature">(<wbr>)
-    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span>
-  </span>
-  
-
-</dt>
-<dd>
-  Returns the smallest power of two greater than or equal to <code>this</code>.
-  
-
-</dd>
-
-        <dt id="nthBit" class="callable">
-  <span class="name"><a href="../binary/IntExtension/nthBit.html">nthBit</a></span><span class="signature">(<wbr><span class="parameter" id="nthBit-param-n"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">n</span></span>)
-    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/bool-class.html">bool</a></span>
-  </span>
-  
-
-</dt>
-<dd>
-  Returns whether the n-th bit is set.
-  
-
-</dd>
-
         <dt id="pow" class="callable">
   <span class="name"><a href="../binary/IntExtension/pow.html">pow</a></span><span class="signature">(<wbr><span class="parameter" id="pow-param-exponent"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">exponent</span></span>)
     <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span>
@@ -229,26 +176,6 @@ a multiple of <code>n</code>.
     </dl>
   </section>
     
-  <section
-      class="summary offset-anchor"
-      id="operators">
-    <h2>Operators</h2>
-    <dl class="callables">
-        <dt id="operator []" class="callable">
-  <span class="name"><a href="../binary/IntExtension/operator_get.html">operator []</a></span><span class="signature">(<wbr><span class="parameter" id="[]-param-n"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">n</span></span>)
-    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/bool-class.html">bool</a></span>
-  </span>
-  
-
-</dt>
-<dd>
-  Returns whether the n-th bit is set.
-  
-
-</dd>
-
-    </dl>
-  </section>
     
     
     
@@ -283,7 +210,7 @@ a multiple of <code>n</code>.
 <footer>
   <span class="no-break">
     binary
-      4.0.0-alpha+6
+      4.0.0-alpha+7
   </span>
 
   

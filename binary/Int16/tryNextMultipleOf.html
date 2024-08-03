@@ -92,7 +92,9 @@ mode.</li>
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">Int16? tryNextMultipleOf(Int16 n) =&gt; tryFrom(_.nextMultipleOf(n._));</code></pre>
+  <pre class="language-dart"><code class="language-dart">Int16? tryNextMultipleOf(Int16 n) {
+  return tryFrom(_descriptor.overflowingNextMultipleOf(_, n));
+}</code></pre>
 </section>
 
 
@@ -126,7 +128,7 @@ mode.</li>
 <footer>
   <span class="no-break">
     binary
-      4.0.0-alpha+6
+      4.0.0-alpha+7
   </span>
 
   
