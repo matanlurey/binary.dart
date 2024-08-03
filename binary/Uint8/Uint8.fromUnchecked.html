@@ -89,7 +89,7 @@ const Uint8.fromUnchecked(
         &#47;&#47; Dart2JS crashes if the boolean is first in this expression, but have
         &#47;&#47; not been able to reproduce it in a minimal example yet, so this is a
         &#47;&#47; workaround.
-        v &gt;= 0 &amp;&amp; v &lt;= 255 || !debugCheckUncheckedInRange,
+        v &gt;= minInt &amp;&amp; v &lt;= maxInt || !debugCheckUncheckedInRange,
         &#39;Value out of range: $v.\n\n&#39;
         &#39;This should never happen, and is likely a bug. To intentionally &#39;
         &#39;overflow, even in debug mode, set &#39;
@@ -128,7 +128,7 @@ const Uint8.fromUnchecked(
 <footer>
   <span class="no-break">
     binary
-      4.0.0-alpha+3
+      4.0.0-alpha+4
   </span>
 
   
