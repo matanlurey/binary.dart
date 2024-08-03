@@ -98,7 +98,7 @@ extension type const Uint32._(int _) implements int {
   static bool isValid(int v) => v >= minInt && v <= maxInt;
 
   /// Returns [value] if its in a valid range for Uint32.
-  static Uint32 checkRange(int value) {
+  factory Uint32.checkRange(int value) {
     RangeError.checkValueInInterval(value, minInt, maxInt, 'value');
     return Uint32.fromUnchecked(value);
   }
@@ -335,12 +335,17 @@ extension type const Uint32._(int _) implements int {
   }
 
   /// Returns whether the n-th bit is set.
-  bool nthBit(int n) => _.nthBit(n);
+  bool nthBit(int n) => _descriptor.nthBit(_, n);
 
   /// Returns whether the n-th bit is set.
   ///
   /// This is an alias for [nthBit].
   bool operator [](int n) => nthBit(n);
+
+  /// Returns whether the least significant bit is set.
+  ///
+  /// This is equivalent to `nthBit(0)`.
+  bool get lsb => nthBit(0);
 
   /// Returns whether the most significant bit is set.
   ///
@@ -399,7 +404,9 @@ extension type const Uint32._(int _) implements int {
   /// ```dart
   /// Uint32(3).nextPowerOf2(); // 4
   /// ```
-  Uint32 nextPowerOf2() => Uint32(_.nextPowerOf2());
+  Uint32 nextPowerOf2() {
+    return Uint32(_descriptor.overflowingNextPowerOf2(_));
+  }
 
   /// Returns the smallest power of two greater than or equal to `this`.
   ///
@@ -408,7 +415,9 @@ extension type const Uint32._(int _) implements int {
   /// `this` must be a positive integer.
   ///
   /// If the result is out of range, the behavior is undefined.
-  Uint32 uncheckedNextPowerOf2() => Uint32.fromUnchecked(_.nextPowerOf2());
+  Uint32 uncheckedNextPowerOf2() {
+    return Uint32.fromUnchecked(_descriptor.overflowingNextPowerOf2(_));
+  }
 
   /// Returns the smallest power of two greater than or equal to `this`.
   ///
@@ -428,7 +437,9 @@ extension type const Uint32._(int _) implements int {
   /// ```dart
   /// Uint32(3).tryNextPowerOf2(); // 4
   /// ```
-  Uint32? tryNextPowerOf2() => tryFrom(_.nextPowerOf2());
+  Uint32? tryNextPowerOf2() {
+    return tryFrom(_descriptor.overflowingNextPowerOf2(_));
+  }
 
   /// Returns the smallest power of two greater than or equal to `this`.
   ///
@@ -448,7 +459,9 @@ extension type const Uint32._(int _) implements int {
   /// ```dart
   /// Uint32(3).wrappedNextPowerOf2(); // 4
   /// ```
-  Uint32 wrappedNextPowerOf2() => Uint32.fromWrapped(_.nextPowerOf2());
+  Uint32 wrappedNextPowerOf2() {
+    return Uint32.fromWrapped(_descriptor.overflowingNextPowerOf2(_));
+  }
 
   /// Returns the smallest power of two greater than or equal to `this`.
   ///
@@ -468,7 +481,9 @@ extension type const Uint32._(int _) implements int {
   /// ```dart
   /// Uint32(3).clampedNextPowerOf2(); // 4
   /// ```
-  Uint32 clampedNextPowerOf2() => Uint32.fromClamped(_.nextPowerOf2());
+  Uint32 clampedNextPowerOf2() {
+    return Uint32.fromClamped(_descriptor.overflowingNextPowerOf2(_));
+  }
 
   /// Calculates the smallest value greater than or equal to `this` that is
   /// a multiple of [n].
@@ -488,7 +503,9 @@ extension type const Uint32._(int _) implements int {
   /// ```dart
   /// Uint32(3).nextMultipleOf(2); // 4
   /// ```
-  Uint32 nextMultipleOf(Uint32 n) => Uint32(_.nextMultipleOf(n._));
+  Uint32 nextMultipleOf(Uint32 n) {
+    return Uint32(_descriptor.overflowingNextMultipleOf(_, n));
+  }
 
   /// Calculates the smallest value greater than or equal to `this` that is
   ///
@@ -498,7 +515,7 @@ extension type const Uint32._(int _) implements int {
   ///
   /// If the result is out of range, the behavior is undefined.
   Uint32 uncheckedNextMultipleOf(Uint32 n) {
-    return Uint32.fromUnchecked(_.nextMultipleOf(n._));
+    return Uint32.fromUnchecked(_descriptor.overflowingNextMultipleOf(_, n));
   }
 
   /// Calculates the smallest value greater than or equal to `this` that is
@@ -519,7 +536,9 @@ extension type const Uint32._(int _) implements int {
   /// ```dart
   /// Uint32(3).tryNextMultipleOf(2); // 4
   /// ```
-  Uint32? tryNextMultipleOf(Uint32 n) => tryFrom(_.nextMultipleOf(n._));
+  Uint32? tryNextMultipleOf(Uint32 n) {
+    return tryFrom(_descriptor.overflowingNextMultipleOf(_, n));
+  }
 
   /// Calculates the smallest value greater than or equal to `this` that is
   /// a multiple of [n].
@@ -540,7 +559,7 @@ extension type const Uint32._(int _) implements int {
   /// Uint32(3).wrappedNextMultipleOf(2); // 4
   /// ```
   Uint32 wrappedNextMultipleOf(Uint32 n) {
-    return Uint32.fromWrapped(_.nextMultipleOf(n._));
+    return Uint32.fromWrapped(_descriptor.overflowingNextMultipleOf(_, n));
   }
 
   /// Calculates the smallest value greater than or equal to `this` that is
@@ -562,7 +581,7 @@ extension type const Uint32._(int _) implements int {
   /// Uint32(3).clampedNextMultipleOf(2); // 4
   /// ```
   Uint32 clampedNextMultipleOf(Uint32 n) {
-    return Uint32.fromClamped(_.nextMultipleOf(n._));
+    return Uint32.fromClamped(_descriptor.overflowingNextMultipleOf(_, n));
   }
 
   /// Returns the number of `1`s in the binary representation of `this`.

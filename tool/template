@@ -96,7 +96,7 @@ extension type const {{NAME}}._(int _) implements int {
   static bool isValid(int v) => v >= minInt && v <= maxInt;
 
   /// Returns [value] if its in a valid range for {{NAME}}.
-  static {{NAME}} checkRange(int value) {
+  factory {{NAME}}.checkRange(int value) {
     RangeError.checkValueInInterval(value, minInt, maxInt, 'value');
     return {{NAME}}.fromUnchecked(value);
   }
@@ -333,12 +333,17 @@ extension type const {{NAME}}._(int _) implements int {
   }
 
   /// Returns whether the n-th bit is set.
-  bool nthBit(int n) => _.nthBit(n);
+  bool nthBit(int n) => _descriptor.nthBit(_, n);
 
   /// Returns whether the n-th bit is set.
   /// 
   /// This is an alias for [nthBit].
   bool operator [](int n) => nthBit(n);
+
+  /// Returns whether the least significant bit is set.
+  /// 
+  /// This is equivalent to `nthBit(0)`.
+  bool get lsb => nthBit(0);
 
   /// Returns whether the most significant bit is set.
   /// 
@@ -397,7 +402,9 @@ extension type const {{NAME}}._(int _) implements int {
   /// ```dart
   /// {{NAME}}(3).nextPowerOf2(); // 4
   /// ```
-  {{NAME}} nextPowerOf2() => {{NAME}}(_.nextPowerOf2());
+  {{NAME}} nextPowerOf2() {
+    return {{NAME}}(_descriptor.overflowingNextPowerOf2(_));
+  }
 
   /// Returns the smallest power of two greater than or equal to `this`.
   /// 
@@ -406,7 +413,9 @@ extension type const {{NAME}}._(int _) implements int {
   /// `this` must be a positive integer.
   /// 
   /// If the result is out of range, the behavior is undefined.
-  {{NAME}} uncheckedNextPowerOf2() => {{NAME}}.fromUnchecked(_.nextPowerOf2());
+  {{NAME}} uncheckedNextPowerOf2() {
+    return {{NAME}}.fromUnchecked(_descriptor.overflowingNextPowerOf2(_));
+  }
 
   /// Returns the smallest power of two greater than or equal to `this`.
   /// 
@@ -426,7 +435,9 @@ extension type const {{NAME}}._(int _) implements int {
   /// ```dart
   /// {{NAME}}(3).tryNextPowerOf2(); // 4
   /// ```
-  {{NAME}}? tryNextPowerOf2() => tryFrom(_.nextPowerOf2());
+  {{NAME}}? tryNextPowerOf2() {
+    return tryFrom(_descriptor.overflowingNextPowerOf2(_));
+  }
 
   /// Returns the smallest power of two greater than or equal to `this`.
   /// 
@@ -446,7 +457,9 @@ extension type const {{NAME}}._(int _) implements int {
   /// ```dart
   /// {{NAME}}(3).wrappedNextPowerOf2(); // 4
   /// ```
-  {{NAME}} wrappedNextPowerOf2() => {{NAME}}.fromWrapped(_.nextPowerOf2());
+  {{NAME}} wrappedNextPowerOf2() {
+    return {{NAME}}.fromWrapped(_descriptor.overflowingNextPowerOf2(_));
+  }
 
   /// Returns the smallest power of two greater than or equal to `this`.
   /// 
@@ -466,7 +479,9 @@ extension type const {{NAME}}._(int _) implements int {
   /// ```dart
   /// {{NAME}}(3).clampedNextPowerOf2(); // 4
   /// ```
-  {{NAME}} clampedNextPowerOf2() => {{NAME}}.fromClamped(_.nextPowerOf2());
+  {{NAME}} clampedNextPowerOf2() {
+    return {{NAME}}.fromClamped(_descriptor.overflowingNextPowerOf2(_));
+  }
 
   /// Calculates the smallest value greater than or equal to `this` that is
   /// a multiple of [n].
@@ -486,7 +501,9 @@ extension type const {{NAME}}._(int _) implements int {
   /// ```dart
   /// {{NAME}}(3).nextMultipleOf(2); // 4
   /// ```
-  {{NAME}} nextMultipleOf({{NAME}} n) => {{NAME}}(_.nextMultipleOf(n._));
+  {{NAME}} nextMultipleOf({{NAME}} n) {
+    return {{NAME}}(_descriptor.overflowingNextMultipleOf(_, n));
+  }
 
   /// Calculates the smallest value greater than or equal to `this` that is
   /// 
@@ -496,7 +513,7 @@ extension type const {{NAME}}._(int _) implements int {
   /// 
   /// If the result is out of range, the behavior is undefined.
   {{NAME}} uncheckedNextMultipleOf({{NAME}} n) {
-    return {{NAME}}.fromUnchecked(_.nextMultipleOf(n._));
+    return {{NAME}}.fromUnchecked(_descriptor.overflowingNextMultipleOf(_, n));
   }
 
   /// Calculates the smallest value greater than or equal to `this` that is
@@ -517,7 +534,9 @@ extension type const {{NAME}}._(int _) implements int {
   /// ```dart
   /// {{NAME}}(3).tryNextMultipleOf(2); // 4
   /// ```
-  {{NAME}}? tryNextMultipleOf({{NAME}} n) => tryFrom(_.nextMultipleOf(n._));
+  {{NAME}}? tryNextMultipleOf({{NAME}} n) {
+    return tryFrom(_descriptor.overflowingNextMultipleOf(_, n));
+  }
 
   /// Calculates the smallest value greater than or equal to `this` that is
   /// a multiple of [n].
@@ -538,7 +557,7 @@ extension type const {{NAME}}._(int _) implements int {
   /// {{NAME}}(3).wrappedNextMultipleOf(2); // 4
   /// ```
   {{NAME}} wrappedNextMultipleOf({{NAME}} n) {
-    return {{NAME}}.fromWrapped(_.nextMultipleOf(n._));
+    return {{NAME}}.fromWrapped(_descriptor.overflowingNextMultipleOf(_, n));
   }
 
   /// Calculates the smallest value greater than or equal to `this` that is
@@ -560,7 +579,7 @@ extension type const {{NAME}}._(int _) implements int {
   /// {{NAME}}(3).clampedNextMultipleOf(2); // 4
   /// ```
   {{NAME}} clampedNextMultipleOf({{NAME}} n) {
-    return {{NAME}}.fromClamped(_.nextMultipleOf(n._));
+    return {{NAME}}.fromClamped(_descriptor.overflowingNextMultipleOf(_, n));
   }
 
   /// Returns the number of `1`s in the binary representation of `this`.

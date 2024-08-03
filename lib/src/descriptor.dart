@@ -185,7 +185,7 @@ final class IntDescriptor<T> {
   int countOnes(int v) {
     var count = 0;
     for (var i = 0; i < width; i++) {
-      if (v.nthBit(i)) {
+      if (nthBit(v, i)) {
         count++;
       }
     }
@@ -198,7 +198,7 @@ final class IntDescriptor<T> {
   int countLeadingOnes(int v) {
     var count = 0;
     for (var i = width - 1; i >= 0; i--) {
-      if (v.nthBit(i)) {
+      if (nthBit(v, i)) {
         count++;
       } else {
         break;
@@ -213,7 +213,7 @@ final class IntDescriptor<T> {
   int countLeadingZeros(int v) {
     var count = 0;
     for (var i = width - 1; i >= 0; i--) {
-      if (!v.nthBit(i)) {
+      if (!nthBit(v, i)) {
         count++;
       } else {
         break;
@@ -228,7 +228,7 @@ final class IntDescriptor<T> {
   int countTrailingOnes(int v) {
     var count = 0;
     for (var i = 0; i < width; i++) {
-      if (v.nthBit(i)) {
+      if (nthBit(v, i)) {
         count++;
       } else {
         break;
@@ -243,7 +243,7 @@ final class IntDescriptor<T> {
   int countTrailingZeros(int v) {
     var count = 0;
     for (var i = 0; i < width; i++) {
-      if (!v.nthBit(i)) {
+      if (!nthBit(v, i)) {
         count++;
       } else {
         break;
@@ -416,14 +416,18 @@ final class IntDescriptor<T> {
   @pragma('dart2js:tryInline')
   @pragma('vm:prefer-inline')
   T uncheckedBinaryAnd(int a, int b) {
+    return _uncheckedCast(_overflowingBinaryAnd(a, b));
+  }
+
+  int _overflowingBinaryAnd(int a, int b) {
     // coverage:ignore-start
     if (!_isJsNumerics || unsigned) {
       // coverage:ignore-end
-      return _uncheckedCast(a & b);
+      return a & b;
     }
     // coverage:ignore-start
     final result = a.toUnsigned(width) & b.toUnsigned(width);
-    return _uncheckedCast(result.toSigned(width));
+    return result.toSigned(width);
     // coverage:ignore-end
   }
 
@@ -512,6 +516,46 @@ final class IntDescriptor<T> {
     final result = v * 2.pow(n);
     return result;
     // coverage:ignore-end
+  }
+
+  /// Returns whether the n-th bit is set.
+  @pragma('dart2js:tryInline')
+  @pragma('vm:prefer-inline')
+  bool nthBit(int v, int n) {
+    // Same as `v & (1 << n) != 0`.
+    return _overflowingBinaryAnd(v, overflowingShiftLeft(1, n)) != 0;
+  }
+
+  /// Returns `true` iff `value == 2^n` for some integer `n`.
+  @pragma('dart2js:tryInline')
+  @pragma('vm:prefer-inline')
+  bool isPowerOf2(int v) {
+    // Same as `v > 0 && (v & (v - 1)) == 0`.
+    return v > 0 && uncheckedBinaryAnd(v, v - 1) == 0;
+  }
+
+  /// Returns the smallest power of two greater than or equal to `v`.
+  ///
+  /// If `v` is already a power of two, it is returned.
+  ///
+  /// `v` must be a positive integer.
+  @pragma('dart2js:tryInline')
+  @pragma('vm:prefer-inline')
+  int overflowingNextPowerOf2(int v) {
+    if (isPowerOf2(v)) {
+      return v;
+    }
+    return overflowingShiftLeft(1, v.log2() + 1);
+  }
+
+  /// Calculates the smallest value greater than or equal to `this` that is
+  /// a multiple of [n].
+  ///
+  /// `n` must be a positive integer.
+  @pragma('dart2js:tryInline')
+  @pragma('vm:prefer-inline')
+  int overflowingNextMultipleOf(int v, int n) {
+    return ((v + n - 1) ~/ RangeError.checkNotNegative(n)) * n;
   }
 
   /// Returns [v] as a binary string.

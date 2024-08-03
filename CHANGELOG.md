@@ -9,6 +9,12 @@
 
 [file an issue]: https://github.com/matanlurey/binary.dart/issues
 
+## 4.0.0-alpha+7
+
+- Added `<Int>.lsb`.
+- Removed bit-operations from `IntExtension`; they are too easy to use
+  incorrectly in the JS VM.
+
 ## 4.0.0-alpha+6
 
 - Just kidding, `checkRange` will return `{{Int}}` if no error is thrown.

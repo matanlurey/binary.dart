@@ -5,7 +5,7 @@ import 'dart:math' as math;
 /// This extension provides additional functionality for integers that is not
 /// provided by the standard library. This includes convenience methods for
 /// accessing `dart:math` functions, as well as behavior that is not provided by
-/// the standard library such as [midpoint] and [isPowerOf2].
+/// the standard library such as [midpoint].
 ///
 /// Methods in [IntExtension] make no assumptions about the size of the
 /// integer.
@@ -118,70 +118,5 @@ extension IntExtension on int {
   int midpoint(int other) {
     // Uses ~/ to ensure that the operation is the same in the VM and JS.
     return (this + other) ~/ 2;
-  }
-
-  /// Returns `true` iff `value == 2^n` for some integer `n`.
-  ///
-  /// ## Example
-  ///
-  /// ```dart
-  /// 8.isPowerOf2(); // true
-  /// 9.isPowerOf2(); // false
-  /// ```
-  @pragma('dart2js:tryInline')
-  @pragma('vm:prefer-inline')
-  bool isPowerOf2() => this > 0 && (this & (this - 1)) == 0;
-
-  /// Returns whether the n-th bit is set.
-  ///
-  /// ## Example
-  ///
-  /// ```dart
-  /// 0x0F.nthBit(0); // true
-  /// 0x0F.nthBit(1); // true
-  /// 0x0F.nthBit(2); // true
-  /// 0x0F.nthBit(3); // true
-  /// 0x0F.nthBit(4); // false
-  /// ```
-  @pragma('dart2js:tryInline')
-  @pragma('vm:prefer-inline')
-  bool nthBit(int n) => (this & (1 << n)) != 0;
-
-  /// Returns whether the n-th bit is set.
-  ///
-  /// This is an alias for [nthBit].
-  bool operator [](int n) => nthBit(n);
-
-  /// Returns the smallest power of two greater than or equal to `this`.
-  ///
-  /// If `this` is already a power of two, it is returned.
-  ///
-  /// `this` must be a positive integer.
-  ///
-  /// ## Example
-  ///
-  /// ```dart
-  /// 7.nextPowerOf2(); // 8
-  /// 8.nextPowerOf2(); // 8
-  /// ```
-  @pragma('dart2js:tryInline')
-  @pragma('vm:prefer-inline')
-  int nextPowerOf2() => isPowerOf2() ? this : 1 << (log2() + 1);
-
-  /// Calculates the smallest value greater than or equal to `this` that is
-  /// a multiple of [n].
-  ///
-  /// `n` must be a positive integer.
-  ///
-  /// ## Example
-  ///
-  /// ```dart
-  /// 7.nextMultipleOf(3); // 9
-  /// 8.nextMultipleOf(3); // 9
-  /// ```
-  @pragma('dart2js:tryInline')
-  @pragma('vm:prefer-inline')
-  int nextMultipleOf(int n) {
-    return ((this + n - 1) ~/ RangeError.checkNotNegative(n)) * n;
   }
 }
