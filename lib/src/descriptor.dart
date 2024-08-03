@@ -27,20 +27,6 @@ const debugCheckUncheckedInRange = bool.fromEnvironment(
 /// Whether the platform is JavaScript.
 const _isJsNumerics = identical(1, 1.0);
 
-/// A base extension type for fixed-width integers.
-///
-/// This type is not very useful, and mostly exists for consistency.
-///
-/// @nodoc
-extension type const FixedInt._(int _) implements Comparable<num> {
-  /// This number as an [int].
-  ///
-  /// This is the underlying integer representation of the `FixedInt`, and is
-  /// effectively an identity function, but for consistency and completeness,
-  /// it is provided as a method to discourage casting.
-  int toInt() => _;
-}
-
 /// A descriptor for a fixed-width integer type [T].
 ///
 /// An integer descriptor is used to describe the properties of a fixed-width

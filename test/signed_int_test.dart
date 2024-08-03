@@ -1,7 +1,6 @@
 import 'dart:math' as math;
 
-import 'package:binary/binary.dart'
-    show FixedInt, Int8, debugCheckFixedWithInRange;
+import 'package:binary/binary.dart' show Int8, debugCheckFixedWithInRange;
 import 'package:test/test.dart';
 
 import 'src/prelude.dart';
@@ -110,18 +109,6 @@ void main() {
       final (hi, lo) = i.hiLo;
       check(Int8.fromHiLo(hi, lo)).equals(i);
     }
-  });
-
-  group('Int8.fromInt', () {
-    test('same number', () {
-      final $F = 0xF as FixedInt;
-      check(Int8.fromInt($F)).equals(Int8(0xF));
-    });
-
-    test('truncates', () {
-      final $FF = 0xFF as FixedInt;
-      check(Int8.fromInt($FF)).equals(Int8.max);
-    });
   });
 
   test('pow that is in range', () {

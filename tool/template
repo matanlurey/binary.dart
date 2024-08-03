@@ -60,7 +60,7 @@ import 'package:meta/meta.dart';
 /// important to be aware of this limitation.
 /// 
 /// This also applies to methods such as [List.cast] or [Iterable.whereType].
-extension type const {{NAME}}._(int _) implements FixedInt {
+extension type const {{NAME}}._(int _) implements int {
   static const _descriptor = IntDescriptor<{{NAME}}>.{{CONSTRUCTOR}}(
     {{NAME}}.fromUnchecked,
     width: width,
@@ -157,21 +157,6 @@ extension type const {{NAME}}._(int _) implements FixedInt {
   @pragma('dart2js:tryInline')
   @pragma('vm:prefer-inline')
   factory {{NAME}}.fromClamped(int v) => _descriptor.fitClamping(v);
-
-  /// Defines an existing fixed-width integer [v] as a {{NAME}}.
-  /// 
-  /// - If `this`'s width is >= [v]'s width, the result is the same as [v].
-  /// - Otherwise, the result is clamped to fit, similar to `fromClamped`.
-  /// 
-  /// This is a convenience constructor; similar behavior can be achieved with:
-  /// 
-  /// ```dart
-  /// final rawInt = v.toInt();
-  /// {{NAME}}.fromClamped(rawInt);
-  /// ```
-  @pragma('dart2js:tryInline')
-  @pragma('vm:prefer-inline')
-  factory {{NAME}}.fromInt(FixedInt v) => _descriptor.fitClamping(v.toInt());
 
   /// Creates a [{{NAME}}] using two integers as high and low bits.
   /// 
@@ -721,6 +706,7 @@ extension type const {{NAME}}._(int _) implements FixedInt {
   /// ```dart
   /// {{NAME}}(-3).abs(); // 3
   /// ```
+  @redeclare
   {{NAME}} abs() => {{NAME}}(_.abs());
 
   /// Returns the absolute value of this integer.
@@ -788,6 +774,7 @@ extension type const {{NAME}}._(int _) implements FixedInt {
   /// {{NAME}}(1).bitLength(); // 1
   /// {{NAME}}(2).bitLength(); // 2
   /// ```
+  @redeclare
   int get bitLength => _.bitLength;
 
   /// Whether this integer is the minimum value representable by this type.
@@ -795,26 +782,6 @@ extension type const {{NAME}}._(int _) implements FixedInt {
 
   /// Whether this integer is the maximum value representable by this type.
   bool get isMax => identical(_, max);
-
-  /// Returns true if and only if this integer is even.
-  /// 
-  /// ## Example
-  /// 
-  /// ```dart
-  /// {{NAME}}(2).isEven; // true
-  /// {{NAME}}(3).isEven; // false
-  /// ```
-  bool get isEven => _.isEven;
-
-  /// Returns true if and only if this integer is odd.
-  /// 
-  /// ## Example
-  /// 
-  /// ```dart
-  /// {{NAME}}(2).isOdd; // false
-  /// {{NAME}}(3).isOdd; // true
-  /// ```
-  bool get isOdd => _.isOdd;
 
   {{#SIGNED}}
   /// Returns the sign of this integer.
@@ -829,8 +796,14 @@ extension type const {{NAME}}._(int _) implements FixedInt {
   /// {{NAME}}(0).sign; // 0
   /// {{NAME}}(3).sign; // 1
   /// ```
+  @redeclare
   {{NAME}} get sign => {{NAME}}.fromUnchecked(_.sign);
   {{/SIGNED}}
+
+  /// Returns true if and only if this integer is positive.
+  /// 
+  /// A positive integer is greater than zero.
+  bool get isPositive => _ > 0;
 
   /// Returns true if and only if this integer is zero.
   /// 
@@ -841,32 +814,6 @@ extension type const {{NAME}}._(int _) implements FixedInt {
   /// {{NAME}}(3).isZero; // false
   /// ```
   bool get isZero => _ == 0;
-
-  /// Returns true if and only if this integer is positive.
-  /// 
-  /// A positive integer is greater than zero.
-  /// 
-  /// ## Example
-  /// 
-  /// ```dart
-  /// {{NAME}}(0).isPositive; // false
-  /// {{NAME}}(3).isPositive; // true
-  /// ```
-  bool get isPositive => _ > 0;
-
-  {{#SIGNED}}
-  /// Returns true if and only if this integer is negative.
-  /// 
-  /// A negative integer is less than zero.
-  /// 
-  /// ## Example
-  /// 
-  /// ```dart
-  /// {{NAME}}(-3).isNegative; // true
-  /// {{NAME}}(0).isNegative; // false
-  /// ```
-  bool get isNegative => _ < 0;
-  {{/SIGNED}}
 
   /// Returns `this` clamped to be in the range of [lowerLimit] and
   /// [upperLimit].
@@ -880,6 +827,7 @@ extension type const {{NAME}}._(int _) implements FixedInt {
   /// {{NAME}}(4).clamp({{NAME}}(3), {{NAME}}(5)); // 4
   /// {{NAME}}(6).clamp({{NAME}}(3), {{NAME}}(5)); // 5
   /// ```
+  @redeclare
   {{NAME}} clamp({{NAME}} lowerLimit, {{NAME}} upperLimit) {
     return {{NAME}}.fromUnchecked(_.clamp(lowerLimit._, upperLimit._));
   }
@@ -889,23 +837,10 @@ extension type const {{NAME}}._(int _) implements FixedInt {
   /// The result r of this operation satisfies: `this == (this ~/ other) *`
   /// `other + r`. As a consequence, the remainder `r` has the same sign as the
   /// dividend `this`.
+  @redeclare
   {{NAME}} remainder({{NAME}} other) {
     return {{NAME}}.fromUnchecked(_.remainder(other._));
   }
-
-  /// This number as a [double].
-  /// 
-  /// If an integer number is not precisely representable as a [double], an
-  /// approximation is returned.
-  double toDouble() => _.toDouble();
-
-  /// This number as an [int].
-  /// 
-  /// This is the underlying integer representation of a [{{NAME}}], and is
-  /// effectively an identity function, but for consistency and completeness,
-  /// it is provided as a method to discourage casting.
-  @redeclare
-  int toInt() => _;
 
   /// Returns this integer split into two parts: high and low bits.
   /// 
@@ -919,6 +854,7 @@ extension type const {{NAME}}._(int _) implements FixedInt {
   /// The sign of the returned value is always positive.
   /// 
   /// See [num.operator %] for more details.
+  @redeclare
   {{NAME}} operator %({{NAME}} other) {
     return {{NAME}}.fromUnchecked(_ % other._);
   }
@@ -938,6 +874,7 @@ extension type const {{NAME}}._(int _) implements FixedInt {
   /// ```dart
   /// {{NAME}}(2) * {{NAME}}(3); // 6
   /// ```
+  @redeclare
   {{NAME}} operator *({{NAME}} other) => {{NAME}}(_ * other._);
 
   /// Multiplies this number by other.
@@ -1008,6 +945,7 @@ extension type const {{NAME}}._(int _) implements FixedInt {
   /// ```dart
   /// {{NAME}}(2) + {{NAME}}(3); // 5
   /// ```
+  @redeclare
   {{NAME}} operator +({{NAME}} other) => {{NAME}}(_ + other._);
 
   /// Adds [other] to this number.
@@ -1078,6 +1016,7 @@ extension type const {{NAME}}._(int _) implements FixedInt {
   /// ```dart
   /// {{NAME}}(3) - {{NAME}}(2); // 1
   /// ```
+  @redeclare
   {{NAME}} operator -({{NAME}} other) => {{NAME}}(_ - other._);
 
   /// Subtracts [other] from this number.
@@ -1133,43 +1072,13 @@ extension type const {{NAME}}._(int _) implements FixedInt {
   /// ```
   {{NAME}} clampedSubtract({{NAME}} other) => {{NAME}}.fromClamped(_ - other._);
 
-  /// Whether this number is numerically smaller than [other].
+  {{#UNSIGNED}}
+  /// The negation of `this`.
   /// 
-  /// ## Example
-  /// 
-  /// ```dart
-  /// {{NAME}}(2) < {{NAME}}(3); // true
-  /// ```
-  bool operator <({{NAME}} other) => _ < other._;
-
-  /// Whether this number is numerically smaller than or equal to [other].
-  /// 
-  /// ## Example
-  /// 
-  /// ```dart
-  /// {{NAME}}(2) <= {{NAME}}(3); // true
-  /// {{NAME}}(3) <= {{NAME}}(3); // true
-  /// ```
-  bool operator <=({{NAME}} other) => _ <= other._;
-
-  /// Whether this number is numerically greater than [other].
-  /// 
-  /// ## Example
-  /// 
-  /// ```dart
-  /// {{NAME}}(3) > {{NAME}}(2); // true
-  /// ```
-  bool operator >({{NAME}} other) => _ > other._;
-
-  /// Whether this number is numerically greater than or equal to [other].
-  /// 
-  /// ## Example
-  /// 
-  /// ```dart
-  /// {{NAME}}(3) >= {{NAME}}(2); // true
-  /// {{NAME}}(3) >= {{NAME}}(3); // true
-  /// ```
-  bool operator >=({{NAME}} other) => _ >= other._;
+  /// For an unsigned integer, this is a no-op.
+  @redeclare
+  {{NAME}} operator -() => {{NAME}}(-_);
+  {{/UNSIGNED}}
 
   {{#SIGNED}}
   /// The negation of `this`.
@@ -1187,6 +1096,7 @@ extension type const {{NAME}}._(int _) implements FixedInt {
   /// ```dart
   /// -{{NAME}}(3); // -3
   /// ```
+  @redeclare
   {{NAME}} operator -() => {{NAME}}(-_);
 
   /// The negation of `this`.
@@ -1254,11 +1164,13 @@ extension type const {{NAME}}._(int _) implements FixedInt {
   /// ```dart
   /// {{NAME}}(10) ~/ {{NAME}}(3); // 3
   /// ```
+  @redeclare
   {{NAME}} operator ~/({{NAME}} other) => {{NAME}}.fromUnchecked(_ ~/ other._);
 
   /// Bit-wise and operator.
   /// 
   /// See [int.operator &] for more details.
+  @redeclare
   {{NAME}} operator &({{NAME}} other) {
     return _descriptor.uncheckedBinaryAnd(_, other._);
   }
@@ -1266,6 +1178,7 @@ extension type const {{NAME}}._(int _) implements FixedInt {
   /// Bit-wise or operator.
   /// 
   /// See [int.operator |] for more details.
+  @redeclare
   {{NAME}} operator |({{NAME}} other) {
     return _descriptor.uncheckedBinaryOr(_, other._);
   }
@@ -1277,6 +1190,7 @@ extension type const {{NAME}}._(int _) implements FixedInt {
   /// `pow(2, shiftAmount)`.
   /// 
   /// [shiftAmount] must be non-negative.
+  @redeclare
   {{NAME}} operator >>(int shiftAmount) {
     return _descriptor.uncheckedShiftRight(_, shiftAmount);
   }
@@ -1299,6 +1213,7 @@ extension type const {{NAME}}._(int _) implements FixedInt {
   /// ```dart
   /// {{NAME}}(3) << 2; // 12
   /// ```
+  @redeclare
   {{NAME}} operator <<(int shiftAmount) {
     return {{NAME}}(_descriptor.overflowingShiftLeft(_, shiftAmount));
   }
@@ -1398,6 +1313,7 @@ extension type const {{NAME}}._(int _) implements FixedInt {
   ///   range.
   /// - [clampedUnsignedShiftRight], which clamps the result if it is out of
   ///   range.
+  @redeclare
   {{NAME}} operator >>>(int shiftAmount) {
     return {{NAME}}(_ >>> shiftAmount);
   }
@@ -1481,6 +1397,7 @@ extension type const {{NAME}}._(int _) implements FixedInt {
   /// significant bits.
   ///
   /// The shiftAmount must be non-negative.
+  @redeclare
   {{NAME}} operator >>>(int shiftAmount) {
     return {{NAME}}(_ >>> shiftAmount);
   }
@@ -1489,19 +1406,19 @@ extension type const {{NAME}}._(int _) implements FixedInt {
   /// Bit-wise exclusive-or operator.
   /// 
   /// See [int.operator ^] for more details.
+  @redeclare
   {{NAME}} operator ^({{NAME}} other) {
     return _descriptor.uncheckedBinaryXor(_, other._);
   }
 
-  {{#SIGNED}}
   /// The bit-wise negate operator.
   /// 
   /// The bitwise compliment of an unsigned integer is its two's complement,
   /// or the number inverted.
+  @redeclare
   {{NAME}} operator ~() {
     return _descriptor.uncheckedBinaryNot(_);
   }
-  {{/SIGNED}}
 
   /// Returns `this` as a binary string.
   String toBinaryString({bool padded = true}) {

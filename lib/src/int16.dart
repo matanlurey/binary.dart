@@ -62,7 +62,7 @@ import 'package:meta/meta.dart';
 /// important to be aware of this limitation.
 ///
 /// This also applies to methods such as [List.cast] or [Iterable.whereType].
-extension type const Int16._(int _) implements FixedInt {
+extension type const Int16._(int _) implements int {
   static const _descriptor = IntDescriptor<Int16>.signed(
     Int16.fromUnchecked,
     width: width,
@@ -71,6 +71,9 @@ extension type const Int16._(int _) implements FixedInt {
 
   /// Always `0`.
   static const zero = Int16.fromUnchecked(0);
+
+  /// Always `1`.
+  static const one = Int16.fromUnchecked(1);
 
   /// The minimum value that this type can represent.
   static const min = Int16.fromUnchecked(-32768);
@@ -156,21 +159,6 @@ extension type const Int16._(int _) implements FixedInt {
   @pragma('dart2js:tryInline')
   @pragma('vm:prefer-inline')
   factory Int16.fromClamped(int v) => _descriptor.fitClamping(v);
-
-  /// Defines an existing fixed-width integer [v] as a Int16.
-  ///
-  /// - If `this`'s width is >= [v]'s width, the result is the same as [v].
-  /// - Otherwise, the result is clamped to fit, similar to `fromClamped`.
-  ///
-  /// This is a convenience constructor; similar behavior can be achieved with:
-  ///
-  /// ```dart
-  /// final rawInt = v.toInt();
-  /// Int16.fromClamped(rawInt);
-  /// ```
-  @pragma('dart2js:tryInline')
-  @pragma('vm:prefer-inline')
-  factory Int16.fromInt(FixedInt v) => _descriptor.fitClamping(v.toInt());
 
   /// Creates a [Int16] using two integers as high and low bits.
   ///
@@ -708,6 +696,7 @@ extension type const Int16._(int _) implements FixedInt {
   /// ```dart
   /// Int16(-3).abs(); // 3
   /// ```
+  @redeclare
   Int16 abs() => Int16(_.abs());
 
   /// Returns the absolute value of this integer.
@@ -774,6 +763,7 @@ extension type const Int16._(int _) implements FixedInt {
   /// Int16(1).bitLength(); // 1
   /// Int16(2).bitLength(); // 2
   /// ```
+  @redeclare
   int get bitLength => _.bitLength;
 
   /// Whether this integer is the minimum value representable by this type.
@@ -781,26 +771,6 @@ extension type const Int16._(int _) implements FixedInt {
 
   /// Whether this integer is the maximum value representable by this type.
   bool get isMax => identical(_, max);
-
-  /// Returns true if and only if this integer is even.
-  ///
-  /// ## Example
-  ///
-  /// ```dart
-  /// Int16(2).isEven; // true
-  /// Int16(3).isEven; // false
-  /// ```
-  bool get isEven => _.isEven;
-
-  /// Returns true if and only if this integer is odd.
-  ///
-  /// ## Example
-  ///
-  /// ```dart
-  /// Int16(2).isOdd; // false
-  /// Int16(3).isOdd; // true
-  /// ```
-  bool get isOdd => _.isOdd;
 
   /// Returns the sign of this integer.
   ///
@@ -814,7 +784,13 @@ extension type const Int16._(int _) implements FixedInt {
   /// Int16(0).sign; // 0
   /// Int16(3).sign; // 1
   /// ```
+  @redeclare
   Int16 get sign => Int16.fromUnchecked(_.sign);
+
+  /// Returns true if and only if this integer is positive.
+  ///
+  /// A positive integer is greater than zero.
+  bool get isPositive => _ > 0;
 
   /// Returns true if and only if this integer is zero.
   ///
@@ -825,30 +801,6 @@ extension type const Int16._(int _) implements FixedInt {
   /// Int16(3).isZero; // false
   /// ```
   bool get isZero => _ == 0;
-
-  /// Returns true if and only if this integer is positive.
-  ///
-  /// A positive integer is greater than zero.
-  ///
-  /// ## Example
-  ///
-  /// ```dart
-  /// Int16(0).isPositive; // false
-  /// Int16(3).isPositive; // true
-  /// ```
-  bool get isPositive => _ > 0;
-
-  /// Returns true if and only if this integer is negative.
-  ///
-  /// A negative integer is less than zero.
-  ///
-  /// ## Example
-  ///
-  /// ```dart
-  /// Int16(-3).isNegative; // true
-  /// Int16(0).isNegative; // false
-  /// ```
-  bool get isNegative => _ < 0;
 
   /// Returns `this` clamped to be in the range of [lowerLimit] and
   /// [upperLimit].
@@ -862,6 +814,7 @@ extension type const Int16._(int _) implements FixedInt {
   /// Int16(4).clamp(Int16(3), Int16(5)); // 4
   /// Int16(6).clamp(Int16(3), Int16(5)); // 5
   /// ```
+  @redeclare
   Int16 clamp(Int16 lowerLimit, Int16 upperLimit) {
     return Int16.fromUnchecked(_.clamp(lowerLimit._, upperLimit._));
   }
@@ -871,23 +824,10 @@ extension type const Int16._(int _) implements FixedInt {
   /// The result r of this operation satisfies: `this == (this ~/ other) *`
   /// `other + r`. As a consequence, the remainder `r` has the same sign as the
   /// dividend `this`.
+  @redeclare
   Int16 remainder(Int16 other) {
     return Int16.fromUnchecked(_.remainder(other._));
   }
-
-  /// This number as a [double].
-  ///
-  /// If an integer number is not precisely representable as a [double], an
-  /// approximation is returned.
-  double toDouble() => _.toDouble();
-
-  /// This number as an [int].
-  ///
-  /// This is the underlying integer representation of a [Int16], and is
-  /// effectively an identity function, but for consistency and completeness,
-  /// it is provided as a method to discourage casting.
-  @redeclare
-  int toInt() => _;
 
   /// Returns this integer split into two parts: high and low bits.
   ///
@@ -901,6 +841,7 @@ extension type const Int16._(int _) implements FixedInt {
   /// The sign of the returned value is always positive.
   ///
   /// See [num.operator %] for more details.
+  @redeclare
   Int16 operator %(Int16 other) {
     return Int16.fromUnchecked(_ % other._);
   }
@@ -920,6 +861,7 @@ extension type const Int16._(int _) implements FixedInt {
   /// ```dart
   /// Int16(2) * Int16(3); // 6
   /// ```
+  @redeclare
   Int16 operator *(Int16 other) => Int16(_ * other._);
 
   /// Multiplies this number by other.
@@ -990,6 +932,7 @@ extension type const Int16._(int _) implements FixedInt {
   /// ```dart
   /// Int16(2) + Int16(3); // 5
   /// ```
+  @redeclare
   Int16 operator +(Int16 other) => Int16(_ + other._);
 
   /// Adds [other] to this number.
@@ -1060,6 +1003,7 @@ extension type const Int16._(int _) implements FixedInt {
   /// ```dart
   /// Int16(3) - Int16(2); // 1
   /// ```
+  @redeclare
   Int16 operator -(Int16 other) => Int16(_ - other._);
 
   /// Subtracts [other] from this number.
@@ -1115,44 +1059,6 @@ extension type const Int16._(int _) implements FixedInt {
   /// ```
   Int16 clampedSubtract(Int16 other) => Int16.fromClamped(_ - other._);
 
-  /// Whether this number is numerically smaller than [other].
-  ///
-  /// ## Example
-  ///
-  /// ```dart
-  /// Int16(2) < Int16(3); // true
-  /// ```
-  bool operator <(Int16 other) => _ < other._;
-
-  /// Whether this number is numerically smaller than or equal to [other].
-  ///
-  /// ## Example
-  ///
-  /// ```dart
-  /// Int16(2) <= Int16(3); // true
-  /// Int16(3) <= Int16(3); // true
-  /// ```
-  bool operator <=(Int16 other) => _ <= other._;
-
-  /// Whether this number is numerically greater than [other].
-  ///
-  /// ## Example
-  ///
-  /// ```dart
-  /// Int16(3) > Int16(2); // true
-  /// ```
-  bool operator >(Int16 other) => _ > other._;
-
-  /// Whether this number is numerically greater than or equal to [other].
-  ///
-  /// ## Example
-  ///
-  /// ```dart
-  /// Int16(3) >= Int16(2); // true
-  /// Int16(3) >= Int16(3); // true
-  /// ```
-  bool operator >=(Int16 other) => _ >= other._;
-
   /// The negation of `this`.
   ///
   /// If the result is out of range, it asserts in debug mode, and wraps in
@@ -1168,6 +1074,7 @@ extension type const Int16._(int _) implements FixedInt {
   /// ```dart
   /// -Int16(3); // -3
   /// ```
+  @redeclare
   Int16 operator -() => Int16(-_);
 
   /// The negation of `this`.
@@ -1234,11 +1141,13 @@ extension type const Int16._(int _) implements FixedInt {
   /// ```dart
   /// Int16(10) ~/ Int16(3); // 3
   /// ```
+  @redeclare
   Int16 operator ~/(Int16 other) => Int16.fromUnchecked(_ ~/ other._);
 
   /// Bit-wise and operator.
   ///
   /// See [int.operator &] for more details.
+  @redeclare
   Int16 operator &(Int16 other) {
     return _descriptor.uncheckedBinaryAnd(_, other._);
   }
@@ -1246,6 +1155,7 @@ extension type const Int16._(int _) implements FixedInt {
   /// Bit-wise or operator.
   ///
   /// See [int.operator |] for more details.
+  @redeclare
   Int16 operator |(Int16 other) {
     return _descriptor.uncheckedBinaryOr(_, other._);
   }
@@ -1257,6 +1167,7 @@ extension type const Int16._(int _) implements FixedInt {
   /// `pow(2, shiftAmount)`.
   ///
   /// [shiftAmount] must be non-negative.
+  @redeclare
   Int16 operator >>(int shiftAmount) {
     return _descriptor.uncheckedShiftRight(_, shiftAmount);
   }
@@ -1279,6 +1190,7 @@ extension type const Int16._(int _) implements FixedInt {
   /// ```dart
   /// Int16(3) << 2; // 12
   /// ```
+  @redeclare
   Int16 operator <<(int shiftAmount) {
     return Int16(_descriptor.overflowingShiftLeft(_, shiftAmount));
   }
@@ -1379,6 +1291,7 @@ extension type const Int16._(int _) implements FixedInt {
   ///   range.
   /// - [clampedUnsignedShiftRight], which clamps the result if it is out of
   ///   range.
+  @redeclare
   Int16 operator >>>(int shiftAmount) {
     return Int16(_ >>> shiftAmount);
   }
@@ -1457,6 +1370,7 @@ extension type const Int16._(int _) implements FixedInt {
   /// Bit-wise exclusive-or operator.
   ///
   /// See [int.operator ^] for more details.
+  @redeclare
   Int16 operator ^(Int16 other) {
     return _descriptor.uncheckedBinaryXor(_, other._);
   }
@@ -1465,6 +1379,7 @@ extension type const Int16._(int _) implements FixedInt {
   ///
   /// The bitwise compliment of an unsigned integer is its two's complement,
   /// or the number inverted.
+  @redeclare
   Int16 operator ~() {
     return _descriptor.uncheckedBinaryNot(_);
   }

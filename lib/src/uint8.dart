@@ -60,7 +60,7 @@ import 'package:meta/meta.dart';
 /// important to be aware of this limitation.
 ///
 /// This also applies to methods such as [List.cast] or [Iterable.whereType].
-extension type const Uint8._(int _) implements FixedInt {
+extension type const Uint8._(int _) implements int {
   static const _descriptor = IntDescriptor<Uint8>.unsigned(
     Uint8.fromUnchecked,
     width: width,
@@ -69,6 +69,9 @@ extension type const Uint8._(int _) implements FixedInt {
 
   /// Always `0`.
   static const zero = Uint8.fromUnchecked(0);
+
+  /// Always `1`.
+  static const one = Uint8.fromUnchecked(1);
 
   /// The minimum value that this type can represent.
   static const min = Uint8.fromUnchecked(0);
@@ -154,21 +157,6 @@ extension type const Uint8._(int _) implements FixedInt {
   @pragma('dart2js:tryInline')
   @pragma('vm:prefer-inline')
   factory Uint8.fromClamped(int v) => _descriptor.fitClamping(v);
-
-  /// Defines an existing fixed-width integer [v] as a Uint8.
-  ///
-  /// - If `this`'s width is >= [v]'s width, the result is the same as [v].
-  /// - Otherwise, the result is clamped to fit, similar to `fromClamped`.
-  ///
-  /// This is a convenience constructor; similar behavior can be achieved with:
-  ///
-  /// ```dart
-  /// final rawInt = v.toInt();
-  /// Uint8.fromClamped(rawInt);
-  /// ```
-  @pragma('dart2js:tryInline')
-  @pragma('vm:prefer-inline')
-  factory Uint8.fromInt(FixedInt v) => _descriptor.fitClamping(v.toInt());
 
   /// Creates a [Uint8] using two integers as high and low bits.
   ///
@@ -711,6 +699,7 @@ extension type const Uint8._(int _) implements FixedInt {
   /// Uint8(1).bitLength(); // 1
   /// Uint8(2).bitLength(); // 2
   /// ```
+  @redeclare
   int get bitLength => _.bitLength;
 
   /// Whether this integer is the minimum value representable by this type.
@@ -719,25 +708,10 @@ extension type const Uint8._(int _) implements FixedInt {
   /// Whether this integer is the maximum value representable by this type.
   bool get isMax => identical(_, max);
 
-  /// Returns true if and only if this integer is even.
+  /// Returns true if and only if this integer is positive.
   ///
-  /// ## Example
-  ///
-  /// ```dart
-  /// Uint8(2).isEven; // true
-  /// Uint8(3).isEven; // false
-  /// ```
-  bool get isEven => _.isEven;
-
-  /// Returns true if and only if this integer is odd.
-  ///
-  /// ## Example
-  ///
-  /// ```dart
-  /// Uint8(2).isOdd; // false
-  /// Uint8(3).isOdd; // true
-  /// ```
-  bool get isOdd => _.isOdd;
+  /// A positive integer is greater than zero.
+  bool get isPositive => _ > 0;
 
   /// Returns true if and only if this integer is zero.
   ///
@@ -748,18 +722,6 @@ extension type const Uint8._(int _) implements FixedInt {
   /// Uint8(3).isZero; // false
   /// ```
   bool get isZero => _ == 0;
-
-  /// Returns true if and only if this integer is positive.
-  ///
-  /// A positive integer is greater than zero.
-  ///
-  /// ## Example
-  ///
-  /// ```dart
-  /// Uint8(0).isPositive; // false
-  /// Uint8(3).isPositive; // true
-  /// ```
-  bool get isPositive => _ > 0;
 
   /// Returns `this` clamped to be in the range of [lowerLimit] and
   /// [upperLimit].
@@ -773,6 +735,7 @@ extension type const Uint8._(int _) implements FixedInt {
   /// Uint8(4).clamp(Uint8(3), Uint8(5)); // 4
   /// Uint8(6).clamp(Uint8(3), Uint8(5)); // 5
   /// ```
+  @redeclare
   Uint8 clamp(Uint8 lowerLimit, Uint8 upperLimit) {
     return Uint8.fromUnchecked(_.clamp(lowerLimit._, upperLimit._));
   }
@@ -782,23 +745,10 @@ extension type const Uint8._(int _) implements FixedInt {
   /// The result r of this operation satisfies: `this == (this ~/ other) *`
   /// `other + r`. As a consequence, the remainder `r` has the same sign as the
   /// dividend `this`.
+  @redeclare
   Uint8 remainder(Uint8 other) {
     return Uint8.fromUnchecked(_.remainder(other._));
   }
-
-  /// This number as a [double].
-  ///
-  /// If an integer number is not precisely representable as a [double], an
-  /// approximation is returned.
-  double toDouble() => _.toDouble();
-
-  /// This number as an [int].
-  ///
-  /// This is the underlying integer representation of a [Uint8], and is
-  /// effectively an identity function, but for consistency and completeness,
-  /// it is provided as a method to discourage casting.
-  @redeclare
-  int toInt() => _;
 
   /// Returns this integer split into two parts: high and low bits.
   ///
@@ -812,6 +762,7 @@ extension type const Uint8._(int _) implements FixedInt {
   /// The sign of the returned value is always positive.
   ///
   /// See [num.operator %] for more details.
+  @redeclare
   Uint8 operator %(Uint8 other) {
     return Uint8.fromUnchecked(_ % other._);
   }
@@ -831,6 +782,7 @@ extension type const Uint8._(int _) implements FixedInt {
   /// ```dart
   /// Uint8(2) * Uint8(3); // 6
   /// ```
+  @redeclare
   Uint8 operator *(Uint8 other) => Uint8(_ * other._);
 
   /// Multiplies this number by other.
@@ -901,6 +853,7 @@ extension type const Uint8._(int _) implements FixedInt {
   /// ```dart
   /// Uint8(2) + Uint8(3); // 5
   /// ```
+  @redeclare
   Uint8 operator +(Uint8 other) => Uint8(_ + other._);
 
   /// Adds [other] to this number.
@@ -971,6 +924,7 @@ extension type const Uint8._(int _) implements FixedInt {
   /// ```dart
   /// Uint8(3) - Uint8(2); // 1
   /// ```
+  @redeclare
   Uint8 operator -(Uint8 other) => Uint8(_ - other._);
 
   /// Subtracts [other] from this number.
@@ -1026,43 +980,11 @@ extension type const Uint8._(int _) implements FixedInt {
   /// ```
   Uint8 clampedSubtract(Uint8 other) => Uint8.fromClamped(_ - other._);
 
-  /// Whether this number is numerically smaller than [other].
+  /// The negation of `this`.
   ///
-  /// ## Example
-  ///
-  /// ```dart
-  /// Uint8(2) < Uint8(3); // true
-  /// ```
-  bool operator <(Uint8 other) => _ < other._;
-
-  /// Whether this number is numerically smaller than or equal to [other].
-  ///
-  /// ## Example
-  ///
-  /// ```dart
-  /// Uint8(2) <= Uint8(3); // true
-  /// Uint8(3) <= Uint8(3); // true
-  /// ```
-  bool operator <=(Uint8 other) => _ <= other._;
-
-  /// Whether this number is numerically greater than [other].
-  ///
-  /// ## Example
-  ///
-  /// ```dart
-  /// Uint8(3) > Uint8(2); // true
-  /// ```
-  bool operator >(Uint8 other) => _ > other._;
-
-  /// Whether this number is numerically greater than or equal to [other].
-  ///
-  /// ## Example
-  ///
-  /// ```dart
-  /// Uint8(3) >= Uint8(2); // true
-  /// Uint8(3) >= Uint8(3); // true
-  /// ```
-  bool operator >=(Uint8 other) => _ >= other._;
+  /// For an unsigned integer, this is a no-op.
+  @redeclare
+  Uint8 operator -() => Uint8(-_);
 
   /// Truncating division operator.
   ///
@@ -1075,11 +997,13 @@ extension type const Uint8._(int _) implements FixedInt {
   /// ```dart
   /// Uint8(10) ~/ Uint8(3); // 3
   /// ```
+  @redeclare
   Uint8 operator ~/(Uint8 other) => Uint8.fromUnchecked(_ ~/ other._);
 
   /// Bit-wise and operator.
   ///
   /// See [int.operator &] for more details.
+  @redeclare
   Uint8 operator &(Uint8 other) {
     return _descriptor.uncheckedBinaryAnd(_, other._);
   }
@@ -1087,6 +1011,7 @@ extension type const Uint8._(int _) implements FixedInt {
   /// Bit-wise or operator.
   ///
   /// See [int.operator |] for more details.
+  @redeclare
   Uint8 operator |(Uint8 other) {
     return _descriptor.uncheckedBinaryOr(_, other._);
   }
@@ -1098,6 +1023,7 @@ extension type const Uint8._(int _) implements FixedInt {
   /// `pow(2, shiftAmount)`.
   ///
   /// [shiftAmount] must be non-negative.
+  @redeclare
   Uint8 operator >>(int shiftAmount) {
     return _descriptor.uncheckedShiftRight(_, shiftAmount);
   }
@@ -1120,6 +1046,7 @@ extension type const Uint8._(int _) implements FixedInt {
   /// ```dart
   /// Uint8(3) << 2; // 12
   /// ```
+  @redeclare
   Uint8 operator <<(int shiftAmount) {
     return Uint8(_descriptor.overflowingShiftLeft(_, shiftAmount));
   }
@@ -1208,6 +1135,7 @@ extension type const Uint8._(int _) implements FixedInt {
   /// significant bits.
   ///
   /// The shiftAmount must be non-negative.
+  @redeclare
   Uint8 operator >>>(int shiftAmount) {
     return Uint8(_ >>> shiftAmount);
   }
@@ -1215,8 +1143,18 @@ extension type const Uint8._(int _) implements FixedInt {
   /// Bit-wise exclusive-or operator.
   ///
   /// See [int.operator ^] for more details.
+  @redeclare
   Uint8 operator ^(Uint8 other) {
     return _descriptor.uncheckedBinaryXor(_, other._);
+  }
+
+  /// The bit-wise negate operator.
+  ///
+  /// The bitwise compliment of an unsigned integer is its two's complement,
+  /// or the number inverted.
+  @redeclare
+  Uint8 operator ~() {
+    return _descriptor.uncheckedBinaryNot(_);
   }
 
   /// Returns `this` as a binary string.
