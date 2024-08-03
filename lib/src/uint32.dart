@@ -98,8 +98,9 @@ extension type const Uint32._(int _) implements int {
   static bool isValid(int v) => v >= minInt && v <= maxInt;
 
   /// Returns [value] if its in a valid range for Uint32.
-  static int checkRange(int value) {
-    return RangeError.checkValueInInterval(value, minInt, maxInt, 'value');
+  static Uint32 checkRange(int value) {
+    RangeError.checkValueInInterval(value, minInt, maxInt, 'value');
+    return Uint32.fromUnchecked(value);
   }
 
   /// Defines [v] as An unsigned 32-bit integer, wrapping if necessary.

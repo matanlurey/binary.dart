@@ -9,6 +9,10 @@
 
 [file an issue]: https://github.com/matanlurey/binary.dart/issues
 
+## 4.0.0-alpha+6
+
+- Just kidding, `checkRange` will return `{{Int}}` if no error is thrown.
+
 ## 4.0.0-alpha+5
 
 - `<Int>.checkRange` returns the `int` if no error was thrown (instead of

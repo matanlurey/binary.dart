@@ -96,8 +96,9 @@ extension type const Uint8._(int _) implements int {
   static bool isValid(int v) => v >= minInt && v <= maxInt;
 
   /// Returns [value] if its in a valid range for Uint8.
-  static int checkRange(int value) {
-    return RangeError.checkValueInInterval(value, minInt, maxInt, 'value');
+  static Uint8 checkRange(int value) {
+    RangeError.checkValueInInterval(value, minInt, maxInt, 'value');
+    return Uint8.fromUnchecked(value);
   }
 
   /// Defines [v] as An unsigned 8-bit integer, wrapping if necessary.

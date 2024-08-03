@@ -98,8 +98,9 @@ extension type const Uint16._(int _) implements int {
   static bool isValid(int v) => v >= minInt && v <= maxInt;
 
   /// Returns [value] if its in a valid range for Uint16.
-  static int checkRange(int value) {
-    return RangeError.checkValueInInterval(value, minInt, maxInt, 'value');
+  static Uint16 checkRange(int value) {
+    RangeError.checkValueInInterval(value, minInt, maxInt, 'value');
+    return Uint16.fromUnchecked(value);
   }
 
   /// Defines [v] as An unsigned 16-bit integer, wrapping if necessary.
