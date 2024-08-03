@@ -188,13 +188,6 @@ final class IntDescriptor<T> {
     return BitList.fromInt(v, length: width, growable: growable);
   }
 
-  /// Returns an iterable of bits in [v], from least to most significant.
-  ///
-  /// The iterable has a length of [width].
-  @pragma('dart2js:tryInline')
-  @pragma('vm:prefer-inline')
-  Iterable<bool> bits(int v) => _BitIterable(v, width);
-
   /// Returns the number of zeros in the binary representation of [v].
   @pragma('dart2js:tryInline')
   @pragma('vm:prefer-inline')
@@ -543,64 +536,4 @@ final class IntDescriptor<T> {
     }
     return result;
   }
-}
-
-final class _BitIterable extends Iterable<bool> {
-  const _BitIterable(this._value, this.length);
-  final int _value;
-
-  @override
-  final int length;
-
-  @override
-  bool elementAt(int index) => _value.nthBit(index);
-
-  @override
-  bool get first => _value.nthBit(0);
-
-  @override
-  bool get last => _value.nthBit(length - 1);
-
-  @override
-  bool get single {
-    if (length != 1) {
-      throw StateError('Iterable has more than one element');
-    }
-    return _value.nthBit(0);
-  }
-
-  @override
-  bool contains(Object? element) {
-    if (element is! bool) {
-      return false;
-    }
-    if (element) {
-      // Checking if at least one bit is set.
-      return _value != 0;
-    }
-    // At least one bit is unset.
-    return _value != (1 << length) - 1;
-  }
-
-  @override
-  bool get isEmpty => _value == 0;
-
-  @override
-  bool get isNotEmpty => _value != 0;
-
-  @override
-  Iterator<bool> get iterator => _BitIterator(_value, length);
-}
-
-final class _BitIterator implements Iterator<bool> {
-  _BitIterator(this._value, this.length);
-  final int _value;
-  final int length;
-  var _index = -1;
-
-  @override
-  bool moveNext() => ++_index < length;
-
-  @override
-  bool get current => _value.nthBit(_index);
 }

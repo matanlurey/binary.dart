@@ -117,7 +117,7 @@ final class _FixedUint32BitList with ListBase<bool> implements BitList {
   }
 
   @override
-  Uint32List toUint32List({bool copy = false}) {
+  Uint32List toUint32List({bool copy = true}) {
     return Uint32List(1)..[0] = _bits.toInt();
   }
 }
@@ -154,7 +154,7 @@ abstract final class _Uint32ListBitList with ListBase<bool> implements BitList {
   }
 
   @override
-  Uint32List toUint32List({bool copy = false}) {
+  Uint32List toUint32List({bool copy = true}) {
     final bytes = _bytes as Uint32List;
     return copy ? Uint32List.fromList(bytes) : bytes;
   }

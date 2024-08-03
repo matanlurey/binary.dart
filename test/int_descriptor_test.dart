@@ -41,9 +41,9 @@ void _test(IntDescriptor<int> i) {
     check(set).equals(0);
   });
 
-  test('bit iterable', () {
+  test('bit list', () {
     final bits = int.parse('10101010', radix: 2);
-    final it = i.bits(bits);
+    final it = i.toBitList(bits);
 
     check(it.elementAt(0)).equals(false);
     check(it.elementAt(1)).equals(true);
@@ -70,7 +70,7 @@ void _test(IntDescriptor<int> i) {
       max: 1,
     );
     final bits = int.parse('1', radix: 2);
-    final it = i1.bits(bits);
+    final it = i1.toBitList(bits);
 
     check(it.single).equals(true);
   });
