@@ -2,7 +2,7 @@
 
 name: binary
 description: Utilities for accessing binary data and bit manipulation in Dart and Flutter
-version: 4.0.0-alpha+2
+version: 4.0.0-alpha+3
 
 environment:
   # Required for https://github.com/dart-lang/sdk/issues/55135

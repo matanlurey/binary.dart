@@ -9,6 +9,12 @@
 
 [file an issue]: https://github.com/matanlurey/binary.dart/issues
 
+## 4.0.0-alpha+3
+
+**New features**:
+
+- Added `<Int>.maxInt` and `<Int>.minInt` as static (`int`) constants.
+
 ## 4.0.0-alpha+2
 
 **Breaking changes**:
