@@ -9,6 +9,14 @@
 
 [file an issue]: https://github.com/matanlurey/binary.dart/issues
 
+## 4.0.0-alpha+2
+
+**New features**:
+
+- `<FixedInt>`, which was pointless, is now just `int`. That means that any
+  fixed integer representation can be provided somewhere an `int` is expected,
+  which cuts down on boilerplate without much value.
+
 ## 4.0.0-alpha+1
 
 **New features**:
