@@ -9,6 +9,11 @@
 
 [file an issue]: https://github.com/matanlurey/binary.dart/issues
 
+## 4.0.0-alpha+5
+
+- `<Int>.checkRange` returns the `int` if no error was thrown (instead of
+  `void`).
+
 ## 4.0.0-alpha+4
 
 - Actually publish the contents of `4.0.0-alpha+3`.

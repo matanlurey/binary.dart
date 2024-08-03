@@ -95,9 +95,9 @@ extension type const {{NAME}}._(int _) implements int {
   /// Returns whether [v] is in a valid range for {{NAME}}.
   static bool isValid(int v) => v >= minInt && v <= maxInt;
 
-  /// Throws a [RangeError] if [value] is not in a valid range for {{NAME}}.
-  static void checkRange(int value) {
-    RangeError.checkValueInInterval(value, minInt, maxInt, 'value');
+  /// Returns [value] if its in a valid range for {{NAME}}.
+  static int checkRange(int value) {
+    return RangeError.checkValueInInterval(value, minInt, maxInt, 'value');
   }
 
   /// Defines [v] as {{DESCRIPTION}}, wrapping if necessary.

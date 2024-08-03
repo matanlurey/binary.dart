@@ -97,9 +97,9 @@ extension type const Int16._(int _) implements int {
   /// Returns whether [v] is in a valid range for Int16.
   static bool isValid(int v) => v >= minInt && v <= maxInt;
 
-  /// Throws a [RangeError] if [value] is not in a valid range for Int16.
-  static void checkRange(int value) {
-    RangeError.checkValueInInterval(value, minInt, maxInt, 'value');
+  /// Returns [value] if its in a valid range for Int16.
+  static int checkRange(int value) {
+    return RangeError.checkValueInInterval(value, minInt, maxInt, 'value');
   }
 
   /// Defines [v] as A signed 16-bit integer, wrapping if necessary.
