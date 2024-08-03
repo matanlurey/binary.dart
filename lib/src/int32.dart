@@ -66,8 +66,18 @@ extension type const Int32._(int _) implements int {
   static const _descriptor = IntDescriptor<Int32>.signed(
     Int32.fromUnchecked,
     width: width,
-    max: 2147483647,
+    max: maxInt,
   );
+
+  /// The minimum value that this type can represent, as a plain [int].
+  ///
+  /// This is equivalent to `Int32.min as int`.
+  static const minInt = -2147483648;
+
+  /// The maximum value that this type can represent, as a plain [int].
+  ///
+  /// This is equivalent to `Int32.max as int`.
+  static const maxInt = 2147483647;
 
   /// Always `0`.
   static const zero = Int32.fromUnchecked(0);
@@ -76,20 +86,20 @@ extension type const Int32._(int _) implements int {
   static const one = Int32.fromUnchecked(1);
 
   /// The minimum value that this type can represent.
-  static const min = Int32.fromUnchecked(-2147483648);
+  static const min = Int32.fromUnchecked(minInt);
 
   /// The maximum value that this type can represent.
-  static const max = Int32.fromUnchecked(2147483647);
+  static const max = Int32.fromUnchecked(maxInt);
 
   /// The number of bits used to represent values of this type.
   static const width = 32;
 
   /// Returns whether [v] is in a valid range for Int32.
-  static bool isValid(int v) => v >= -2147483648 && v <= 2147483647;
+  static bool isValid(int v) => v >= minInt && v <= maxInt;
 
   /// Throws a [RangeError] if [value] is not in a valid range for Int32.
   static void checkRange(int value) {
-    RangeError.checkValueInInterval(value, -2147483648, 2147483647, 'value');
+    RangeError.checkValueInInterval(value, minInt, maxInt, 'value');
   }
 
   /// Defines [v] as A signed 32-bit integer, wrapping if necessary.
@@ -108,7 +118,7 @@ extension type const Int32._(int _) implements int {
           // Dart2JS crashes if the boolean is first in this expression, but have
           // not been able to reproduce it in a minimal example yet, so this is a
           // workaround.
-          v >= -2147483648 && v <= 2147483647 || !debugCheckUncheckedInRange,
+          v >= minInt && v <= maxInt || !debugCheckUncheckedInRange,
           'Value out of range: $v.\n\n'
           'This should never happen, and is likely a bug. To intentionally '
           'overflow, even in debug mode, set '

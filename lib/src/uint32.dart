@@ -66,8 +66,18 @@ extension type const Uint32._(int _) implements int {
   static const _descriptor = IntDescriptor<Uint32>.unsigned(
     Uint32.fromUnchecked,
     width: width,
-    max: 4294967295,
+    max: maxInt,
   );
+
+  /// The minimum value that this type can represent, as a plain [int].
+  ///
+  /// This is equivalent to `Uint32.min as int`.
+  static const minInt = 0;
+
+  /// The maximum value that this type can represent, as a plain [int].
+  ///
+  /// This is equivalent to `Uint32.max as int`.
+  static const maxInt = 4294967295;
 
   /// Always `0`.
   static const zero = Uint32.fromUnchecked(0);
@@ -76,20 +86,20 @@ extension type const Uint32._(int _) implements int {
   static const one = Uint32.fromUnchecked(1);
 
   /// The minimum value that this type can represent.
-  static const min = Uint32.fromUnchecked(0);
+  static const min = Uint32.fromUnchecked(minInt);
 
   /// The maximum value that this type can represent.
-  static const max = Uint32.fromUnchecked(4294967295);
+  static const max = Uint32.fromUnchecked(maxInt);
 
   /// The number of bits used to represent values of this type.
   static const width = 32;
 
   /// Returns whether [v] is in a valid range for Uint32.
-  static bool isValid(int v) => v >= 0 && v <= 4294967295;
+  static bool isValid(int v) => v >= minInt && v <= maxInt;
 
   /// Throws a [RangeError] if [value] is not in a valid range for Uint32.
   static void checkRange(int value) {
-    RangeError.checkValueInInterval(value, 0, 4294967295, 'value');
+    RangeError.checkValueInInterval(value, minInt, maxInt, 'value');
   }
 
   /// Defines [v] as An unsigned 32-bit integer, wrapping if necessary.
@@ -108,7 +118,7 @@ extension type const Uint32._(int _) implements int {
           // Dart2JS crashes if the boolean is first in this expression, but have
           // not been able to reproduce it in a minimal example yet, so this is a
           // workaround.
-          v >= 0 && v <= 4294967295 || !debugCheckUncheckedInRange,
+          v >= minInt && v <= maxInt || !debugCheckUncheckedInRange,
           'Value out of range: $v.\n\n'
           'This should never happen, and is likely a bug. To intentionally '
           'overflow, even in debug mode, set '

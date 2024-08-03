@@ -9,6 +9,10 @@
 
 [file an issue]: https://github.com/matanlurey/binary.dart/issues
 
+## 4.0.0-alpha+4
+
+- Actually publish the contents of `4.0.0-alpha+3`.
+
 ## 4.0.0-alpha+3
 
 **New features**:

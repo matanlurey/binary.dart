@@ -64,8 +64,18 @@ extension type const Int8._(int _) implements int {
   static const _descriptor = IntDescriptor<Int8>.signed(
     Int8.fromUnchecked,
     width: width,
-    max: 127,
+    max: maxInt,
   );
+
+  /// The minimum value that this type can represent, as a plain [int].
+  ///
+  /// This is equivalent to `Int8.min as int`.
+  static const minInt = -128;
+
+  /// The maximum value that this type can represent, as a plain [int].
+  ///
+  /// This is equivalent to `Int8.max as int`.
+  static const maxInt = 127;
 
   /// Always `0`.
   static const zero = Int8.fromUnchecked(0);
@@ -74,20 +84,20 @@ extension type const Int8._(int _) implements int {
   static const one = Int8.fromUnchecked(1);
 
   /// The minimum value that this type can represent.
-  static const min = Int8.fromUnchecked(-128);
+  static const min = Int8.fromUnchecked(minInt);
 
   /// The maximum value that this type can represent.
-  static const max = Int8.fromUnchecked(127);
+  static const max = Int8.fromUnchecked(maxInt);
 
   /// The number of bits used to represent values of this type.
   static const width = 8;
 
   /// Returns whether [v] is in a valid range for Int8.
-  static bool isValid(int v) => v >= -128 && v <= 127;
+  static bool isValid(int v) => v >= minInt && v <= maxInt;
 
   /// Throws a [RangeError] if [value] is not in a valid range for Int8.
   static void checkRange(int value) {
-    RangeError.checkValueInInterval(value, -128, 127, 'value');
+    RangeError.checkValueInInterval(value, minInt, maxInt, 'value');
   }
 
   /// Defines [v] as A signed 8-bit integer, wrapping if necessary.
@@ -106,7 +116,7 @@ extension type const Int8._(int _) implements int {
           // Dart2JS crashes if the boolean is first in this expression, but have
           // not been able to reproduce it in a minimal example yet, so this is a
           // workaround.
-          v >= -128 && v <= 127 || !debugCheckUncheckedInRange,
+          v >= minInt && v <= maxInt || !debugCheckUncheckedInRange,
           'Value out of range: $v.\n\n'
           'This should never happen, and is likely a bug. To intentionally '
           'overflow, even in debug mode, set '
