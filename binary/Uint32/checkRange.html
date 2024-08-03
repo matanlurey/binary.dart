@@ -63,7 +63,7 @@
     <section class="multi-line-signature">
       
 
-<span class="returntype"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span>
+<span class="returntype"><a href="../../binary/Uint32-extension-type.html">Uint32</a></span>
 <span class="name ">checkRange</span>(<wbr><ol class="parameter-list"><li><span class="parameter" id="checkRange-param-value"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">value</span></span></li>
 </ol>)
 
@@ -79,8 +79,9 @@
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">static int checkRange(int value) {
-  return RangeError.checkValueInInterval(value, minInt, maxInt, &#39;value&#39;);
+  <pre class="language-dart"><code class="language-dart">static Uint32 checkRange(int value) {
+  RangeError.checkValueInInterval(value, minInt, maxInt, &#39;value&#39;);
+  return Uint32.fromUnchecked(value);
 }</code></pre>
 </section>
 
@@ -115,7 +116,7 @@
 <footer>
   <span class="no-break">
     binary
-      4.0.0-alpha+5
+      4.0.0-alpha+6
   </span>
 
   
