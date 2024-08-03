@@ -86,7 +86,7 @@ Uint32.</p>
 <p>Some methods that only make sense for unsigned integers are not available
 for signed integers, and vice versa, and some methods that are typically
 inherited from <a href="https://api.dart.dev/stable/3.4.4/dart-core/num-class.html">num</a>, but not useful for integers, are not available; these
-can still be accessed through the underlying <a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a> value, using <a href="../binary/Uint32/toInt.html">toInt</a>:</p>
+can still be accessed through the underlying <a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a> value, using <a href="https://api.dart.dev/stable/3.4.4/dart-core/num/toInt.html">toInt</a>:</p>
 <pre class="language-dart"><code class="language-dart">Uint32(3).toInt().toStringAsExponential(); // "3e+0"
 </code></pre>
 <h2 id="safety">Safety</h2>
@@ -109,7 +109,7 @@ important to be aware of this limitation.</p>
   <dt>Implemented types</dt>
   <dd>
     <ul class="comma-separated clazz-relationships">
-        <li><a href="https://api.dart.dev/stable/3.4.4/dart-core/Comparable-class.html">Comparable</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.dart.dev/stable/3.4.4/dart-core/num-class.html">num</a></span>&gt;</span></li>
+        <li><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></li>
     </ul>
   </dd>
 
@@ -145,13 +145,6 @@ important to be aware of this limitation.</p>
           Creates a <a href="../binary/Uint32-extension-type.html">Uint32</a> using two integers as high and low bits.
             <div class="constructor-modifier features">factory</div>
         </dd>
-        <dt id="Uint32.fromInt" class="callable">
-          <span class="name"><a href="../binary/Uint32/Uint32.fromInt.html">Uint32.fromInt</a></span><span class="signature">(<span class="parameter" id="fromInt-param-v"><span class="type-annotation">FixedInt</span> <span class="parameter-name">v</span></span>)</span>
-        </dt>
-        <dd>
-          Defines an existing fixed-width integer <code>v</code> as a Uint32.
-            <div class="constructor-modifier features">factory</div>
-        </dd>
         <dt id="Uint32.fromUnchecked" class="callable">
           <span class="name"><a href="../binary/Uint32/Uint32.fromUnchecked.html">Uint32.fromUnchecked</a></span><span class="signature">(<span class="parameter" id="fromUnchecked-param-v"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">v</span></span>)</span>
         </dt>
@@ -182,18 +175,18 @@ important to be aware of this limitation.</p>
 </dt>
 <dd>
   Returns the <em>minimum</em> number of bits required to store this integer.
-  <div class="features"><span class="feature">no setter</span></div>
+  <div class="features"><span class="feature">no setter</span><span class="feature">override</span></div>
 
 </dd>
 
         <dt id="hashCode" class="property inherited">
-  <span class="name"><a href="https://api.dart.dev/stable/3.4.4/dart-core/Object/hashCode.html">hashCode</a></span>
+  <span class="name"><a href="https://api.dart.dev/stable/3.4.4/dart-core/num/hashCode.html">hashCode</a></span>
   <span class="signature">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span>
   
 
 </dt>
 <dd class="inherited">
-  The hash code for this object.
+  Returns a hash code for a numerical value.
   <div class="features"><span class="feature">no setter</span><span class="feature">inherited</span></div>
 
 </dd>
@@ -210,15 +203,39 @@ important to be aware of this limitation.</p>
 
 </dd>
 
-        <dt id="isEven" class="property">
-  <span class="name"><a href="../binary/Uint32/isEven.html">isEven</a></span>
+        <dt id="isEven" class="property inherited">
+  <span class="name"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int/isEven.html">isEven</a></span>
   <span class="signature">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/bool-class.html">bool</a></span>
   
 
 </dt>
-<dd>
+<dd class="inherited">
   Returns true if and only if this integer is even.
-  <div class="features"><span class="feature">no setter</span></div>
+  <div class="features"><span class="feature">no setter</span><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="isFinite" class="property inherited">
+  <span class="name"><a href="https://api.dart.dev/stable/3.4.4/dart-core/num/isFinite.html">isFinite</a></span>
+  <span class="signature">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/bool-class.html">bool</a></span>
+  
+
+</dt>
+<dd class="inherited">
+  Whether this number is finite.
+  <div class="features"><span class="feature">no setter</span><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="isInfinite" class="property inherited">
+  <span class="name"><a href="https://api.dart.dev/stable/3.4.4/dart-core/num/isInfinite.html">isInfinite</a></span>
+  <span class="signature">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/bool-class.html">bool</a></span>
+  
+
+</dt>
+<dd class="inherited">
+  Whether this number is positive infinity or negative infinity.
+  <div class="features"><span class="feature">no setter</span><span class="feature">inherited</span></div>
 
 </dd>
 
@@ -246,15 +263,39 @@ important to be aware of this limitation.</p>
 
 </dd>
 
-        <dt id="isOdd" class="property">
-  <span class="name"><a href="../binary/Uint32/isOdd.html">isOdd</a></span>
+        <dt id="isNaN" class="property inherited">
+  <span class="name"><a href="https://api.dart.dev/stable/3.4.4/dart-core/num/isNaN.html">isNaN</a></span>
   <span class="signature">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/bool-class.html">bool</a></span>
   
 
 </dt>
-<dd>
+<dd class="inherited">
+  Whether this number is a Not-a-Number value.
+  <div class="features"><span class="feature">no setter</span><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="isNegative" class="property inherited">
+  <span class="name"><a href="https://api.dart.dev/stable/3.4.4/dart-core/num/isNegative.html">isNegative</a></span>
+  <span class="signature">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/bool-class.html">bool</a></span>
+  
+
+</dt>
+<dd class="inherited">
+  Whether this number is negative.
+  <div class="features"><span class="feature">no setter</span><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="isOdd" class="property inherited">
+  <span class="name"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int/isOdd.html">isOdd</a></span>
+  <span class="signature">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/bool-class.html">bool</a></span>
+  
+
+</dt>
+<dd class="inherited">
   Returns true if and only if this integer is odd.
-  <div class="features"><span class="feature">no setter</span></div>
+  <div class="features"><span class="feature">no setter</span><span class="feature">inherited</span></div>
 
 </dd>
 
@@ -306,6 +347,18 @@ important to be aware of this limitation.</p>
 
 </dd>
 
+        <dt id="sign" class="property inherited">
+  <span class="name"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int/sign.html">sign</a></span>
+  <span class="signature">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span>
+  
+
+</dt>
+<dd class="inherited">
+  Returns the sign of this integer.
+  <div class="features"><span class="feature">no setter</span><span class="feature">inherited</span></div>
+
+</dd>
+
     </dl>
   </section>
     
@@ -314,6 +367,45 @@ important to be aware of this limitation.</p>
       id="instance-methods">
     <h2>Methods</h2>
     <dl class="callables">
+        <dt id="abs" class="callable inherited">
+  <span class="name"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int/abs.html">abs</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  Returns the absolute value of this integer.
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="ceil" class="callable inherited">
+  <span class="name"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int/ceil.html">ceil</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  Returns <code>this</code>.
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="ceilToDouble" class="callable inherited">
+  <span class="name"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int/ceilToDouble.html">ceilToDouble</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/double-class.html">double</a></span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  Returns <code>this.toDouble()</code>.
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
         <dt id="chunk" class="callable">
   <span class="name"><a href="../binary/Uint32/chunk.html">chunk</a></span><span class="signature">(<wbr><span class="parameter" id="chunk-param-left"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">left</span>, </span><span class="parameter" id="chunk-param-size">[<span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">size</span>]</span>)
     <span class="returntype parameter">&#8594; <a href="../binary/Uint32-extension-type.html">Uint32</a></span>
@@ -337,7 +429,7 @@ important to be aware of this limitation.</p>
 <dd>
   Returns <code>this</code> clamped to be in the range of <code>lowerLimit</code> and
 <code>upperLimit</code>.
-  
+  <div class="features"><span class="feature">override</span></div>
 
 </dd>
 
@@ -434,14 +526,14 @@ a multiple of <code>n</code>.
 </dd>
 
         <dt id="compareTo" class="callable inherited">
-  <span class="name"><a href="https://api.dart.dev/stable/3.4.4/dart-core/Comparable/compareTo.html">compareTo</a></span><span class="signature">(<wbr><span class="parameter" id="compareTo-param-other"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/num-class.html">num</a></span> <span class="parameter-name">other</span></span>)
+  <span class="name"><a href="https://api.dart.dev/stable/3.4.4/dart-core/num/compareTo.html">compareTo</a></span><span class="signature">(<wbr><span class="parameter" id="compareTo-param-other"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/num-class.html">num</a></span> <span class="parameter-name">other</span></span>)
     <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span>
   </span>
   
 
 </dt>
 <dd class="inherited">
-  Compares this object to another object.
+  Compares this to <code>other</code>.
   <div class="features"><span class="feature">inherited</span></div>
 
 </dd>
@@ -526,6 +618,45 @@ a multiple of <code>n</code>.
 
 </dd>
 
+        <dt id="floor" class="callable inherited">
+  <span class="name"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int/floor.html">floor</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  Returns <code>this</code>.
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="floorToDouble" class="callable inherited">
+  <span class="name"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int/floorToDouble.html">floorToDouble</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/double-class.html">double</a></span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  Returns <code>this.toDouble()</code>.
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="gcd" class="callable inherited">
+  <span class="name"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int/gcd.html">gcd</a></span><span class="signature">(<wbr><span class="parameter" id="gcd-param-other"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">other</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  Returns the greatest common divisor of this integer and <code>other</code>.
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
         <dt id="log" class="callable">
   <span class="name"><a href="../binary/Uint32/log.html">log</a></span><span class="signature">(<wbr><span class="parameter" id="log-param-base">[<span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">base</span>]</span>)
     <span class="returntype parameter">&#8594; <a href="../binary/Uint32-extension-type.html">Uint32</a></span>
@@ -575,6 +706,33 @@ a multiple of <code>n</code>.
 <dd>
   Returns the midpoint between this integer and <code>other</code>, rounded down.
   
+
+</dd>
+
+        <dt id="modInverse" class="callable inherited">
+  <span class="name"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int/modInverse.html">modInverse</a></span><span class="signature">(<wbr><span class="parameter" id="modInverse-param-modulus"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">modulus</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  Returns the modular multiplicative inverse of this integer
+modulo <code>modulus</code>.
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="modPow" class="callable inherited">
+  <span class="name"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int/modPow.html">modPow</a></span><span class="signature">(<wbr><span class="parameter" id="modPow-param-exponent"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">exponent</span>, </span><span class="parameter" id="modPow-param-modulus"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">modulus</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  Returns this integer to the power of <code>exponent</code> modulo <code>modulus</code>.
+  <div class="features"><span class="feature">inherited</span></div>
 
 </dd>
 
@@ -653,7 +811,7 @@ a multiple of <code>n</code>.
 </dt>
 <dd>
   The remainder of the truncating division of <code>this</code> by <code>other</code>.
-  
+  <div class="features"><span class="feature">override</span></div>
 
 </dd>
 
@@ -694,6 +852,32 @@ with the same number of bits from <code>replacement</code>.
 <dd>
   Rotates the bits in <code>this</code> to the right by <code>n</code> positions.
   
+
+</dd>
+
+        <dt id="round" class="callable inherited">
+  <span class="name"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int/round.html">round</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  Returns <code>this</code>.
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="roundToDouble" class="callable inherited">
+  <span class="name"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int/roundToDouble.html">roundToDouble</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/double-class.html">double</a></span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  Returns <code>this.toDouble()</code>.
+  <div class="features"><span class="feature">inherited</span></div>
 
 </dd>
 
@@ -775,16 +959,16 @@ with the same number of bits from <code>replacement</code>.
 
 </dd>
 
-        <dt id="toDouble" class="callable">
-  <span class="name"><a href="../binary/Uint32/toDouble.html">toDouble</a></span><span class="signature">(<wbr>)
+        <dt id="toDouble" class="callable inherited">
+  <span class="name"><a href="https://api.dart.dev/stable/3.4.4/dart-core/num/toDouble.html">toDouble</a></span><span class="signature">(<wbr>)
     <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/double-class.html">double</a></span>
   </span>
   
 
 </dt>
-<dd>
+<dd class="inherited">
   This number as a <a href="https://api.dart.dev/stable/3.4.4/dart-core/double-class.html">double</a>.
-  
+  <div class="features"><span class="feature">inherited</span></div>
 
 </dd>
 
@@ -801,28 +985,137 @@ with the same number of bits from <code>replacement</code>.
 
 </dd>
 
-        <dt id="toInt" class="callable">
-  <span class="name"><a href="../binary/Uint32/toInt.html">toInt</a></span><span class="signature">(<wbr>)
+        <dt id="toInt" class="callable inherited">
+  <span class="name"><a href="https://api.dart.dev/stable/3.4.4/dart-core/num/toInt.html">toInt</a></span><span class="signature">(<wbr>)
     <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span>
   </span>
   
 
 </dt>
-<dd>
-  This number as an <a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a>.
-  
+<dd class="inherited">
+  Truncates this <a href="https://api.dart.dev/stable/3.4.4/dart-core/num-class.html">num</a> to an integer and returns the result as an <a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a>.
+  <div class="features"><span class="feature">inherited</span></div>
 
 </dd>
 
-        <dt id="toString" class="callable inherited">
-  <span class="name"><a href="https://api.dart.dev/stable/3.4.4/dart-core/Object/toString.html">toString</a></span><span class="signature">(<wbr>)
+        <dt id="toRadixString" class="callable inherited">
+  <span class="name"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int/toRadixString.html">toRadixString</a></span><span class="signature">(<wbr><span class="parameter" id="toRadixString-param-radix"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">radix</span></span>)
     <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/String-class.html">String</a></span>
   </span>
   
 
 </dt>
 <dd class="inherited">
-  A string representation of this object.
+  Converts <a href="../binary/Uint32-extension-type.html">this</a> to a string representation in the given <code>radix</code>.
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="toSigned" class="callable inherited">
+  <span class="name"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int/toSigned.html">toSigned</a></span><span class="signature">(<wbr><span class="parameter" id="toSigned-param-width"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">width</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  Returns the least significant <code>width</code> bits of this integer, extending the
+highest retained bit to the sign. This is the same as truncating the value
+to fit in <code>width</code> bits using an signed 2-s complement representation. The
+returned value has the same bit value in all positions higher than <code>width</code>.
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="toString" class="callable inherited">
+  <span class="name"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int/toString.html">toString</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/String-class.html">String</a></span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  Returns a string representation of this integer.
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="toStringAsExponential" class="callable inherited">
+  <span class="name"><a href="https://api.dart.dev/stable/3.4.4/dart-core/num/toStringAsExponential.html">toStringAsExponential</a></span><span class="signature">(<wbr><span class="parameter" id="toStringAsExponential-param-fractionDigits">[<span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">fractionDigits</span>]</span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/String-class.html">String</a></span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  An exponential string-representation of this number.
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="toStringAsFixed" class="callable inherited">
+  <span class="name"><a href="https://api.dart.dev/stable/3.4.4/dart-core/num/toStringAsFixed.html">toStringAsFixed</a></span><span class="signature">(<wbr><span class="parameter" id="toStringAsFixed-param-fractionDigits"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">fractionDigits</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/String-class.html">String</a></span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  A decimal-point string-representation of this number.
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="toStringAsPrecision" class="callable inherited">
+  <span class="name"><a href="https://api.dart.dev/stable/3.4.4/dart-core/num/toStringAsPrecision.html">toStringAsPrecision</a></span><span class="signature">(<wbr><span class="parameter" id="toStringAsPrecision-param-precision"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">precision</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/String-class.html">String</a></span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  A string representation with <code>precision</code> significant digits.
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="toUnsigned" class="callable inherited">
+  <span class="name"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int/toUnsigned.html">toUnsigned</a></span><span class="signature">(<wbr><span class="parameter" id="toUnsigned-param-width"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">width</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  Returns the least significant <code>width</code> bits of this integer as a
+non-negative number (i.e. unsigned representation).  The returned value has
+zeros in all bit positions higher than <code>width</code>.
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="truncate" class="callable inherited">
+  <span class="name"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int/truncate.html">truncate</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  Returns <code>this</code>.
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="truncateToDouble" class="callable inherited">
+  <span class="name"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int/truncateToDouble.html">truncateToDouble</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/double-class.html">double</a></span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  Returns <code>this.toDouble()</code>.
   <div class="features"><span class="feature">inherited</span></div>
 
 </dd>
@@ -1185,7 +1478,7 @@ a multiple of <code>n</code>.
 </dt>
 <dd>
   Euclidean modulo of this number by other.
-  
+  <div class="features"><span class="feature">override</span></div>
 
 </dd>
 
@@ -1198,7 +1491,7 @@ a multiple of <code>n</code>.
 </dt>
 <dd>
   Bit-wise and operator.
-  
+  <div class="features"><span class="feature">override</span></div>
 
 </dd>
 
@@ -1211,7 +1504,7 @@ a multiple of <code>n</code>.
 </dt>
 <dd>
   Multiplies this number by other.
-  
+  <div class="features"><span class="feature">override</span></div>
 
 </dd>
 
@@ -1224,7 +1517,7 @@ a multiple of <code>n</code>.
 </dt>
 <dd>
   Adds <code>other</code> to this number.
-  
+  <div class="features"><span class="feature">override</span></div>
 
 </dd>
 
@@ -1237,20 +1530,33 @@ a multiple of <code>n</code>.
 </dt>
 <dd>
   Subtracts <code>other</code> from this number.
-  
+  <div class="features"><span class="feature">override</span></div>
 
 </dd>
 
-        <dt id="operator &lt;" class="callable">
-  <span class="name"><a href="../binary/Uint32/operator_less.html">operator <</a></span><span class="signature">(<wbr><span class="parameter" id="<-param-other"><span class="type-annotation"><a href="../binary/Uint32-extension-type.html">Uint32</a></span> <span class="parameter-name">other</span></span>)
+        <dt id="operator &#47;" class="callable inherited">
+  <span class="name"><a href="https://api.dart.dev/stable/3.4.4/dart-core/num/operator_divide.html">operator /</a></span><span class="signature">(<wbr><span class="parameter" id="/-param-other"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/num-class.html">num</a></span> <span class="parameter-name">other</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/double-class.html">double</a></span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  Divides this number by <code>other</code>.
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="operator &lt;" class="callable inherited">
+  <span class="name"><a href="https://api.dart.dev/stable/3.4.4/dart-core/num/operator_less.html">operator <</a></span><span class="signature">(<wbr><span class="parameter" id="<-param-other"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/num-class.html">num</a></span> <span class="parameter-name">other</span></span>)
     <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/bool-class.html">bool</a></span>
   </span>
   
 
 </dt>
-<dd>
+<dd class="inherited">
   Whether this number is numerically smaller than <code>other</code>.
-  
+  <div class="features"><span class="feature">inherited</span></div>
 
 </dd>
 
@@ -1263,59 +1569,59 @@ a multiple of <code>n</code>.
 </dt>
 <dd>
   Shifts the bits of this integer to the left by <code>shiftAmount</code>.
-  
+  <div class="features"><span class="feature">override</span></div>
 
 </dd>
 
-        <dt id="operator &lt;=" class="callable">
-  <span class="name"><a href="../binary/Uint32/operator_less_equal.html">operator <=</a></span><span class="signature">(<wbr><span class="parameter" id="<=-param-other"><span class="type-annotation"><a href="../binary/Uint32-extension-type.html">Uint32</a></span> <span class="parameter-name">other</span></span>)
-    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/bool-class.html">bool</a></span>
-  </span>
-  
-
-</dt>
-<dd>
-  Whether this number is numerically smaller than or equal to <code>other</code>.
-  
-
-</dd>
-
-        <dt id="operator ==" class="callable inherited">
-  <span class="name"><a href="https://api.dart.dev/stable/3.4.4/dart-core/Object/operator_equals.html">operator ==</a></span><span class="signature">(<wbr><span class="parameter" id="==-param-other"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/Object-class.html">Object</a></span> <span class="parameter-name">other</span></span>)
+        <dt id="operator &lt;=" class="callable inherited">
+  <span class="name"><a href="https://api.dart.dev/stable/3.4.4/dart-core/num/operator_less_equal.html">operator <=</a></span><span class="signature">(<wbr><span class="parameter" id="<=-param-other"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/num-class.html">num</a></span> <span class="parameter-name">other</span></span>)
     <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/bool-class.html">bool</a></span>
   </span>
   
 
 </dt>
 <dd class="inherited">
-  The equality operator.
+  Whether this number is numerically smaller than or equal to <code>other</code>.
   <div class="features"><span class="feature">inherited</span></div>
 
 </dd>
 
-        <dt id="operator &gt;" class="callable">
-  <span class="name"><a href="../binary/Uint32/operator_greater.html">operator ></a></span><span class="signature">(<wbr><span class="parameter" id=">-param-other"><span class="type-annotation"><a href="../binary/Uint32-extension-type.html">Uint32</a></span> <span class="parameter-name">other</span></span>)
+        <dt id="operator ==" class="callable inherited">
+  <span class="name"><a href="https://api.dart.dev/stable/3.4.4/dart-core/num/operator_equals.html">operator ==</a></span><span class="signature">(<wbr><span class="parameter" id="==-param-other"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/Object-class.html">Object</a></span> <span class="parameter-name">other</span></span>)
     <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/bool-class.html">bool</a></span>
   </span>
   
 
 </dt>
-<dd>
-  Whether this number is numerically greater than <code>other</code>.
-  
+<dd class="inherited">
+  Test whether this value is numerically equal to <code>other</code>.
+  <div class="features"><span class="feature">inherited</span></div>
 
 </dd>
 
-        <dt id="operator &gt;=" class="callable">
-  <span class="name"><a href="../binary/Uint32/operator_greater_equal.html">operator >=</a></span><span class="signature">(<wbr><span class="parameter" id=">=-param-other"><span class="type-annotation"><a href="../binary/Uint32-extension-type.html">Uint32</a></span> <span class="parameter-name">other</span></span>)
+        <dt id="operator &gt;" class="callable inherited">
+  <span class="name"><a href="https://api.dart.dev/stable/3.4.4/dart-core/num/operator_greater.html">operator ></a></span><span class="signature">(<wbr><span class="parameter" id=">-param-other"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/num-class.html">num</a></span> <span class="parameter-name">other</span></span>)
     <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/bool-class.html">bool</a></span>
   </span>
   
 
 </dt>
-<dd>
-  Whether this number is numerically greater than or equal to <code>other</code>.
+<dd class="inherited">
+  Whether this number is numerically greater than <code>other</code>.
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="operator &gt;=" class="callable inherited">
+  <span class="name"><a href="https://api.dart.dev/stable/3.4.4/dart-core/num/operator_greater_equal.html">operator >=</a></span><span class="signature">(<wbr><span class="parameter" id=">=-param-other"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/num-class.html">num</a></span> <span class="parameter-name">other</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/bool-class.html">bool</a></span>
+  </span>
   
+
+</dt>
+<dd class="inherited">
+  Whether this number is numerically greater than or equal to <code>other</code>.
+  <div class="features"><span class="feature">inherited</span></div>
 
 </dd>
 
@@ -1328,7 +1634,7 @@ a multiple of <code>n</code>.
 </dt>
 <dd>
   Shifts the bits of this integer to the right by <code>shiftAmount</code>.
-  
+  <div class="features"><span class="feature">override</span></div>
 
 </dd>
 
@@ -1341,7 +1647,7 @@ a multiple of <code>n</code>.
 </dt>
 <dd>
   Bitwise unsigned right shift by <code>shiftAmount</code> bits.
-  
+  <div class="features"><span class="feature">override</span></div>
 
 </dd>
 
@@ -1367,7 +1673,20 @@ a multiple of <code>n</code>.
 </dt>
 <dd>
   Bit-wise exclusive-or operator.
+  <div class="features"><span class="feature">override</span></div>
+
+</dd>
+
+        <dt id="operator unary-" class="callable">
+  <span class="name"><a href="../binary/Uint32/operator_unary_minus.html">operator unary-</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Uint32-extension-type.html">Uint32</a></span>
+  </span>
   
+
+</dt>
+<dd>
+  The negation of <code>this</code>.
+  <div class="features"><span class="feature">override</span></div>
 
 </dd>
 
@@ -1380,7 +1699,20 @@ a multiple of <code>n</code>.
 </dt>
 <dd>
   Bit-wise or operator.
+  <div class="features"><span class="feature">override</span></div>
+
+</dd>
+
+        <dt id="operator ~" class="callable">
+  <span class="name"><a href="../binary/Uint32/operator_bitwise_negate.html">operator ~</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="../binary/Uint32-extension-type.html">Uint32</a></span>
+  </span>
   
+
+</dt>
+<dd>
+  The bit-wise negate operator.
+  <div class="features"><span class="feature">override</span></div>
 
 </dd>
 
@@ -1393,7 +1725,7 @@ a multiple of <code>n</code>.
 </dt>
 <dd>
   Truncating division operator.
-  
+  <div class="features"><span class="feature">override</span></div>
 
 </dd>
 
@@ -1475,6 +1807,18 @@ a multiple of <code>n</code>.
 
 </dd>
 
+        <dt id="one" class="constant">
+    <span class="name "><a href="../binary/Uint32/one-constant.html">one</a></span>
+  <span class="signature">&#8594; const <a href="../binary/Uint32-extension-type.html">Uint32</a></span>
+  
+
+</dt>
+<dd>
+  Always <code>1</code>.
+  
+
+</dd>
+
         <dt id="width" class="constant">
     <span class="name "><a href="../binary/Uint32/width-constant.html">width</a></span>
   <span class="signature">&#8594; const <a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span>
@@ -1531,7 +1875,7 @@ a multiple of <code>n</code>.
 <footer>
   <span class="no-break">
     binary
-      4.0.0-alpha+1
+      4.0.0-alpha+2
   </span>
 
   

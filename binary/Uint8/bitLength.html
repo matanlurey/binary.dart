@@ -66,9 +66,14 @@
 
     <section class="multi-line-signature">
       
+  <div>
+    <ol class="annotation-list">
+        <li>@<a href="https://pub.dev/documentation/meta/1.15.0/meta/redeclare-constant.html">redeclare</a></li>
+    </ol>
+  </div>
       <span class="returntype"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span>
       <span class="name ">bitLength</span>
-      
+      <div class="features"><span class="feature">override</span></div>
 
     </section>
 
@@ -86,7 +91,8 @@ Uint8(2).bitLength(); // 2
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">int get bitLength =&gt; _.bitLength;</code></pre>
+  <pre class="language-dart"><code class="language-dart">@redeclare
+int get bitLength =&gt; _.bitLength;</code></pre>
 </section>
 
   </section>
@@ -122,7 +128,7 @@ Uint8(2).bitLength(); // 2
 <footer>
   <span class="no-break">
     binary
-      4.0.0-alpha+1
+      4.0.0-alpha+2
   </span>
 
   

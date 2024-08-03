@@ -62,11 +62,16 @@
 
     <section class="multi-line-signature">
       
+  <div>
+    <ol class="annotation-list">
+        <li>@<a href="https://pub.dev/documentation/meta/1.15.0/meta/redeclare-constant.html">redeclare</a></li>
+    </ol>
+  </div>
 
 <span class="returntype"><a href="../../binary/Int8-extension-type.html">Int8</a></span>
 <span class="name ">operator ~</span>(<wbr>)
 
-      
+      <div class="features"><span class="feature">override</span></div>
 
     </section>
     
@@ -80,7 +85,8 @@ or the number inverted.</p>
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">Int8 operator ~() {
+  <pre class="language-dart"><code class="language-dart">@redeclare
+Int8 operator ~() {
   return _descriptor.uncheckedBinaryNot(_);
 }</code></pre>
 </section>
@@ -116,7 +122,7 @@ or the number inverted.</p>
 <footer>
   <span class="no-break">
     binary
-      4.0.0-alpha+1
+      4.0.0-alpha+2
   </span>
 
   

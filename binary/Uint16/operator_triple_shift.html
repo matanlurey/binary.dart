@@ -62,12 +62,17 @@
 
     <section class="multi-line-signature">
       
+  <div>
+    <ol class="annotation-list">
+        <li>@<a href="https://pub.dev/documentation/meta/1.15.0/meta/redeclare-constant.html">redeclare</a></li>
+    </ol>
+  </div>
 
 <span class="returntype"><a href="../../binary/Uint16-extension-type.html">Uint16</a></span>
 <span class="name ">operator &gt;&gt;&gt;</span>(<wbr><ol class="parameter-list"><li><span class="parameter" id=">>>-param-shiftAmount"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">shiftAmount</span></span></li>
 </ol>)
 
-      
+      <div class="features"><span class="feature">override</span></div>
 
     </section>
     
@@ -83,7 +88,8 @@ significant bits.</p>
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">Uint16 operator &gt;&gt;&gt;(int shiftAmount) {
+  <pre class="language-dart"><code class="language-dart">@redeclare
+Uint16 operator &gt;&gt;&gt;(int shiftAmount) {
   return Uint16(_ &gt;&gt;&gt; shiftAmount);
 }</code></pre>
 </section>
@@ -119,7 +125,7 @@ significant bits.</p>
 <footer>
   <span class="no-break">
     binary
-      4.0.0-alpha+1
+      4.0.0-alpha+2
   </span>
 
   

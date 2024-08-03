@@ -62,13 +62,18 @@
 
     <section class="multi-line-signature">
       
+  <div>
+    <ol class="annotation-list">
+        <li>@<a href="https://pub.dev/documentation/meta/1.15.0/meta/redeclare-constant.html">redeclare</a></li>
+    </ol>
+  </div>
 
 <span class="returntype"><a href="../../binary/Int32-extension-type.html">Int32</a></span>
 <span class="name ">clamp</span>(<wbr><ol class="parameter-list"><li><span class="parameter" id="clamp-param-lowerLimit"><span class="type-annotation"><a href="../../binary/Int32-extension-type.html">Int32</a></span> <span class="parameter-name">lowerLimit</span>, </span></li>
 <li><span class="parameter" id="clamp-param-upperLimit"><span class="type-annotation"><a href="../../binary/Int32-extension-type.html">Int32</a></span> <span class="parameter-name">upperLimit</span></span></li>
 </ol>)
 
-      
+      <div class="features"><span class="feature">override</span></div>
 
     </section>
     
@@ -87,7 +92,8 @@ Int32(6).clamp(Int32(3), Int32(5)); // 5
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">Int32 clamp(Int32 lowerLimit, Int32 upperLimit) {
+  <pre class="language-dart"><code class="language-dart">@redeclare
+Int32 clamp(Int32 lowerLimit, Int32 upperLimit) {
   return Int32.fromUnchecked(_.clamp(lowerLimit._, upperLimit._));
 }</code></pre>
 </section>
@@ -123,7 +129,7 @@ Int32(6).clamp(Int32(3), Int32(5)); // 5
 <footer>
   <span class="no-break">
     binary
-      4.0.0-alpha+1
+      4.0.0-alpha+2
   </span>
 
   

@@ -62,12 +62,17 @@
 
     <section class="multi-line-signature">
       
+  <div>
+    <ol class="annotation-list">
+        <li>@<a href="https://pub.dev/documentation/meta/1.15.0/meta/redeclare-constant.html">redeclare</a></li>
+    </ol>
+  </div>
 
 <span class="returntype"><a href="../../binary/Int8-extension-type.html">Int8</a></span>
 <span class="name ">remainder</span>(<wbr><ol class="parameter-list"><li><span class="parameter" id="remainder-param-other"><span class="type-annotation"><a href="../../binary/Int8-extension-type.html">Int8</a></span> <span class="parameter-name">other</span></span></li>
 </ol>)
 
-      
+      <div class="features"><span class="feature">override</span></div>
 
     </section>
     
@@ -82,7 +87,8 @@ dividend <code>this</code>.</p>
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">Int8 remainder(Int8 other) {
+  <pre class="language-dart"><code class="language-dart">@redeclare
+Int8 remainder(Int8 other) {
   return Int8.fromUnchecked(_.remainder(other._));
 }</code></pre>
 </section>
@@ -118,7 +124,7 @@ dividend <code>this</code>.</p>
 <footer>
   <span class="no-break">
     binary
-      4.0.0-alpha+1
+      4.0.0-alpha+2
   </span>
 
   

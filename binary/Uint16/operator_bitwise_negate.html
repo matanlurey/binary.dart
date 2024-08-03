@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
-  <meta name="description" content="API docs for the operator &lt; method from the Int8 extension type, for the Dart programming language.">
-  <title>operator &lt; method - Int8 extension type - binary library - Dart API</title>
+  <meta name="description" content="API docs for the operator ~ method from the Uint16 extension type, for the Dart programming language.">
+  <title>operator ~ method - Uint16 extension type - binary library - Dart API</title>
 
 
   
@@ -30,10 +30,10 @@
   <ol class="breadcrumbs gt-separated dark hidden-xs">
     <li><a href="../../index.html">binary</a></li>
     <li><a href="../../binary/binary-library.html">binary.dart</a></li>
-    <li><a href="../../binary/Int8-extension-type.html">Int8</a></li>
-    <li class="self-crumb">operator < method</li>
+    <li><a href="../../binary/Uint16-extension-type.html">Uint16</a></li>
+    <li class="self-crumb">operator ~ method</li>
   </ol>
-  <div class="self-name">operator &lt;</div>
+  <div class="self-name">operator ~</div>
   <form class="search navbar-right" role="search">
     <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
   </form>
@@ -54,35 +54,41 @@
 <div
     id="dartdoc-main-content"
     class="main-content"
-    data-above-sidebar="binary&#47;Int8-extension-type-sidebar.html"
+    data-above-sidebar="binary&#47;Uint16-extension-type-sidebar.html"
     data-below-sidebar="">
     <div>
-<h1><span class="kind-method">operator <</span> method 
+<h1><span class="kind-method">operator ~</span> method 
 </h1></div>
 
     <section class="multi-line-signature">
       
+  <div>
+    <ol class="annotation-list">
+        <li>@<a href="https://pub.dev/documentation/meta/1.15.0/meta/redeclare-constant.html">redeclare</a></li>
+    </ol>
+  </div>
 
-<span class="returntype"><a href="https://api.dart.dev/stable/3.4.4/dart-core/bool-class.html">bool</a></span>
-<span class="name ">operator &lt;</span>(<wbr><ol class="parameter-list"><li><span class="parameter" id="<-param-other"><span class="type-annotation"><a href="../../binary/Int8-extension-type.html">Int8</a></span> <span class="parameter-name">other</span></span></li>
-</ol>)
+<span class="returntype"><a href="../../binary/Uint16-extension-type.html">Uint16</a></span>
+<span class="name ">operator ~</span>(<wbr>)
 
-      
+      <div class="features"><span class="feature">override</span></div>
 
     </section>
     
 <section class="desc markdown">
-  <p>Whether this number is numerically smaller than <code>other</code>.</p>
-<h2 id="example">Example</h2>
-<pre class="language-dart"><code class="language-dart">Int8(2) &lt; Int8(3); // true
-</code></pre>
+  <p>The bit-wise negate operator.</p>
+<p>The bitwise compliment of an unsigned integer is its two's complement,
+or the number inverted.</p>
 </section>
 
 
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">bool operator &lt;(Int8 other) =&gt; _ &lt; other._;</code></pre>
+  <pre class="language-dart"><code class="language-dart">@redeclare
+Uint16 operator ~() {
+  return _descriptor.uncheckedBinaryNot(_);
+}</code></pre>
 </section>
 
 
@@ -99,12 +105,12 @@
 <ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
     <li><a href="../../index.html">binary</a></li>
     <li><a href="../../binary/binary-library.html">binary</a></li>
-    <li><a href="../../binary/Int8-extension-type.html">Int8</a></li>
-    <li class="self-crumb">operator < method</li>
+    <li><a href="../../binary/Uint16-extension-type.html">Uint16</a></li>
+    <li class="self-crumb">operator ~ method</li>
 </ol>
 
 
-    <h5>Int8 extension type</h5>
+    <h5>Uint16 extension type</h5>
     <div id="dartdoc-sidebar-left-content"></div>
   </div><!--/.sidebar-offcanvas-->
 
@@ -116,7 +122,7 @@
 <footer>
   <span class="no-break">
     binary
-      4.0.0-alpha+1
+      4.0.0-alpha+2
   </span>
 
   
