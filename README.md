@@ -156,8 +156,8 @@ integers.
 [pub_img]: https://img.shields.io/pub/v/binary.svg
 [gha_url]: https://github.com/matanlurey/binary.dart/actions
 [gha_img]: https://github.com/matanlurey/binary.dart/actions/workflows/check.yaml/badge.svg
-[cov_url]: https://codecov.io/gh/matanlurey/binary.dart
-[cov_img]: https://codecov.io/gh/matanlurey/binary.dart/branch/main/graph/badge.svg
+[cov_url]: https://coveralls.io/github/matanlurey/binary.dart?branch=main
+[cov_img]: https://coveralls.io/repos/github/matanlurey/binary.dart/badge.svg?branch=main
 [doc_url]: https://www.dartdocs.org/documentation/binary/latest
 [doc_img]: https://img.shields.io/badge/Documentation-binary-blue.svg
 [sty_url]: https://pub.dev/packages/oath

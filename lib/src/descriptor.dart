@@ -179,12 +179,14 @@ final class IntDescriptor<T> {
   // OPERATIONS
   // ---------------------------------------------------------------------------
 
-  /// Returns an iterable of bits in [v], from least to most significant.
+  /// Returns a list of bits representing [v].
   ///
-  /// The iterable has a length of [width].
+  /// The list has a length of [width].
   @pragma('dart2js:tryInline')
   @pragma('vm:prefer-inline')
-  Iterable<bool> bits(int v) => _BitIterable(v, width);
+  BitList toBitList(int v, {bool growable = false}) {
+    return BitList.fromInt(v, length: width, growable: growable);
+  }
 
   /// Returns the number of zeros in the binary representation of [v].
   @pragma('dart2js:tryInline')
@@ -302,14 +304,13 @@ final class IntDescriptor<T> {
   @pragma('dart2js:tryInline')
   @pragma('vm:prefer-inline')
   T uncheckedChunk(int v, int left, [int? size]) {
-    var result = 0;
-    size ??= width - left;
-    for (var i = 0; i < size; i++) {
-      if (v.nthBit(left + i)) {
-        result |= 1 << i;
-      }
-    }
-    return _uncheckedCast(result);
+    size ??= width - left; // If size is null, use width - left
+
+    // Calculate mask with 'size' number of 1 bits
+    final mask = (1 << size) - 1;
+
+    // Shift and mask to extract the desired bits
+    return _uncheckedCast((v >> left) & mask);
   }
 
   /// Returns a new instance with bits [left] to [right], inclusive.
@@ -535,64 +536,4 @@ final class IntDescriptor<T> {
     }
     return result;
   }
-}
-
-final class _BitIterable extends Iterable<bool> {
-  const _BitIterable(this._value, this.length);
-  final int _value;
-
-  @override
-  final int length;
-
-  @override
-  bool elementAt(int index) => _value.nthBit(index);
-
-  @override
-  bool get first => _value.nthBit(0);
-
-  @override
-  bool get last => _value.nthBit(length - 1);
-
-  @override
-  bool get single {
-    if (length != 1) {
-      throw StateError('Iterable has more than one element');
-    }
-    return _value.nthBit(0);
-  }
-
-  @override
-  bool contains(Object? element) {
-    if (element is! bool) {
-      return false;
-    }
-    if (element) {
-      // Checking if at least one bit is set.
-      return _value != 0;
-    }
-    // At least one bit is unset.
-    return _value != (1 << length) - 1;
-  }
-
-  @override
-  bool get isEmpty => _value == 0;
-
-  @override
-  bool get isNotEmpty => _value != 0;
-
-  @override
-  Iterator<bool> get iterator => _BitIterator(_value, length);
-}
-
-final class _BitIterator implements Iterator<bool> {
-  _BitIterator(this._value, this.length);
-  final int _value;
-  final int length;
-  var _index = -1;
-
-  @override
-  bool moveNext() => ++_index < length;
-
-  @override
-  bool get current => _value.nthBit(_index);
 }

@@ -1,7 +1,5 @@
 # CHANGELOG
 
-## 4.0.0-alpha
-
 > [!IMPORTANT]
 > Version 4.0.0 has a _large_ set of breaking changes, including removing the
 > vast majority of extension methods and boxed classes, in favor of using the
@@ -11,11 +9,35 @@
 
 [file an issue]: https://github.com/matanlurey/binary.dart/issues
 
+## 4.0.0-alpha+1
+
+**New features**:
+
+- Added `BitList`, a compact `List<bool>` implementation that stores every
+  element as a single bit, with implementations that are fixed-size and
+  growable.
+
+- Added `<FixedInt>.zero` and `<FixedInt>.one` as static constants.
+
+- Added `collectBytes()`, a utility to convert a `Stream<List<int>>` into a
+  `Uint8List`.
+
+**Breaking changes**:
+
+- Replaced `<FixedInt>.bits` with `<FixedInt>.toBitList()`:
+
+  ```diff
+  - final bits = Int8(0).bits;
+  + final bits = Int8(0).toBitList();
+  ```
+
+## 4.0.0-alpha
+
 **New features**:
 
 Lots and lots. It will be easier to just read the API documentation.
 
-**Breaking changes:**
+**Breaking changes**:
 
 _Basically everything_. The entire API has been restructured to use extension
 types, and some APIs removed entirely that were either not well-thought out

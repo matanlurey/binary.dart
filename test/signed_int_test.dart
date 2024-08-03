@@ -12,6 +12,20 @@ void main() {
     debugCheckFixedWithInRange = true;
   });
 
+  test('isValid, checkRange', () {
+    check(Int8.isValid(0)).isTrue();
+    check(Int8.isValid(127)).isTrue();
+    check(Int8.isValid(-128)).isTrue();
+    check(Int8.isValid(-129)).isFalse();
+    check(Int8.isValid(128)).isFalse();
+
+    check(() => Int8.checkRange(0)).returnsNormally();
+    check(() => Int8.checkRange(127)).returnsNormally();
+    check(() => Int8.checkRange(-128)).returnsNormally();
+    check(() => Int8.checkRange(-129)).throws<Error>();
+    check(() => Int8.checkRange(128)).throws<Error>();
+  });
+
   test('Int8.min is -128', () {
     check(Int8.min).equals(Int8(-128));
   });
@@ -177,7 +191,7 @@ void main() {
   group('individual bit operations', () {
     test('bits iterator', () {
       final i = int.parse('10101010', radix: 2).toSigned(8);
-      final bits = Int8(i).bits;
+      final bits = Int8(i).toBitList();
       check(bits).deepEquals([
         false,
         true,
