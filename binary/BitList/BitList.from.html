@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
-  <meta name="description" content="API docs for the uncheckedChunk method from the IntDescriptor class, for the Dart programming language.">
-  <title>uncheckedChunk method - IntDescriptor class - binary library - Dart API</title>
+  <meta name="description" content="API docs for the BitList.from constructor from Class BitList from the binary library, for the Dart programming language.">
+  <title>BitList.from constructor - BitList - binary library - Dart API</title>
 
 
   
@@ -30,10 +30,10 @@
   <ol class="breadcrumbs gt-separated dark hidden-xs">
     <li><a href="../../index.html">binary</a></li>
     <li><a href="../../binary/binary-library.html">binary.dart</a></li>
-    <li><a href="../../binary/IntDescriptor-class.html">IntDescriptor<span class="signature">&lt;<wbr><span class="type-parameter">T</span>&gt;</span></a></li>
-    <li class="self-crumb">uncheckedChunk method</li>
+    <li><a href="../../binary/BitList-class.html">BitList</a></li>
+    <li class="self-crumb">BitList.from factory constructor</li>
   </ol>
-  <div class="self-name">uncheckedChunk</div>
+  <div class="self-name">BitList.from</div>
   <form class="search navbar-right" role="search">
     <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
   </form>
@@ -51,49 +51,56 @@
 </header>
 <main>
 
-<div
-    id="dartdoc-main-content"
-    class="main-content"
-    data-above-sidebar="binary&#47;IntDescriptor-class-sidebar.html"
-    data-below-sidebar="">
-    <div>
-<h1><span class="kind-method">uncheckedChunk</span> method 
+  <div
+      id="dartdoc-main-content"
+      class="main-content"
+      data-above-sidebar="binary&#47;BitList-class-sidebar.html"
+      data-below-sidebar="">
+      <div>
+<h1><span class="kind-constructor">BitList.from</span> constructor 
 </h1></div>
 
     <section class="multi-line-signature">
       
-
-<span class="returntype">T</span>
-<span class="name ">uncheckedChunk</span>(<wbr><ol class="parameter-list"><li><span class="parameter" id="uncheckedChunk-param-v"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">v</span>, </span></li>
-<li><span class="parameter" id="uncheckedChunk-param-left"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">left</span>, </span></li>
-<li><span class="parameter" id="uncheckedChunk-param-size">[<span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">size</span>]</span></li>
+      <span class="name ">BitList.from</span>(<wbr><ol class="parameter-list"><li><span class="parameter" id="from-param-bits"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/Iterable-class.html">Iterable</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.dart.dev/stable/3.4.4/dart-core/bool-class.html">bool</a></span>&gt;</span></span> <span class="parameter-name">bits</span>, </span></li>
+<li><span class="parameter" id="from-param-growable">{<span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/bool-class.html">bool</a></span> <span class="parameter-name">growable</span> = <span class="default-value">false</span>}</span></li>
 </ol>)
-
-      
-
     </section>
+
     
 <section class="desc markdown">
-  <p>Returns a new instance with bits in <code>left</code> to <code>size</code>.</p>
-<p>The result is left-padded with 0s.</p>
-<p>Both <code>left</code> and <code>size</code> must be in the range of the integer descriptor
-or the behavior is undefined.</p>
+  <p>Creates a list of booleans from the provided <code>bits</code>.</p>
+<p>If <code>growable</code> is <code>true</code>, the list will be able to grow beyond its initial
+length.</p>
 </section>
 
 
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">@pragma(&#39;dart2js:tryInline&#39;)
-@pragma(&#39;vm:prefer-inline&#39;)
-T uncheckedChunk(int v, int left, [int? size]) {
-  size ??= width - left; &#47;&#47; If size is null, use width - left
-
-  &#47;&#47; Calculate mask with &#39;size&#39; number of 1 bits
-  final mask = (1 &lt;&lt; size) - 1;
-
-  &#47;&#47; Shift and mask to extract the desired bits
-  return _uncheckedCast((v &gt;&gt; left) &amp; mask);
+  <pre class="language-dart"><code class="language-dart">factory BitList.from(Iterable&lt;bool&gt; bits, {bool growable = false}) {
+  var list = &lt;Uint32&gt;[];
+  var size = 0;
+  for (final bit in bits) {
+    if (size % 32 == 0) {
+      list.add(Uint32.min);
+    }
+    list[size ~&#47; 32] = list[size ~&#47; 32].setNthBit(size % 32, bit);
+    size++;
+  }
+  if (!growable) {
+    if (size &lt;= 32) {
+      return _FixedUint32BitList._(list.first, length: size);
+    } else {
+      list = Uint32List.fromList(list as List&lt;int&gt;) as List&lt;Uint32&gt;;
+      return _FixedUint32ListBitList._(list, length: size);
+    }
+  } else {
+    final bits = _GrowableUint32ListBitList(size, fill: false);
+    bits._bytes = Uint32List.fromList(list as List&lt;int&gt;) as List&lt;Uint32&gt;;
+    bits._length = size;
+    return bits;
+  }
 }</code></pre>
 </section>
 
@@ -111,17 +118,17 @@ T uncheckedChunk(int v, int left, [int? size]) {
 <ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
     <li><a href="../../index.html">binary</a></li>
     <li><a href="../../binary/binary-library.html">binary</a></li>
-    <li><a href="../../binary/IntDescriptor-class.html">IntDescriptor<span class="signature">&lt;<wbr><span class="type-parameter">T</span>&gt;</span></a></li>
-    <li class="self-crumb">uncheckedChunk method</li>
+    <li><a href="../../binary/BitList-class.html">BitList</a></li>
+    <li class="self-crumb">BitList.from factory constructor</li>
 </ol>
 
 
-    <h5>IntDescriptor class</h5>
+    <h5>BitList class</h5>
     <div id="dartdoc-sidebar-left-content"></div>
-  </div><!--/.sidebar-offcanvas-->
+  </div><!--/.sidebar-offcanvas-left-->
 
   <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
-</div><!--/.sidebar-offcanvas-->
+  </div><!--/.sidebar-offcanvas-->
 
 </main>
 

@@ -186,18 +186,6 @@ important to be aware of this limitation.</p>
 
 </dd>
 
-        <dt id="bits" class="property">
-  <span class="name"><a href="../binary/Int8/bits.html">bits</a></span>
-  <span class="signature">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/Iterable-class.html">Iterable</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.dart.dev/stable/3.4.4/dart-core/bool-class.html">bool</a></span>&gt;</span></span>
-  
-
-</dt>
-<dd>
-  Bits, from least significant to most significant.
-  <div class="features"><span class="feature">no setter</span></div>
-
-</dd>
-
         <dt id="hashCode" class="property inherited">
   <span class="name"><a href="https://api.dart.dev/stable/3.4.4/dart-core/Object/hashCode.html">hashCode</a></span>
   <span class="signature">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span>
@@ -833,6 +821,19 @@ with the same number of bits from <code>replacement</code>.
 </dt>
 <dd>
   Returns <code>this</code> as a binary string.
+  
+
+</dd>
+
+        <dt id="toBitList" class="callable">
+  <span class="name"><a href="../binary/Int8/toBitList.html">toBitList</a></span><span class="signature">(<wbr><span class="parameter" id="toBitList-param-growable">{<span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/bool-class.html">bool</a></span> <span class="parameter-name">growable</span> = <span class="default-value">false</span>}</span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.4.4/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.dart.dev/stable/3.4.4/dart-core/bool-class.html">bool</a></span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns a list of bits representing this integer.
   
 
 </dd>
@@ -1688,6 +1689,18 @@ a multiple of <code>n</code>.
 </dt>
 <dd>
   The number of bits used to represent values of this type.
+  
+
+</dd>
+
+        <dt id="zero" class="constant">
+    <span class="name "><a href="../binary/Int8/zero-constant.html">zero</a></span>
+  <span class="signature">&#8594; const <a href="../binary/Int8-extension-type.html">Int8</a></span>
+  
+
+</dt>
+<dd>
+  Always <code>0</code>.
   
 
 </dd>

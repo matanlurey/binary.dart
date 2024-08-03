@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
-  <meta name="description" content="API docs for the bits property from the Uint8 extension type, for the Dart programming language.">
-  <title>bits property - Uint8 extension type - binary library - Dart API</title>
+  <meta name="description" content="API docs for the toBitList method from the Uint8 extension type, for the Dart programming language.">
+  <title>toBitList method - Uint8 extension type - binary library - Dart API</title>
 
 
   
@@ -31,9 +31,9 @@
     <li><a href="../../index.html">binary</a></li>
     <li><a href="../../binary/binary-library.html">binary.dart</a></li>
     <li><a href="../../binary/Uint8-extension-type.html">Uint8</a></li>
-    <li class="self-crumb">bits property</li>
+    <li class="self-crumb">toBitList method</li>
   </ol>
-  <div class="self-name">bits</div>
+  <div class="self-name">toBitList</div>
   <form class="search navbar-right" role="search">
     <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
   </form>
@@ -57,39 +57,47 @@
     data-above-sidebar="binary&#47;Uint8-extension-type-sidebar.html"
     data-below-sidebar="">
     <div>
-<h1><span class="kind-property">bits</span> property 
+<h1><span class="kind-method">toBitList</span> method 
 </h1></div>
-
-
-        
-  <section id="getter">
 
     <section class="multi-line-signature">
       
-      <span class="returntype"><a href="https://api.dart.dev/stable/3.4.4/dart-core/Iterable-class.html">Iterable</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.dart.dev/stable/3.4.4/dart-core/bool-class.html">bool</a></span>&gt;</span></span>
-      <span class="name ">bits</span>
+
+<span class="returntype"><a href="https://api.dart.dev/stable/3.4.4/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.dart.dev/stable/3.4.4/dart-core/bool-class.html">bool</a></span>&gt;</span></span>
+<span class="name ">toBitList</span>(<wbr><ol class="parameter-list"><li><span class="parameter" id="toBitList-param-growable">{<span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/bool-class.html">bool</a></span> <span class="parameter-name">growable</span> = <span class="default-value">false</span>}</span></li>
+</ol>)
+
       
 
     </section>
-
     
 <section class="desc markdown">
-  <p>Bits, from least significant to most significant.</p>
+  <p>Returns a list of bits representing this integer.</p>
+<p>The most significant bit is at index <code>0</code>.</p>
+<p>If <code>growable</code> is <code>true</code>, the returned list is a growable list.</p>
+<h2 id="performance">Performance</h2>
+<p>A fixed-size list is a lightweight abstraction over a single integer, and
+is can be inlined more easily by the compiler. Use a growable list only if
+you need to modify the list.</p>
+<h2 id="example">Example</h2>
+<pre class="language-dart"><code class="language-dart">Uint8(3).bits; // [true, true, false]
+</code></pre>
 </section>
+
 
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">Iterable&lt;bool&gt; get bits =&gt; _descriptor.bits(_);</code></pre>
+  <pre class="language-dart"><code class="language-dart">List&lt;bool&gt; toBitList({bool growable = false}) {
+  return _descriptor.toBitList(_, growable: growable);
+}</code></pre>
 </section>
 
-  </section>
 
+  </div> <!-- /.main-content -->
 
-</div> <!-- /.main-content -->
-
-<div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
-  <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
 <header id="header-search-sidebar" class="hidden-l">
   <form class="search-sidebar" role="search">
     <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
@@ -100,15 +108,15 @@
     <li><a href="../../index.html">binary</a></li>
     <li><a href="../../binary/binary-library.html">binary</a></li>
     <li><a href="../../binary/Uint8-extension-type.html">Uint8</a></li>
-    <li class="self-crumb">bits property</li>
+    <li class="self-crumb">toBitList method</li>
 </ol>
 
 
-  <h5>Uint8 extension type</h5>
-  <div id="dartdoc-sidebar-left-content"></div>
-</div><!--/.sidebar-offcanvas-->
+    <h5>Uint8 extension type</h5>
+    <div id="dartdoc-sidebar-left-content"></div>
+  </div><!--/.sidebar-offcanvas-->
 
-<div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
 </div><!--/.sidebar-offcanvas-->
 
 </main>

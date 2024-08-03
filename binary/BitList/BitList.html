@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
-  <meta name="description" content="API docs for the bits method from the IntDescriptor class, for the Dart programming language.">
-  <title>bits method - IntDescriptor class - binary library - Dart API</title>
+  <meta name="description" content="API docs for the BitList constructor from Class BitList from the binary library, for the Dart programming language.">
+  <title>BitList constructor - BitList - binary library - Dart API</title>
 
 
   
@@ -30,10 +30,10 @@
   <ol class="breadcrumbs gt-separated dark hidden-xs">
     <li><a href="../../index.html">binary</a></li>
     <li><a href="../../binary/binary-library.html">binary.dart</a></li>
-    <li><a href="../../binary/IntDescriptor-class.html">IntDescriptor<span class="signature">&lt;<wbr><span class="type-parameter">T</span>&gt;</span></a></li>
-    <li class="self-crumb">bits method</li>
+    <li><a href="../../binary/BitList-class.html">BitList</a></li>
+    <li class="self-crumb">BitList factory constructor</li>
   </ol>
-  <div class="self-name">bits</div>
+  <div class="self-name">BitList</div>
   <form class="search navbar-right" role="search">
     <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
   </form>
@@ -51,29 +51,29 @@
 </header>
 <main>
 
-<div
-    id="dartdoc-main-content"
-    class="main-content"
-    data-above-sidebar="binary&#47;IntDescriptor-class-sidebar.html"
-    data-below-sidebar="">
-    <div>
-<h1><span class="kind-method">bits</span> method 
+  <div
+      id="dartdoc-main-content"
+      class="main-content"
+      data-above-sidebar="binary&#47;BitList-class-sidebar.html"
+      data-below-sidebar="">
+      <div>
+<h1><span class="kind-constructor">BitList</span> constructor 
 </h1></div>
 
     <section class="multi-line-signature">
       
-
-<span class="returntype"><a href="https://api.dart.dev/stable/3.4.4/dart-core/Iterable-class.html">Iterable</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.dart.dev/stable/3.4.4/dart-core/bool-class.html">bool</a></span>&gt;</span></span>
-<span class="name ">bits</span>(<wbr><ol class="parameter-list"><li><span class="parameter" id="bits-param-v"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">v</span></span></li>
+      <span class="name ">BitList</span>(<wbr><ol class="parameter-list"><li><span class="parameter" id="-param-length"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">length</span>, </span></li>
+<li><span class="parameter" id="-param-fill">{<span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/bool-class.html">bool</a></span> <span class="parameter-name">fill</span> = <span class="default-value">false</span>, </span></li>
+<li><span class="parameter" id="-param-growable"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/bool-class.html">bool</a></span> <span class="parameter-name">growable</span> = <span class="default-value">false</span>}</span></li>
 </ol>)
-
-      
-
     </section>
+
     
 <section class="desc markdown">
-  <p>Returns an iterable of bits in <code>v</code>, from least to most significant.</p>
-<p>The iterable has a length of <a href="../../binary/IntDescriptor/width.html">width</a>.</p>
+  <p>Creates a list of booleans with the provided <code>length</code>.</p>
+<p>The list is initially filled with <code>false</code> unless <code>fill</code> is set to <code>true</code>.</p>
+<p>If <code>growable</code> is <code>true</code>, the list will be able to grow beyond its initial
+length.</p>
 </section>
 
 
@@ -82,7 +82,19 @@
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@pragma(&#39;dart2js:tryInline&#39;)
 @pragma(&#39;vm:prefer-inline&#39;)
-Iterable&lt;bool&gt; bits(int v) =&gt; _BitIterable(v, width);</code></pre>
+factory BitList(int length, {bool fill = false, bool growable = false}) {
+  if (!growable) {
+    if (length &lt;= 32) {
+      return _FixedUint32BitList._(
+        fill ? Uint32.max : Uint32.min,
+        length: length,
+      );
+    } else {
+      return _FixedUint32ListBitList(length, fill: fill);
+    }
+  }
+  return _GrowableUint32ListBitList(length, fill: fill);
+}</code></pre>
 </section>
 
 
@@ -99,17 +111,17 @@ Iterable&lt;bool&gt; bits(int v) =&gt; _BitIterable(v, width);</code></pre>
 <ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
     <li><a href="../../index.html">binary</a></li>
     <li><a href="../../binary/binary-library.html">binary</a></li>
-    <li><a href="../../binary/IntDescriptor-class.html">IntDescriptor<span class="signature">&lt;<wbr><span class="type-parameter">T</span>&gt;</span></a></li>
-    <li class="self-crumb">bits method</li>
+    <li><a href="../../binary/BitList-class.html">BitList</a></li>
+    <li class="self-crumb">BitList factory constructor</li>
 </ol>
 
 
-    <h5>IntDescriptor class</h5>
+    <h5>BitList class</h5>
     <div id="dartdoc-sidebar-left-content"></div>
-  </div><!--/.sidebar-offcanvas-->
+  </div><!--/.sidebar-offcanvas-left-->
 
   <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
-</div><!--/.sidebar-offcanvas-->
+  </div><!--/.sidebar-offcanvas-->
 
 </main>
 

@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
-  <meta name="description" content="API docs for the uncheckedChunk method from the IntDescriptor class, for the Dart programming language.">
-  <title>uncheckedChunk method - IntDescriptor class - binary library - Dart API</title>
+  <meta name="description" content="API docs for the toBitList method from the Uint16 extension type, for the Dart programming language.">
+  <title>toBitList method - Uint16 extension type - binary library - Dart API</title>
 
 
   
@@ -30,10 +30,10 @@
   <ol class="breadcrumbs gt-separated dark hidden-xs">
     <li><a href="../../index.html">binary</a></li>
     <li><a href="../../binary/binary-library.html">binary.dart</a></li>
-    <li><a href="../../binary/IntDescriptor-class.html">IntDescriptor<span class="signature">&lt;<wbr><span class="type-parameter">T</span>&gt;</span></a></li>
-    <li class="self-crumb">uncheckedChunk method</li>
+    <li><a href="../../binary/Uint16-extension-type.html">Uint16</a></li>
+    <li class="self-crumb">toBitList method</li>
   </ol>
-  <div class="self-name">uncheckedChunk</div>
+  <div class="self-name">toBitList</div>
   <form class="search navbar-right" role="search">
     <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
   </form>
@@ -54,19 +54,17 @@
 <div
     id="dartdoc-main-content"
     class="main-content"
-    data-above-sidebar="binary&#47;IntDescriptor-class-sidebar.html"
+    data-above-sidebar="binary&#47;Uint16-extension-type-sidebar.html"
     data-below-sidebar="">
     <div>
-<h1><span class="kind-method">uncheckedChunk</span> method 
+<h1><span class="kind-method">toBitList</span> method 
 </h1></div>
 
     <section class="multi-line-signature">
       
 
-<span class="returntype">T</span>
-<span class="name ">uncheckedChunk</span>(<wbr><ol class="parameter-list"><li><span class="parameter" id="uncheckedChunk-param-v"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">v</span>, </span></li>
-<li><span class="parameter" id="uncheckedChunk-param-left"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">left</span>, </span></li>
-<li><span class="parameter" id="uncheckedChunk-param-size">[<span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">size</span>]</span></li>
+<span class="returntype"><a href="https://api.dart.dev/stable/3.4.4/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.dart.dev/stable/3.4.4/dart-core/bool-class.html">bool</a></span>&gt;</span></span>
+<span class="name ">toBitList</span>(<wbr><ol class="parameter-list"><li><span class="parameter" id="toBitList-param-growable">{<span class="type-annotation"><a href="https://api.dart.dev/stable/3.4.4/dart-core/bool-class.html">bool</a></span> <span class="parameter-name">growable</span> = <span class="default-value">false</span>}</span></li>
 </ol>)
 
       
@@ -74,26 +72,24 @@
     </section>
     
 <section class="desc markdown">
-  <p>Returns a new instance with bits in <code>left</code> to <code>size</code>.</p>
-<p>The result is left-padded with 0s.</p>
-<p>Both <code>left</code> and <code>size</code> must be in the range of the integer descriptor
-or the behavior is undefined.</p>
+  <p>Returns a list of bits representing this integer.</p>
+<p>The most significant bit is at index <code>0</code>.</p>
+<p>If <code>growable</code> is <code>true</code>, the returned list is a growable list.</p>
+<h2 id="performance">Performance</h2>
+<p>A fixed-size list is a lightweight abstraction over a single integer, and
+is can be inlined more easily by the compiler. Use a growable list only if
+you need to modify the list.</p>
+<h2 id="example">Example</h2>
+<pre class="language-dart"><code class="language-dart">Uint16(3).bits; // [true, true, false]
+</code></pre>
 </section>
 
 
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">@pragma(&#39;dart2js:tryInline&#39;)
-@pragma(&#39;vm:prefer-inline&#39;)
-T uncheckedChunk(int v, int left, [int? size]) {
-  size ??= width - left; &#47;&#47; If size is null, use width - left
-
-  &#47;&#47; Calculate mask with &#39;size&#39; number of 1 bits
-  final mask = (1 &lt;&lt; size) - 1;
-
-  &#47;&#47; Shift and mask to extract the desired bits
-  return _uncheckedCast((v &gt;&gt; left) &amp; mask);
+  <pre class="language-dart"><code class="language-dart">List&lt;bool&gt; toBitList({bool growable = false}) {
+  return _descriptor.toBitList(_, growable: growable);
 }</code></pre>
 </section>
 
@@ -111,12 +107,12 @@ T uncheckedChunk(int v, int left, [int? size]) {
 <ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
     <li><a href="../../index.html">binary</a></li>
     <li><a href="../../binary/binary-library.html">binary</a></li>
-    <li><a href="../../binary/IntDescriptor-class.html">IntDescriptor<span class="signature">&lt;<wbr><span class="type-parameter">T</span>&gt;</span></a></li>
-    <li class="self-crumb">uncheckedChunk method</li>
+    <li><a href="../../binary/Uint16-extension-type.html">Uint16</a></li>
+    <li class="self-crumb">toBitList method</li>
 </ol>
 
 
-    <h5>IntDescriptor class</h5>
+    <h5>Uint16 extension type</h5>
     <div id="dartdoc-sidebar-left-content"></div>
   </div><!--/.sidebar-offcanvas-->
 
