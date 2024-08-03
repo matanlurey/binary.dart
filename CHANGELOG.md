@@ -11,7 +11,7 @@
 
 ## 4.0.0-alpha+2
 
-**New features**:
+**Breaking changes**:
 
 - `<FixedInt>`, which was pointless, is now just `int`. That means that any
   fixed integer representation can be provided somewhere an `int` is expected,
