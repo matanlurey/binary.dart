@@ -67,6 +67,9 @@ extension type const Int8._(int _) implements FixedInt {
     max: 127,
   );
 
+  /// Always `0`.
+  static const zero = Int8.fromUnchecked(0);
+
   /// The minimum value that this type can represent.
   static const min = Int8.fromUnchecked(-128);
 
@@ -309,8 +312,26 @@ extension type const Int8._(int _) implements FixedInt {
   /// ```
   Int8 midpoint(Int8 other) => Int8.fromUnchecked(_.midpoint(other._));
 
-  /// Bits, from least significant to most significant.
-  Iterable<bool> get bits => _descriptor.bits(_);
+  /// Returns a list of bits representing this integer.
+  ///
+  /// The most significant bit is at index `0`.
+  ///
+  /// If [growable] is `true`, the returned list is a growable list.
+  ///
+  /// ## Performance
+  ///
+  /// A fixed-size list is a lightweight abstraction over a single integer, and
+  /// is can be inlined more easily by the compiler. Use a growable list only if
+  /// you need to modify the list.
+  ///
+  /// ## Example
+  ///
+  /// ```dart
+  /// Int8(3).bits; // [true, true, false]
+  /// ```
+  List<bool> toBitList({bool growable = false}) {
+    return _descriptor.toBitList(_, growable: growable);
+  }
 
   /// Returns whether the n-th bit is set.
   bool nthBit(int n) => _.nthBit(n);

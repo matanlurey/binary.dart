@@ -179,6 +179,15 @@ final class IntDescriptor<T> {
   // OPERATIONS
   // ---------------------------------------------------------------------------
 
+  /// Returns a list of bits representing [v].
+  ///
+  /// The list has a length of [width].
+  @pragma('dart2js:tryInline')
+  @pragma('vm:prefer-inline')
+  BitList toBitList(int v, {bool growable = false}) {
+    return BitList.fromInt(v, length: width, growable: growable);
+  }
+
   /// Returns an iterable of bits in [v], from least to most significant.
   ///
   /// The iterable has a length of [width].
@@ -302,14 +311,13 @@ final class IntDescriptor<T> {
   @pragma('dart2js:tryInline')
   @pragma('vm:prefer-inline')
   T uncheckedChunk(int v, int left, [int? size]) {
-    var result = 0;
-    size ??= width - left;
-    for (var i = 0; i < size; i++) {
-      if (v.nthBit(left + i)) {
-        result |= 1 << i;
-      }
-    }
-    return _uncheckedCast(result);
+    size ??= width - left; // If size is null, use width - left
+
+    // Calculate mask with 'size' number of 1 bits
+    final mask = (1 << size) - 1;
+
+    // Shift and mask to extract the desired bits
+    return _uncheckedCast((v >> left) & mask);
   }
 
   /// Returns a new instance with bits [left] to [right], inclusive.

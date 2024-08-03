@@ -177,7 +177,7 @@ void main() {
   group('individual bit operations', () {
     test('bits iterator', () {
       final i = int.parse('10101010', radix: 2).toSigned(8);
-      final bits = Int8(i).bits;
+      final bits = Int8(i).toBitList();
       check(bits).deepEquals([
         false,
         true,
