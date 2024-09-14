@@ -356,6 +356,7 @@ extension type const Uint32._(int _) implements int {
   ///
   /// [n] must be in the range of `0` to `width - 1`.
   @useResult
+  // Intentional usage of positional boolean parameters.
   // ignore: avoid_positional_boolean_parameters
   Uint32 setNthBit(int n, [bool value = true]) {
     RangeError.checkValidRange(0, n, width - 1, 'n');

@@ -9,6 +9,10 @@
 
 [file an issue]: https://github.com/matanlurey/binary.dart/issues
 
+## 4.0.0-beta
+
+- Update Dart SDK to `^3.5.0`.
+
 ## 4.0.0-alpha+7
 
 - Added `<Int>.lsb`.

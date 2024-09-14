@@ -115,29 +115,6 @@ Uint8(1).uncheckedAdd(Uint8(3));
 Uint8(255).uncheckedAdd(Uint8(1));
 ```
 
-### Bit Patterns
-
-There is also builder-type API for generating patterns to match against bits.
-The easiest way to explain this API is it is _like_ `RegExp`, except for
-matching and capturing components of bits:
-
-```dart
-void main() {
-  // Create a BitPattern.
-  final $01V = BitPatternBuilder([
-    BitPart.zero,
-    BitPart.one,
-    BitPart.v(1),
-  ]).build();
-
-  // Match it against bits.
-  print($01V.matches('011'.bits)); // true
-
-  // Capture variables (if any), similar to a RegExp.
-  print($01V.capture('011'.bits)); // [1]
-}
-```
-
 ## Compatibility
 
 This package is intended to work identically and well in:
