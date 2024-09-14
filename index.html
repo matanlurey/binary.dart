@@ -134,25 +134,6 @@ Uint8(1).uncheckedAdd(Uint8(3));
 // DANGEROUS: This will overflow, but it won't be checked in release mode!
 Uint8(255).uncheckedAdd(Uint8(1));
 </code></pre>
-<h3 id="bit-patterns">Bit Patterns</h3>
-<p>There is also builder-type API for generating patterns to match against bits.
-The easiest way to explain this API is it is <em>like</em> <code>RegExp</code>, except for
-matching and capturing components of bits:</p>
-<pre class="language-dart"><code class="language-dart">void main() {
-  // Create a BitPattern.
-  final $01V = BitPatternBuilder([
-    BitPart.zero,
-    BitPart.one,
-    BitPart.v(1),
-  ]).build();
-
-  // Match it against bits.
-  print($01V.matches('011'.bits)); // true
-
-  // Capture variables (if any), similar to a RegExp.
-  print($01V.capture('011'.bits)); // [1]
-}
-</code></pre>
 <h2 id="compatibility">Compatibility</h2>
 <p>This package is intended to work identically and well in:</p>
 <ul>
@@ -225,7 +206,7 @@ Dart.
 <footer>
   <span class="no-break">
     binary
-      4.0.0-alpha+7
+      4.0.0-beta
   </span>
 
   
