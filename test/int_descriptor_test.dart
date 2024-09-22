@@ -1,6 +1,6 @@
 import 'package:binary/binary.dart';
 
-import 'src/prelude.dart';
+import '_prelude.dart';
 
 void main() {
   final uint8 = IntDescriptor<int>.unsigned(

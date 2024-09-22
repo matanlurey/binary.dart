@@ -18,8 +18,9 @@
 /// [little endian]: https://en.wikipedia.org/wiki/Endianness
 library;
 
-export 'src/async.dart' show collectBytes;
+export 'src/as_bytes.dart';
 export 'src/bit_list.dart';
+export 'src/collect_bytes.dart';
 export 'src/descriptor.dart';
 export 'src/extension.dart';
 export 'src/int16.dart';

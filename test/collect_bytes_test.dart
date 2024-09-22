@@ -1,7 +1,7 @@
 import 'package:binary/binary.dart' show collectBytes;
 import 'package:test/test.dart';
 
-import 'src/prelude.dart';
+import '_prelude.dart';
 
 void main() {
   test('collect bytes', () async {

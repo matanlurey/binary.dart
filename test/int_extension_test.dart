@@ -1,6 +1,6 @@
 import 'package:binary/binary.dart' show IntExtension;
 
-import 'src/prelude.dart';
+import '_prelude.dart';
 
 void main() {
   group('pow', () {

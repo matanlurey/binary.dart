@@ -1,6 +1,6 @@
 # Binary
 
-Utilities for accessing binary data and bit manipulation in Dart and Flutter.
+Utilities for accessing binary data and bit manipulation in Dart.
 
 [![Binary on pub.dev][pub_img]][pub_url]
 [![Code coverage][cov_img]][cov_url]

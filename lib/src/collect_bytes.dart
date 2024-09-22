@@ -9,17 +9,10 @@ import 'dart:typed_data';
 (Future<Uint8List>, Future<void> Function() cancel) collectBytes(
   Stream<List<int>> stream,
 ) {
-  final completer = Completer<Uint8List>.sync();
   final builder = BytesBuilder(copy: false);
-  late final StreamSubscription<void> sub;
-  sub = stream.listen(
-    builder.add,
-    onDone: () async {
-      completer.complete(builder.toBytes());
-      await sub.cancel();
-    },
-    onError: completer.completeError,
-    cancelOnError: true,
-  );
-  return (completer.future, sub.cancel);
+  final sub = stream.listen(builder.add);
+
+  // Intentionally don't await, the goal is to return the future.
+  // ignore: discarded_futures
+  return (sub.asFuture(builder).then((b) => b.takeBytes()), sub.cancel);
 }

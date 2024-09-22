@@ -1,6 +1,6 @@
 import 'package:binary/binary.dart' show BitList;
 
-import 'src/prelude.dart';
+import '_prelude.dart';
 
 void main() {
   group('fixed-length 16 bits', () {

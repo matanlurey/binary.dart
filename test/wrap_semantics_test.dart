@@ -1,6 +1,6 @@
 import 'package:binary/binary.dart' show Int32, Uint32, Uint8;
 
-import 'src/prelude.dart';
+import '_prelude.dart';
 
 /// A minimal suite that checks wrap semantics independent of the larger tests.
 void main() {

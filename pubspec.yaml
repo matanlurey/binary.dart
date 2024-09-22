@@ -1,8 +1,8 @@
 # Format: https://dart.dev/tools/pub/pubspec
 
 name: binary
-description: Utilities for accessing binary data and bit manipulation in Dart and Flutter
-version: 4.0.0-beta
+description: Utilities for accessing binary data and bit manipulation in Dart.
+version: 4.0.0
 
 environment:
   sdk: ^3.5.0

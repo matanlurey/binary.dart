@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 4.0.0
+
+Stable release!
+
 > [!IMPORTANT]
 > Version 4.0.0 has a _large_ set of breaking changes, including removing the
 > vast majority of extension methods and boxed classes, in favor of using the
@@ -8,6 +12,13 @@
 > please [file an issue][] if you need this.
 
 [file an issue]: https://github.com/matanlurey/binary.dart/issues
+
+**New features**:
+
+- Added `viewOrCopyAsBytes`.
+- Added `BytesBuilderExtension`.
+
+Read the release notes _below_ for a summary of changes.
 
 ## 4.0.0-beta
 

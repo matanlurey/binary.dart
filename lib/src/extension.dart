@@ -1,4 +1,9 @@
+/// @docImport 'uint16.dart';
+/// @docImport 'uint32.dart';
+library;
+
 import 'dart:math' as math;
+import 'dart:typed_data';
 
 /// Additional functionality for any integer, without size restrictions.
 ///
@@ -118,5 +123,62 @@ extension IntExtension on int {
   int midpoint(int other) {
     // Uses ~/ to ensure that the operation is the same in the VM and JS.
     return (this + other) ~/ 2;
+  }
+}
+
+/// Additional functionality for [BytesBuilder].
+extension BytesBuilderExtension on BytesBuilder {
+  /// Appends [word] to the current contents of this builder.
+  ///
+  /// The [word] will be truncated to a [Uint16].
+  void addWord(int word, [Endian endian = Endian.big]) {
+    final byte1 = (word >> 8) & 0xFF;
+    final byte2 = word & 0xFF;
+    if (endian == Endian.big) {
+      addByte(byte1);
+      addByte(byte2);
+    } else {
+      addByte(byte2);
+      addByte(byte1);
+    }
+  }
+
+  /// Appends [words] to the current contents of this builder.
+  ///
+  /// Each value of [words] will be truncated to a [Uint16].
+  void addWords(List<int> words, [Endian endian = Endian.big]) {
+    for (final word in words) {
+      addWord(word, endian);
+    }
+  }
+
+  /// Appends [dword] to the current contents of this builder.
+  ///
+  /// The [dword] will be truncated to a [Uint32].
+  void addDWord(int dword, [Endian endian = Endian.big]) {
+    final byte1 = (dword >> 24) & 0xFF;
+    final byte2 = (dword >> 16) & 0xFF;
+    final byte3 = (dword >> 8) & 0xFF;
+    final byte4 = dword & 0xFF;
+    if (endian == Endian.big) {
+      addByte(byte1);
+      addByte(byte2);
+      addByte(byte3);
+      addByte(byte4);
+    } else {
+      addByte(byte4);
+      addByte(byte3);
+      addByte(byte2);
+      addByte(byte1);
+    }
+  }
+
+  /// Appends [dwords] to the current contents of this builder.
+  ///
+  /// Each value of [dwords] will be truncated to a [Uint32].
+  void addDWords(List<int> dwords, [Endian endian = Endian.big]) {
+    for (final dword in dwords) {
+      addDWord(dword, endian);
+    }
   }
 }

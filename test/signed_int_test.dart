@@ -3,7 +3,7 @@ import 'dart:math' as math;
 import 'package:binary/binary.dart' show Int8, debugCheckFixedWithInRange;
 import 'package:test/test.dart';
 
-import 'src/prelude.dart';
+import '_prelude.dart';
 
 /// Tests [Int8] as a proxy for every unsigned integer type.
 void main() {
