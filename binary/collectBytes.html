@@ -85,19 +85,12 @@ collection and underlying stream early.</p>
   <pre class="language-dart"><code class="language-dart">(Future&lt;Uint8List&gt;, Future&lt;void&gt; Function() cancel) collectBytes(
   Stream&lt;List&lt;int&gt;&gt; stream,
 ) {
-  final completer = Completer&lt;Uint8List&gt;.sync();
   final builder = BytesBuilder(copy: false);
-  late final StreamSubscription&lt;void&gt; sub;
-  sub = stream.listen(
-    builder.add,
-    onDone: () async {
-      completer.complete(builder.toBytes());
-      await sub.cancel();
-    },
-    onError: completer.completeError,
-    cancelOnError: true,
-  );
-  return (completer.future, sub.cancel);
+  final sub = stream.listen(builder.add);
+
+  &#47;&#47; Intentionally don&#39;t await, the goal is to return the future.
+  &#47;&#47; ignore: discarded_futures
+  return (sub.asFuture(builder).then((b) =&gt; b.takeBytes()), sub.cancel);
 }</code></pre>
 </section>
 
@@ -131,7 +124,7 @@ collection and underlying stream early.</p>
 <footer>
   <span class="no-break">
     binary
-      4.0.0-beta
+      4.0.0
   </span>
 
   
